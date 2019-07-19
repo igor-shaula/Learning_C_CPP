@@ -3,16 +3,20 @@
 main()
 {
     int c;
-    while ((c = getchar()) != EOF)
+    // while ((c = getchar()) != EOF)
+    // {
+    //     putchar(c);
+    // }
+    if ((getchar() != EOF) == 1)
     {
-        printf(c);
+        printf("!= EOF -> 1");
     }
-    if (c == EOF)
+    else if ((getchar() != EOF) == 0)
     {
-        printf("1"); // in theory this has to be the last thing to see in output
+        printf("!= EOF -> 0");
     }
     else
     {
-        printf("not equals EOF"); // we shouldn't ever see that
+        printf("something else - not 1 or 0");
     }
 }
