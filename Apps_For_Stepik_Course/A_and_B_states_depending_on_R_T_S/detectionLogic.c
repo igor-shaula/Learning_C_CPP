@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "types.h"
 
 BOOL detect_A(BOOL r, BOOL s, BOOL t)
 {
