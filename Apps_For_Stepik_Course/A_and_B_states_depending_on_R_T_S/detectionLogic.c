@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include "types.h"
+#include "baseLogicBlocks.h"
 
 BOOL detect_A(BOOL r, BOOL s, BOOL t)
 {
-    BOOL a = r || !(r || t);
-    return a;
+    // return = r || !(r || t);
+    return _or(r, _nor(r, t));
 }
 
 BOOL detect_B(BOOL r, BOOL s, BOOL t)
 {
-    BOOL b = !s && !(r || t);
-    return b;
+    // return = !s && !(r || t);
+    return _and(_not(s), _nor(r, t));
 }
 
 void detect_A_and_B(BOOL r, BOOL s, BOOL t)
