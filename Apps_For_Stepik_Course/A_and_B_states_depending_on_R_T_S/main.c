@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <unistd.h>
 #include "debugFunctions.h"
 #include "detectionLogic.h"
 #include "inputPreparation.h"

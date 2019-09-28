@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "types.h"
 
-void fillRSTvalues(RST *rstPtr)
+void fillRSTvalues(RST* rstPtr)
 {
     printf("Enter R:");
     scanf("%d", &(*rstPtr).r);

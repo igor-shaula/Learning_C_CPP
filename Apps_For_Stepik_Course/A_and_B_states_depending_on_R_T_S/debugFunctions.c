@@ -14,9 +14,9 @@ void debugInput(void)
 void debugLogic(RST *rstPtr)
 {
     BOOL r, s, t;
-    r = ((RST)*rstPtr).r;
-    s = ((RST)*rstPtr).s;
-    t = ((RST)*rstPtr).t;
+    r = (*rstPtr).r;
+    s = (*rstPtr).s;
+    t = (*rstPtr).t;
     printf("\nr = %d, s = %d, t = %d\n", r, s, t);
     printf("\nr|t:%d", r | t);
     printf("\nr||t:%d", r || t);
