@@ -24,15 +24,16 @@ AB detect_A_and_B(BOOL r, BOOL s, BOOL t)
 
 unsigned int countVariations(AB *resultSet)
 {
-    unsigned int result = 0;
-    AB auxiliary[DIMENSION] = {0};
+    unsigned int result = 1; // even if all values are the same - we still have at least 1 variation - the very first array element
+
     for (int i = 1; i < DIMENSION; i++)
     {
-        printf("resultSet[i].a = %d", resultSet[i].a);
-        printf("auxiliary[0].a = %d", auxiliary[0].a);
-        if (resultSet[i].a == auxiliary[0].a) // kind of a test
+        for (int j = 0; j < i; j++) // comparing to all previous array elements
         {
-            result++;
+            if (resultSet[i].a != resultSet[j].a && resultSet[i].b != resultSet[j].b)
+            {
+                result++;
+            }
         }
     }
     return result;
