@@ -4,21 +4,22 @@
 #include "inputPreparation.h"
 #include "types.h"
 
+#define DIMENSION 2 * 2 * 2 // 2 variants for each of R, S & T booleans
+
 int main(void)
 {
-    unsigned int dimension = 2 * 2 * 2; // 2 variants for each of R, S & T booleans
-
-    RST dataSet[dimension]; // all possible variants of RST instances for processing
+    // all possible variants of RST instances are kept here
+    RST dataSet[DIMENSION];
 
     // initialization of data for processing
-    for (int i = 0; i < dimension; i++)
+    for (int i = 0; i < DIMENSION; i++)
     {
         dataSet[i] = fillRST(i);
     }
 
     // processing of each data structure
     RST rst;
-    for (size_t i = 0; i < dimension; i++)
+    for (size_t i = 0; i < DIMENSION; i++)
     {
         rst = dataSet[i];
         detect_A_and_B(rst.r, rst.s, rst.t);
