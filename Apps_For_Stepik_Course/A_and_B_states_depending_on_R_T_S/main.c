@@ -22,12 +22,14 @@ int main(void)
     {
         rst = dataSet[i];
         resultSet[i] = detect_A_and_B(rst.r, rst.s, rst.t);
-        printf("\n");
     }
 
     for (int i = 0; i < DIMENSION; i++)
     {
-        printf("A = %d, B = %d\n", resultSet[i].a, resultSet[i].b);
+        rst = dataSet[i];
+        printf("R=%d, S=%d, T=%d -> ", rst.r, rst.s, rst.t);
+        printf("A=%d, B=%d", resultSet[i].a, resultSet[i].b);
+        printf("\n");
     }
 
     return 0;
