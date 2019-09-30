@@ -4,8 +4,6 @@
 #include "inputPreparation.h"
 #include "types.h"
 
-#define DIMENSION 2 * 2 * 2 // 2 variants for each of R, S & T booleans
-
 int main(void)
 {
     // all possible variants of RST instances are kept here
