@@ -32,5 +32,10 @@ int main(void)
         printf("\n");
     }
 
+    unsigned int variantsTotal = countVariations(&resultSet);
+
+    printf("total count of all possible variants is %d", variantsTotal);
+
+    printf("\n");
     return 0;
 }

@@ -21,3 +21,19 @@ AB detect_A_and_B(BOOL r, BOOL s, BOOL t)
     AB ab = {a, b};
     return ab;
 }
+
+unsigned int countVariations(AB *resultSet)
+{
+    unsigned int result = 0;
+    AB auxiliary[DIMENSION] = {0};
+    for (int i = 1; i < DIMENSION; i++)
+    {
+        printf("resultSet[i].a = %d", resultSet[i].a);
+        printf("auxiliary[0].a = %d", auxiliary[0].a);
+        if (resultSet[i].a == auxiliary[0].a) // kind of a test
+        {
+            result++;
+        }
+    }
+    return result;
+}
