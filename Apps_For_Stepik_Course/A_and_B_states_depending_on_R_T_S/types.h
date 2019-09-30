@@ -18,4 +18,9 @@ typedef struct
 //      true
 // } bool;
 
+typedef struct
+{
+    BOOL a, b;
+} AB;
+
 #endif

@@ -17,11 +17,17 @@ int main(void)
 
     // processing of each data structure
     RST rst;
+    AB resultSet[DIMENSION];
     for (size_t i = 0; i < DIMENSION; i++)
     {
         rst = dataSet[i];
-        detect_A_and_B(rst.r, rst.s, rst.t);
+        resultSet[i] = detect_A_and_B(rst.r, rst.s, rst.t);
         printf("\n");
+    }
+
+    for (int i = 0; i < DIMENSION; i++)
+    {
+        printf("A = %d, B = %d\n", resultSet[i].a, resultSet[i].b);
     }
 
     return 0;
