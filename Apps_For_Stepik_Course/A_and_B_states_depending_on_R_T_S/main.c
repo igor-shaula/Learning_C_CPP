@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "debugFunctions.h"
-#include "detectionLogic.h"
-#include "inputPreparation.h"
-#include "types.h"
+#include "headers/debugFunctions.h"
+#include "headers/detectionLogic.h"
+#include "headers/inputPreparation.h"
+#include "headers/types.h"
 
 int main(void)
 {

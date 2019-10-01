@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "types.h"
-#include "baseLogicBlocks.h"
+#include "../headers/types.h"
+#include "../headers/baseLogicBlocks.h"
 
 BOOL detect_A(BOOL r, BOOL s, BOOL t)
 {
