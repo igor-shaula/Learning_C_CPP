@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "headers/debugFunctions.h"
 #include "headers/detectionLogic.h"
 #include "headers/inputPreparation.h"
 #include "headers/types.h"
@@ -24,6 +23,7 @@ int main(void)
         resultSet[i] = detect_A_and_B(rst.r, rst.s, rst.t);
     }
 
+    // just printing results - everything has already been done
     for (int i = 0; i < DIMENSION; i++)
     {
         rst = dataSet[i];

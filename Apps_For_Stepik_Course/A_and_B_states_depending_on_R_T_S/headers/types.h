@@ -1,9 +1,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define ui unsigned int
+
 #define FALSE 0
 #define TRUE 1
-#define BOOL unsigned int
+#define BOOL ui
 
 #define DIMENSION 2 * 2 * 2 // 2 variants for each of R, S & T booleans
 
