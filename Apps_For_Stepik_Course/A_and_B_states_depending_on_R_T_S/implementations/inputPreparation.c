@@ -14,7 +14,7 @@ RST dataSet[2 * 2 * 2] = {
    {1, 1, 1}
 };
 */
-RST fillRST(ui number) // for RST max is 8 = 111 in binary form
+RST fillRST(ui number) // inner function
 {
     RST rst;
     rst.r = (number >> 2) & 1; // elder bit
@@ -23,7 +23,7 @@ RST fillRST(ui number) // for RST max is 8 = 111 in binary form
     return rst;
 }
 
-RST **prepareDataSet()
+RST **prepareDataSet() // not used for now
 {
     RST dataSet[DIMENSION];
     // initialization of data for processing

@@ -12,7 +12,7 @@ BOOL detect_B(BOOL r, BOOL s, BOOL t) // inner function
     return AND(NOT(s), NOR(r, t));
 }
 
-AB detect_A_and_B(BOOL r, BOOL s, BOOL t)
+AB detect_A_and_B(BOOL r, BOOL s, BOOL t) // inner function
 {
     BOOL a = detect_A(r, s, t);
     BOOL b = detect_B(r, s, t);
