@@ -1,5 +1,5 @@
 #include "types.h"
 
-evaluateLogic(RST dataSet[], AB resultSet[]);
+void evaluateLogic(RST dataSet[], AB resultSet[], const ui dimension);
 
-ui countVariations(AB *resultSet);
+ui countVariations(AB resultSet[], const ui dimension);

@@ -7,16 +7,16 @@ int main(void)
 {
     // all possible variants of RST instances are kept here
     RST dataSet[DIMENSION];
-    fillDataSet(dataSet);
+    fillDataSet(dataSet, DIMENSION);
 
     // processing of each data structure
     AB resultSet[DIMENSION];
-    evaluateLogic(dataSet, resultSet);
+    evaluateLogic(dataSet, resultSet, DIMENSION);
 
     // just printing results - everything has already been done
-    showResults(dataSet, resultSet);
+    showResults(dataSet, resultSet, DIMENSION);
 
-    ui variantsTotal = countVariations(&resultSet);
+    ui variantsTotal = countVariations(resultSet, DIMENSION);
     showSummary(variantsTotal);
 
     return 0;

@@ -20,19 +20,19 @@ AB detect_A_and_B(BOOL r, BOOL s, BOOL t) // inner function
     return ab;
 }
 
-evaluateLogic(RST dataSet[], AB resultSet[])
+void evaluateLogic(RST dataSet[], AB resultSet[], const ui dimension)
 {
-    for (size_t i = 0; i < DIMENSION; i++)
+    for (size_t i = 0; i < dimension; i++)
     {
         resultSet[i] = detect_A_and_B(dataSet[i].r, dataSet[i].s, dataSet[i].t);
     }
 }
 
-ui countVariations(AB *resultSet)
+ui countVariations(AB resultSet[], const ui dimension)
 {
     ui result = 1; // even if all values are the same - we still have at least 1 variation - the very first array element
 
-    for (int i = 1; i < DIMENSION; i++)
+    for (int i = 1; i < dimension; i++)
     {
         for (int j = 0; j < i; j++) // comparing to all previous array elements
         {

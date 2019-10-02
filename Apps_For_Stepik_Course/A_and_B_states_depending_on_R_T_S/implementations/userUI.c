@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "../headers/types.h"
 
-void showResults(RST dataSet[], AB resultSet[])
+void showResults(RST dataSet[], AB resultSet[], const ui dimension)
 {
-    for (int i = 0; i < DIMENSION; i++)
+    for (int i = 0; i < dimension; i++)
     {
         printf("R=%d, S=%d, T=%d -> ", dataSet[i].r, dataSet[i].s, dataSet[i].t);
         printf("A=%d, B=%d", resultSet[i].a, resultSet[i].b);

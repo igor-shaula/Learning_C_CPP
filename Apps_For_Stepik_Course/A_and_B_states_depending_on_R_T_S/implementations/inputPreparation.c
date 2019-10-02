@@ -1,19 +1,6 @@
 #include <stdio.h>
 #include "../headers/types.h"
 
-/*
-as a result we have to get all possible variants of RST structures - as following:
-RST dataSet[2 * 2 * 2] = {
-   {0, 0, 0},
-   {0, 0, 1},
-   {0, 1, 0},
-   {0, 1, 1},
-   {1, 0, 0},
-   {1, 0, 1},
-   {1, 1, 0},
-   {1, 1, 1}
-};
-*/
 RST fillRST(ui number) // inner function
 {
     RST rst;
@@ -23,21 +10,9 @@ RST fillRST(ui number) // inner function
     return rst;
 }
 
-RST **prepareDataSet() // not used for now
+void fillDataSet(RST dataSet[], const ui dimension)
 {
-    RST dataSet[DIMENSION];
-    // initialization of data for processing
-    for (int i = 0; i < DIMENSION; i++)
-    {
-        dataSet[i] = fillRST(i);
-    }
-    return dataSet;
-}
-
-void fillDataSet(RST dataSet[])
-{
-    // initialization of data for processing
-    for (int i = 0; i < DIMENSION; i++)
+    for (int i = 0; i < dimension; i++)
     {
         dataSet[i] = fillRST(i);
     }
