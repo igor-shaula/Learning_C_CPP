@@ -1,5 +1,7 @@
 #include "types.h"
 
+evaluateLogic(RST dataSet[], AB resultSet[]);
+
 AB detect_A_and_B(BOOL r, BOOL s, BOOL t);
 
-unsigned int countVariations(AB *resultSet);
+ui countVariations(AB *resultSet);

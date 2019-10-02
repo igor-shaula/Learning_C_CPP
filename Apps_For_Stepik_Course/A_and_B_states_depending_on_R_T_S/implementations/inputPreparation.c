@@ -19,11 +19,11 @@ RST fillRST(ui number) // for RST max is 8 = 111 in binary form
     RST rst;
     rst.r = (number >> 2) & 1; // elder bit
     rst.s = (number >> 1) & 1; // medium bit
-    rst.t = number & 1; // lesser bit
+    rst.t = number & 1;        // lesser bit
     return rst;
 }
 
-RST** prepareDataSet()
+RST **prepareDataSet()
 {
     RST dataSet[DIMENSION];
     // initialization of data for processing
@@ -32,4 +32,13 @@ RST** prepareDataSet()
         dataSet[i] = fillRST(i);
     }
     return dataSet;
+}
+
+void fillDataSet(RST dataSet[])
+{
+    // initialization of data for processing
+    for (int i = 0; i < DIMENSION; i++)
+    {
+        dataSet[i] = fillRST(i);
+    }
 }

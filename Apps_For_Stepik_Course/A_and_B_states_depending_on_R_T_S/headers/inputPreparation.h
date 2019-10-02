@@ -2,4 +2,6 @@
 
 RST fillRST(int number);
 
-RST** prepareDataSet();
+RST **prepareDataSet();
+
+void fillDataSet(RST dataSet[]);
