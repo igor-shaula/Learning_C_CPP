@@ -10,3 +10,9 @@ void showResults(RST dataSet[], AB resultSet[])
         printf("\n");
     }
 }
+
+void showSummary(ui variantsTotal)
+{
+    printf("total count of all possible variants is %d", variantsTotal);
+    printf("\n");
+}

@@ -1,8 +1,7 @@
-#include <stdio.h>
+#include "headers/types.h"
 #include "headers/detectionLogic.h"
 #include "headers/inputPreparation.h"
 #include "headers/userUI.h"
-#include "headers/types.h"
 
 int main(void)
 {
@@ -18,9 +17,7 @@ int main(void)
     showResults(dataSet, resultSet);
 
     ui variantsTotal = countVariations(&resultSet);
+    showSummary(variantsTotal);
 
-    printf("total count of all possible variants is %d", variantsTotal);
-
-    printf("\n");
     return 0;
 }
