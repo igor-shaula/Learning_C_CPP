@@ -8,11 +8,10 @@ int main(void)
     // all possible variants of RST instances are kept here
     RST dataSet[DIMENSION];
 
-    // initialization of data for processing
-    for (int i = 0; i < DIMENSION; i++)
-    {
-        dataSet[i] = fillRST(i);
-    }
+    RST** dataSetPtr = prepareDataSet();
+    printf("dataSetPtr:%d", **dataSetPtr);
+
+    // dataSet = dataSetPtr; // in fact dataSet is array of RST structs - the same as dataSetPtr
 
     // processing of each data structure
     RST rst;

@@ -22,3 +22,14 @@ RST fillRST(ui number) // for RST max is 8 = 111 in binary form
     rst.t = number & 1; // lesser bit
     return rst;
 }
+
+RST** prepareDataSet()
+{
+    RST dataSet[DIMENSION];
+    // initialization of data for processing
+    for (int i = 0; i < DIMENSION; i++)
+    {
+        dataSet[i] = fillRST(i);
+    }
+    return dataSet;
+}
