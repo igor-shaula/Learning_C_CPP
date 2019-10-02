@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "headers/detectionLogic.h"
 #include "headers/inputPreparation.h"
+#include "headers/userUI.h"
 #include "headers/types.h"
 
 int main(void)
@@ -14,12 +15,7 @@ int main(void)
     evaluateLogic(dataSet, resultSet);
 
     // just printing results - everything has already been done
-    for (int i = 0; i < DIMENSION; i++)
-    {
-        printf("R=%d, S=%d, T=%d -> ", dataSet[i].r, dataSet[i].s, dataSet[i].t);
-        printf("A=%d, B=%d", resultSet[i].a, resultSet[i].b);
-        printf("\n");
-    }
+    showResults(dataSet, resultSet);
 
     ui variantsTotal = countVariations(&resultSet);
 
