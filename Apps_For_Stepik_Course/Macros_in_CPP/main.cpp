@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
 
-#define MAX(x, y, r) (r = ((x) > (y)) ? (x) : (y))
+// #define MAX(x, y, r) ({int X = x, Y = y; r = ((x) > (y)) ? (X) : (Y);})
+#define MAX(x, y, r) ({int X = x, Y = y; r = (X > Y) ? (X) : (Y); })
 
 int main()
 {
