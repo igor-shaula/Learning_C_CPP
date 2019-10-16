@@ -4,21 +4,23 @@ using namespace std;
 
 int evaluateLogarithm(unsigned int limit)
 {
-    unsigned int l = 0;
+    if (limit <= 0)
+    {
+        cout << "(number must be positive value)";
+        return -1;
+    }
+
+    unsigned int logarithm = -1;
     unsigned int candidate = 1;
-    while (candidate <= limit)
+    while (candidate <= limit) // we'll have at least 1 iteration if limit is 1 & more if 2 or bigger
     {
         // cout << "initial " << candidate << ' ';
-        // candidate << 1;
         candidate *= 2;
+        // candidate << 1;
+        logarithm++;
         // cout << "after multiplication " << candidate << endl;
-        l++;
-        if (l > 9)
-        {
-            break;
-        }
     }
-    return l;
+    return logarithm;
 }
 
 bool test_evaluateLogarithm()
@@ -44,6 +46,7 @@ bool test_evaluateLogarithm()
     cout << "log2of80=" << evaluateLogarithm(80) << endl;
     cout << "log2of90=" << evaluateLogarithm(90) << endl;
     cout << "log2of100=" << evaluateLogarithm(100) << endl;
+    cout << "log2of59218=" << evaluateLogarithm(59218) << endl;
     cout << "log2of1000000000=" << evaluateLogarithm(1000000000) << endl;
 }
 
@@ -51,7 +54,7 @@ int main()
 {
     // int t;
     // cin >> t;
-    // int l = evaluateLogarithm(t);
+    // int logarithm = evaluateLogarithm(t);
 
     test_evaluateLogarithm();
 
