@@ -17,10 +17,32 @@ void fillArrayWithProportion(int *array, int size, int shift)
         *p = (p - array) + shift; // this formula is about getting the value to be written by the address p
     }
 }
+void printArray(int *array, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << array[i] << ' ';
+    }
+    cout << endl;
+}
+
+// 3
+int findMaxValue(int *array, int size)
+{
+    int max = *array;
+    for (int i = 0; i < size; i++)
+    {
+        if (array[i] > max)
+        {
+            max = array[i];
+        }
+    }
+    return max;
+}
 
 int main()
 {
-    // 1 - swap
+    // 1 - swapping values
     cout << "please enter two numbers: ";
     int a, b;
     cin >> a >> b;
@@ -35,13 +57,11 @@ int main()
     cout << "enter desired value of the first element: ";
     int firstValue;
     cin >> firstValue;
-
     fillArrayWithProportion(array, size, firstValue);
-    for (int i = 0; i < size; i++)
-    {
-        cout << array[i] << ' ';
-    }
-    cout << endl;
+    printArray(array, size);
+
+    // 3 - finding max element
+    cout << "max value of this array is: " << findMaxValue(array, size) << endl;
 
     return 0;
 }
