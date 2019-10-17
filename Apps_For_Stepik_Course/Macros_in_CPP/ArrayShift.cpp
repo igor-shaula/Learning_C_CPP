@@ -11,9 +11,20 @@ void leftShiftByOne(int array[], int size)
     array[size - 1] = save;
 }
 
-void rotate(int array[], unsigned size, int shift)
+void rightShiftByOne(int array[], int size)
 {
-    shift = shift % size;
+    int save = array[size - 1];
+    for (int i = size - 1; i > 0; i--)
+    {
+        array[i] = array[i - 1];
+    }
+    array[0] = save;
+}
+
+void rotate(int array[], int size, int shift)
+{
+    shift = shift % size; // if size in unsigned - it affects possible negative values of shift
+    cout << shift << endl;
     if (shift == 0)
     {
         return;
@@ -25,13 +36,22 @@ void rotate(int array[], unsigned size, int shift)
             leftShiftByOne(array, size);
         }
     }
-    else
+    else // shift < 0
     {
         for (int i = 0; i < shift; i++)
         {
-            // rightShiftByOne(array, size);
+            rightShiftByOne(array, size);
         }
     }
+}
+
+void printArray(int array[], int size)
+{
+    for (unsigned i = 0; i < size; i++)
+    {
+        cout << array[i] << ' ';
+    }
+    cout << endl;
 }
 
 int main()
@@ -48,7 +68,9 @@ int main()
     cin >> shift;
 
     int a[] = {1, 2, 3, 4, 5};
+    printArray(a, 5);
     rotate(a, 5, shift);
+    printArray(a, 5);
 
     return 0;
 }
