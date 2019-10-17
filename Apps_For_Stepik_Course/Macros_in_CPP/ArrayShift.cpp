@@ -38,7 +38,7 @@ void rotate(int array[], int size, int shift)
     }
     else // shift < 0
     {
-        for (int i = 0; i < shift; i++)
+        for (int i = 0; i > shift; i--)
         {
             rightShiftByOne(array, size);
         }
