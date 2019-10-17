@@ -21,9 +21,9 @@ void rightShiftByOne(int array[], int size)
     array[0] = save;
 }
 
-void rotate(int array[], int size, int shift)
+void rotate(int array[], unsigned size, int shift)
 {
-    shift = shift % size; // if size in unsigned - it affects possible negative values of shift
+    shift = shift % (int)size; // if size remains unsigned - it affects possible negative values of shift
     cout << shift << endl;
     if (shift == 0)
     {
@@ -45,6 +45,14 @@ void rotate(int array[], int size, int shift)
     }
 }
 
+void fillArrayWithSequence(int array[], unsigned size)
+{
+    for (int *p = array; p < array + size; p++)
+    {
+        *p = (p - array) + 1;
+    }
+}
+
 void printArray(int array[], int size)
 {
     for (unsigned i = 0; i < size; i++)
@@ -56,8 +64,6 @@ void printArray(int array[], int size)
 
 int main()
 {
-
-    // cout << "enter value of the array: ";
     cout << "enter size of arithmetic sequence array: ";
     int size;
     cin >> size;
@@ -67,10 +73,10 @@ int main()
     int shift;
     cin >> shift;
 
-    int a[] = {1, 2, 3, 4, 5};
-    printArray(a, 5);
-    rotate(a, 5, shift);
-    printArray(a, 5);
+    fillArrayWithSequence(array, size);
+    printArray(array, size);
+    rotate(array, size, shift);
+    printArray(array, size);
 
     return 0;
 }
