@@ -39,7 +39,7 @@ int findMaxValue(int *array, int size)
     }
     return max;
 }
-int findMax(int *array, int *next)
+int findMaxValue(int *array, int *next)
 {
     int max = *array;
     for (; array != next; array++)
@@ -54,6 +54,26 @@ int *findPMax(int *array, int *next)
         if (*array > *pmax)
             pmax = array;
     return pmax;
+}
+bool detectMax(int *array, int *next, int *result)
+{
+    if (array == next) // this means that given array is empty
+        return false;
+    *result = *array;
+    for (; array != next; array++)
+        if (*array > *result)
+            *result = *array;
+    return true;
+}
+bool detectMax(int *array, int *next, int **result)
+{
+    if (array == next)
+        return false;
+    *result = array;
+    for (; array != next; array++)
+        if (*array > **result)
+            *result = array;
+    return true;
 }
 
 // 4
