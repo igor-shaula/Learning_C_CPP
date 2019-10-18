@@ -39,6 +39,22 @@ int findMaxValue(int *array, int size)
     }
     return max;
 }
+int findMax(int *array, int *next)
+{
+    int max = *array;
+    for (; array != next; array++)
+        if (*array > max)
+            max = *array;
+    return max;
+}
+int *findPMax(int *array, int *next)
+{
+    int *pmax = array;
+    for (; array != next; array++)
+        if (*array > *pmax)
+            pmax = array;
+    return pmax;
+}
 
 // 4
 bool contains(int *array, int size, int value)
