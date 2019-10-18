@@ -40,6 +40,22 @@ int findMaxValue(int *array, int size)
     return max;
 }
 
+// 4
+bool contains(int *array, int size, int value)
+{
+    for (int i = 0; i != size; i++)
+        if (array[i] == value) // classical access to array element - hides addition operation inside
+            return true;
+    return false;
+}
+bool contains(int *array, int *next, int value) // using address of the element right after array
+{
+    for (; array != next; array++)
+        if (*array == value) // faster than previous form with array[i] <-> *(array + i) -> we do not add here
+            return true;
+    return false;
+}
+
 int main()
 {
     // 1 - swapping values
