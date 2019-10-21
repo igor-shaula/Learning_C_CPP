@@ -23,7 +23,7 @@ int search(const char *where, const char *what)
         if (*where == *what)
         {
             foundPosition = i;
-            cout << "found " << *what << " at position " << foundPosition << endl;
+            // cout << "found " << *what << " at position " << foundPosition << endl;
             for (; what != what + sLength(what); what++, where++)
                 if (*what != *where)
                 {
@@ -58,7 +58,123 @@ int search(const char *where, const char *what)
 //     return -1;
 // }
 
-void launchTests()
+void test1()
+{
+    (0 == search("", "")) ? cout << "OK : 1"
+                                 << " (" << 0 << " : " << (0 == search("", "")) << " )" << endl
+                          : cout << "Failed : 1"
+                                 << " (" << 0 << " : " << (0 == search("", "")) << " )" << endl;
+    (0 == search("a", "")) ? cout << "OK : 2"
+                                  << " (" << 0 << " : " << (0 == search("a", "")) << " )" << endl
+                           : cout << "Failed : 2"
+                                  << " (" << 0 << " : " << (0 == search("a", "")) << " )" << endl;
+    (0 == search("a", "a")) ? cout << "OK : 3"
+                                   << " (" << 0 << " : " << (0 == search("a", "a")) << " )" << endl
+                            : cout << "Failed : 3"
+                                   << " (" << 0 << " : " << (0 == search("a", "a")) << " )" << endl;
+    (-1 == search("a", "b")) ? cout << "OK : 4"
+                                    << " (" << -1 << " : " << (-1 == search("a", "b")) << " )" << endl
+                             : cout << "Failed : 4"
+                                    << " (" << -1 << " : " << (-1 == search("a", "b")) << " )" << endl;
+    (0 == search("aa", "")) ? cout << "OK : 5"
+                                   << " (" << 0 << " : " << (0 == search("aa", "")) << " )" << endl
+                            : cout << "Failed : 5"
+                                   << " (" << 0 << " : " << (0 == search("aa", "")) << " )" << endl;
+    (0 == search("aa", "a")) ? cout << "OK : 6"
+                                    << " (" << 0 << " : " << (0 == search("aa", "a")) << " )" << endl
+                             : cout << "Failed : 6"
+                                    << " (" << 0 << " : " << (0 == search("aa", "a")) << " )" << endl;
+    (0 == search("ab", "a")) ? cout << "OK : 7"
+                                    << " (" << 0 << " : " << (0 == search("ab", "a")) << " )" << endl
+                             : cout << "Failed : 7"
+                                    << " (" << 0 << " : " << (0 == search("ab", "a")) << " )" << endl;
+    (1 == search("ba", "a")) ? cout << "OK : 8"
+                                    << " (" << 1 << " : " << (1 == search("ba", "a")) << " )" << endl
+                             : cout << "Failed : 8"
+                                    << " (" << 1 << " : " << (1 == search("ba", "a")) << " )" << endl;
+    (-1 == search("bb", "a")) ? cout << "OK : 9"
+                                     << " (" << -1 << " : " << (-1 == search("bb", "a")) << " )" << endl
+                              : cout << "Failed : 9"
+                                     << " (" << -1 << " : " << (-1 == search("bb", "a")) << " )" << endl;
+    (0 == search("aaa", "")) ? cout << "OK : 10"
+                                    << " (" << 0 << " : " << (0 == search("aaa", "")) << " )" << endl
+                             : cout << "Failed : 10"
+                                    << " (" << 0 << " : " << (0 == search("aaa", "")) << " )" << endl;
+    (0 == search("aaa", "a")) ? cout << "OK : 11"
+                                     << " (" << 0 << " : " << (0 == search("aaa", "a")) << " )" << endl
+                              : cout << "Failed : 11"
+                                     << " (" << 0 << " : " << (0 == search("aaa", "a")) << " )" << endl;
+    (1 == search("abc", "b")) ? cout << "OK : 12"
+                                     << " (" << 1 << " : " << (1 == search("abc", "b")) << " )" << endl
+                              : cout << "Failed : 12"
+                                     << " (" << 1 << " : " << (1 == search("abc", "b")) << " )" << endl;
+    (2 == search("abc", "c")) ? cout << "OK : 13"
+                                     << " (" << 2 << " : " << (2 == search("abc", "c")) << " )" << endl
+                              : cout << "Failed : 13"
+                                     << " (" << 2 << " : " << (2 == search("abc", "c")) << " )" << endl;
+    (-1 == search("abc", "d")) ? cout << "OK : 14"
+                                      << " (" << -1 << " : " << (-1 == search("abc", "d")) << " )" << endl
+                               : cout << "Failed : 14"
+                                      << " (" << -1 << " : " << (-1 == search("abc", "d")) << " )" << endl;
+    (-1 == search("a", "aa")) ? cout << "OK : 15"
+                                     << " (" << -1 << " : " << (-1 == search("a", "aa")) << " )" << endl
+                              : cout << "Failed : 15"
+                                     << " (" << -1 << " : " << (-1 == search("a", "aa")) << " )" << endl;
+    (-1 == search("a", "ba")) ? cout << "OK : 16"
+                                     << " (" << -1 << " : " << (-1 == search("a", "ba")) << " )" << endl
+                              : cout << "Failed : 16"
+                                     << " (" << -1 << " : " << (-1 == search("a", "ba")) << " )" << endl;
+    (-1 == search("a", "ab")) ? cout << "OK : 17"
+                                     << " (" << -1 << " : " << (-1 == search("a", "ab")) << " )" << endl
+                              : cout << "Failed : 17"
+                                     << " (" << -1 << " : " << (-1 == search("a", "ab")) << " )" << endl;
+    (-1 == search("a", "bb")) ? cout << "OK : 18"
+                                     << " (" << -1 << " : " << (-1 == search("a", "bb")) << " )" << endl
+                              : cout << "Failed : 18"
+                                     << " (" << -1 << " : " << (-1 == search("a", "bb")) << " )" << endl;
+    (-1 == search("a", "aaa")) ? cout << "OK : 19"
+                                      << " (" << -1 << " : " << (-1 == search("a", "aaa")) << " )" << endl
+                               : cout << "Failed : 19"
+                                      << " (" << -1 << " : " << (-1 == search("a", "aaa")) << " )" << endl;
+    (-1 == search("aa", "aaa")) ? cout << "OK : 20"
+                                       << " (" << -1 << " : " << (-1 == search("aa", "aaa")) << " )" << endl
+                                : cout << "Failed : 20"
+                                       << " (" << -1 << " : " << (-1 == search("aa", "aaa")) << " )" << endl;
+    (0 == search("aaa", "aaa")) ? cout << "OK : 21"
+                                       << " (" << 0 << " : " << (0 == search("aaa", "aaa")) << " )" << endl
+                                : cout << "Failed : 21"
+                                       << " (" << 0 << " : " << (0 == search("aaa", "aaa")) << " )" << endl;
+    (0 == search("aaab", "aaa")) ? cout << "OK : 22"
+                                        << " (" << 0 << " : " << (0 == search("aaab", "aaa")) << " )" << endl
+                                 : cout << "Failed : 22"
+                                        << " (" << 0 << " : " << (0 == search("aaab", "aaa")) << " )" << endl;
+    (1 == search("baaa", "aaa")) ? cout << "OK : 23"
+                                        << " (" << 1 << " : " << (1 == search("baaa", "aaa")) << " )" << endl
+                                 : cout << "Failed : 23"
+                                        << " (" << 1 << " : " << (1 == search("baaa", "aaa")) << " )" << endl;
+    (1 == search("baaaa", "aaa")) ? cout << "OK : 24"
+                                         << " (" << 1 << " : " << (1 == search("baaaa", "aaa")) << " )" << endl
+                                  : cout << "Failed : 24"
+                                         << " (" << 1 << " : " << (1 == search("baaaa", "aaa")) << " )" << endl;
+    (1 == search("baaab", "aaa")) ? cout << "OK : 25"
+                                         << " (" << 1 << " : " << (1 == search("baaab", "aaa")) << " )" << endl
+                                  : cout << "Failed : 25"
+                                         << " (" << 1 << " : " << (1 == search("baaab", "aaa")) << " )" << endl;
+    (-1 == search("abd", "abc")) ? cout << "OK : 26"
+                                        << " (" << -1 << " : " << (-1 == search("abd", "abc")) << " )" << endl
+                                 : cout << "Failed : 26"
+                                        << " (" << -1 << " : " << (-1 == search("abd", "abc")) << " )" << endl;
+    (2 == search("ababc", "abc")) ? cout << "OK : 27"
+                                         << " (" << 2 << " : " << (2 == search("ababc", "abc")) << " )" << endl
+                                  : cout << "Failed : 27"
+                                         << " (" << 2 << " : " << (2 == search("ababc", "abc")) << " )" << endl;
+    (3 == search("abdabc", "abc")) ? cout << "OK : 28"
+                                          << " (" << 3 << " : " << (3 == search("abdabc", "abc")) << " )" << endl
+                                   : cout << "Failed : 28"
+                                          << " (" << 3 << " : " << (3 == search("abdabc", "abc")) << " )" << endl;
+}
+
+void test2()
 {
     struct test
     {
@@ -113,6 +229,7 @@ int main()
     char t[] = "st";
     int foundPosition = search(s, t);
     cout << "first occurence of \"" << t << "\" found is at position: " << foundPosition << endl;
-    launchTests();
+    test1();
+    test2();
     return 0;
 }
