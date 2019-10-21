@@ -9,10 +9,6 @@ unsigned sLength(const char *s)
     return length;
 }
 
-//   if (pattern == "" || *pattern == '\0'){
-//     return 0;
-//   }
-
 // int search(const char *text, const char *pattern)
 // {
 //     unsigned textLength = sLength(pattern);
@@ -38,33 +34,6 @@ unsigned sLength(const char *s)
 //     return foundPosition;
 // }
 
-int search(const char *text, const char *pattern)
-{
-    if (pattern == "")
-        return 0;
-    if (sLength(pattern) == 0)
-        return 0;
-    if (sLength(pattern) > sLength(text))
-        return -1;
-
-    bool found = false;
-
-    for (int count = 0; *text != '\0'; text++, count++)
-        if (*text == *pattern)
-        {
-            for (int i = 0; pattern[i] != '\0'; i++)
-            {
-                if (text[i] == pattern[i])
-                    found = true;
-                else
-                    found = false;
-            }
-            if (found == true)
-                return count;
-        }
-    return -1;
-}
-
 // unsigned findFirstOccurence(const char *text, const char *pattern)
 // {
 //     unsigned patternLength = sLength(text);
@@ -88,6 +57,24 @@ int search(const char *text, const char *pattern)
 //         }
 //     return -1;
 // }
+
+int search(const char *text, const char *pattern)
+{
+    if (pattern == "" || *pattern == '\0')
+        return 0;
+
+    bool found = false;
+
+    for (int position = 0; *text != '\0'; text++, position++)
+        if (*text == *pattern)
+        {
+            for (int i = 0; pattern[i] != '\0'; i++)
+                found = text[i] == pattern[i];
+            if (found)
+                return position;
+        }
+    return -1;
+}
 
 void test1()
 {
