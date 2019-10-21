@@ -9,29 +9,60 @@ unsigned sLength(const char *s)
     return length;
 }
 
+//   if (pattern == "" || *pattern == '\0'){
+//     return 0;
+//   }
+
+// int search(const char *text, const char *pattern)
+// {
+//     unsigned textLength = sLength(pattern);
+//     if (textLength == 0)
+//         return 0;
+//     unsigned patternLength = sLength(text);
+//     if (textLength > patternLength)
+//         return -1;
+
+//     int foundPosition = -1;
+//     for (unsigned i = 0; text != text + sLength(text); text++, i++)
+//         if (*text == *pattern)
+//         {
+//             foundPosition = i;
+//             // cout << "found " << *pattern << " at position " << foundPosition << endl;
+//             for (; pattern != pattern + sLength(pattern); pattern++, text++)
+//                 if (*pattern != *text)
+//                 {
+//                     foundPosition = -1;
+//                     break;
+//                 }
+//         }
+//     return foundPosition;
+// }
+
 int search(const char *text, const char *pattern)
 {
-    unsigned textLength = sLength(pattern);
-    if (textLength == 0)
+    if (pattern == "")
         return 0;
-    unsigned patternLength = sLength(text);
-    if (textLength > patternLength)
+    if (sLength(pattern) == 0)
+        return 0;
+    if (sLength(pattern) > sLength(text))
         return -1;
 
-    int foundPosition = -1;
-    for (unsigned i = 0; text != text + sLength(text); text++, i++)
+    bool found = false;
+
+    for (int count = 0; *text != '\0'; text++, count++)
         if (*text == *pattern)
         {
-            foundPosition = i;
-            // cout << "found " << *pattern << " at position " << foundPosition << endl;
-            for (; pattern != pattern + sLength(pattern); pattern++, text++)
-                if (*pattern != *text)
-                {
-                    foundPosition = -1;
-                    break;
-                }
+            for (int i = 0; pattern[i] != '\0'; i++)
+            {
+                if (text[i] == pattern[i])
+                    found = true;
+                else
+                    found = false;
+            }
+            if (found == true)
+                return count;
         }
-    return foundPosition;
+    return -1;
 }
 
 // unsigned findFirstOccurence(const char *text, const char *pattern)
