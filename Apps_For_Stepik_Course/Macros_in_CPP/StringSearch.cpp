@@ -4,19 +4,26 @@ using namespace std;
 unsigned sLength(const char *s)
 {
     unsigned length = 0;
-    for (; *s != 0; s++, length++)
+    for (; *(s + length) != 0; length++) // *(s + length) is more safer because we change length but s remains the same
         ;
     return length;
 }
 
 int search(const char *where, const char *what)
 {
+    unsigned whatLength = sLength(what);
+    if (whatLength == 0)
+        return 0;
+    unsigned whereLength = sLength(where);
+    if (whereLength == 0 || whereLength < whatLength)
+        return -1;
+
     int foundPosition = -1;
     for (unsigned i = 0; where != where + sLength(where); where++, i++)
         if (*where == *what)
         {
             foundPosition = i;
-            // cout << "found " << *what << " at position " << foundPosition << endl;
+            cout << "found " << *what << " at position " << foundPosition << endl;
             for (; what != what + sLength(what); what++, where++)
                 if (*what != *where)
                 {
@@ -102,8 +109,6 @@ void launchTests()
 
 int main()
 {
-    // cout << "enter a string:" << endl;
-    // cin >> ???
     char s[] = "test string";
     char t[] = "st";
     int foundPosition = search(s, t);
