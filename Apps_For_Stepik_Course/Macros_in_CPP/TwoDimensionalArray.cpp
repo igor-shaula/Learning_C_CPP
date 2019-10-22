@@ -47,22 +47,33 @@ int **create2dArrayOnStack(size_t a, size_t b)
     return sArray;
 }
 
-void print2dArray(int **array, size_t a, size_t b)
+// void print1dArray(int *array, size_t size)
+void print1dArray(int array[], size_t size) // this declaration is the same as commented above
+{
+    for (size_t i = 0; i < size; i++)
+        cout << array[i] << ' ';
+    cout << endl;
+}
+
+void print2dArray(int array[][5], size_t a, size_t b) //
 {
     for (size_t i = 0; i < a; i++)
+    {
         for (size_t j = 0; j < b; j++)
-            cout << array[i][j];
-    cout << endl;
+            cout << array[i][j] << ' ';
+        cout << endl;
+    }
 }
 
 int main()
 {
     size_t a = 3, b = 5;
-    int array[][5] = {
+    int array[3][5] = {
         {2, 2, 2, 2, 2},
         {3, 3, 3, 3, 3},
         {4, 4, 4, 4, 4}};
+    print1dArray(*array, a);
+    print2dArray(array, a, b);
     // fill2dArrayWithOneValue(array, a, b);
-    // print2dArray(array, a, b);
     return 0;
 }
