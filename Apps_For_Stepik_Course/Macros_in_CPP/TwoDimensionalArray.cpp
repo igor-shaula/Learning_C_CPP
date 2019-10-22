@@ -32,7 +32,37 @@ void free2dArrayQuick(int **array, size_t a, size_t b) // no need in passing dim
     delete[] array;
 }
 
+void fill2dArrayWithOneValue(int **array, size_t a, size_t b)
+{
+    for (size_t i = 0; i < a; i++)
+        for (size_t j = 0; j < b; j++)
+            *((int *)array + i * b + j) = 1; // the same as sArray[i][j] = 1;
+}
+
+int **create2dArrayOnStack(size_t a, size_t b)
+{
+    int **sArray = {}; // creating array in stack - not in dynamic memory
+    // linear structure of this two-dimensional array in stack accepts the following:
+    fill2dArrayWithOneValue(sArray, a, b);
+    return sArray;
+}
+
+void print2dArray(int **array, size_t a, size_t b)
+{
+    for (size_t i = 0; i < a; i++)
+        for (size_t j = 0; j < b; j++)
+            cout << array[i][j];
+    cout << endl;
+}
+
 int main()
 {
+    size_t a = 3, b = 5;
+    int array[][5] = {
+        {2, 2, 2, 2, 2},
+        {3, 3, 3, 3, 3},
+        {4, 4, 4, 4, 4}};
+    // fill2dArrayWithOneValue(array, a, b);
+    // print2dArray(array, a, b);
     return 0;
 }
