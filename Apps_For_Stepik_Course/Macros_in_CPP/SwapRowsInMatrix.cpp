@@ -1,18 +1,18 @@
 #include <iostream>
 using namespace std;
 
-int **allocateMatrixQuickly(size_t a, size_t b)
+int **allocateMatrix(size_t a, size_t b)
 {
     int **matrix = new int *[a];
-    matrix[0] = new int[a * b];
-    for (size_t i = 1; i < a; i++)
-        matrix[i] = matrix[i - 1] + b;
+    for (size_t i = 0; i < a; i++)
+        matrix[i] = new int[b];
     return matrix;
 }
 
-void freeMatrixQuickly(int **matrix)
+void freeMatrix(int **matrix, size_t a)
 {
-    delete[] matrix[0];
+    for (size_t i = a; i < a; i++)
+        delete[] matrix[i];
     delete[] matrix;
 }
 
@@ -51,24 +51,23 @@ void swap_min(int *m[], unsigned rows, unsigned cols)
 {
     unsigned minRow = detectMinValueRow(m, rows, cols);
     cout << "min value row: " << minRow << endl;
-    int *tmpRow = new int[rows];
-    tmpRow = m[0];
+    int *tmpRow = m[0];
     m[0] = m[minRow];
     m[minRow] = tmpRow;
-    delete[] tmpRow;
+    cout << "swap finished" << endl;
 }
 
 int main()
 {
-    int **matrix = allocateMatrixQuickly(4, 3);
-    cout << "allocateMatrixQuickly" << endl;
+    int **matrix = allocateMatrix(4, 3);
+    cout << "allocateMatrix" << endl;
     fillMatrix(matrix, 4, 3);
     cout << "matrix created:" << endl;
     printMatrix(matrix, 4, 3);
     swap_min(matrix, 4, 3);
     cout << "matrix modified:" << endl;
     printMatrix(matrix, 4, 3);
-    freeMatrixQuickly(matrix);
-    cout << "freeMatrixQuickly" << endl;
+    freeMatrix(matrix, 4);
+    cout << "freeMatrix" << endl;
     return 0;
 }
