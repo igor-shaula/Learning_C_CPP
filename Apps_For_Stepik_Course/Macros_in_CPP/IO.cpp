@@ -1,11 +1,7 @@
-#include <iostream>
-using namespace std;
-
 #include <cstring>
-
-int main()
+void stringsInCStyle()
 {
-    // block 1 - C style
+    // C style - requires library "cstring"
 
     char str1[100] = "hello";
     cout << strlen(str1) << endl;
@@ -17,8 +13,11 @@ int main()
     char str3[6] = {72, 101, 108, 108, 111};
     if (strcmp(str1, str3) == 0)
         cout << "str1 == str3" << endl;
+}
 
-    // block 2 - CPP style
+void stringsInCppStyle()
+{
+    // CPP style - requires no libraries
 
     string s1 = "HELLO";
     cout << s1.size() << endl;
@@ -29,6 +28,34 @@ int main()
 
     if (s1 == s2)
         cout << "s1 == s3" << endl;
+}
+
+#include <cstdio>
+void printfANDscanf()
+{
+    // C style - requires "cstdio"
+    int a = 0, b = 0;
+    printf("enter a & b: ");
+    scanf("%d %d", &a, &b); // dangerous here - in fact any type of pointer can be sent here
+    printf("a + b = %d\n", (a + b));
+}
+
+#include <iostream>
+using namespace std;
+void coutANDcin()
+{
+    string name;
+    cout << "enter any name: ";
+    cin >> name;
+    cout << "hi, " << name << endl;
+}
+
+int main()
+{
+    stringsInCStyle();
+    stringsInCppStyle();
+    printfANDscanf();
+    coutANDcin();
 
     return 0;
 }
