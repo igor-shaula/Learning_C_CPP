@@ -72,6 +72,23 @@ void useAllStructs()
         int **data;
     };
     IntMatrix im = {3, 5, create2dArray(3, 5)};
+
+    // ABSTRACTION - using 1d array as 2d from outside:
+    struct IntArray2d
+    {
+        size_t a, b;
+        int *data;
+        int &get(size_t i, size_t j)
+        {
+            return data[i * b + j];
+        };
+    };
+    int *array = new int[5];
+    IntArray2d m = {3, 5, array};
+    for (size_t i = 0; i < m.a; i++)
+        for (size_t j = 0; j < m.b; j++)
+            if (m.get(i, j) < 0)
+                m.get(i, j) = 0;
 }
 
 int main()
