@@ -1,4 +1,10 @@
 #include <cstdio>
+#include <iostream>
+#include <cstring>
+#include <fstream>
+
+using namespace std;
+
 void printfANDscanf() // C style - requires "cstdio"
 {
     int a = 0, b = 0;
@@ -7,8 +13,6 @@ void printfANDscanf() // C style - requires "cstdio"
     printf("a + b = %d\n", (a + b));
 }
 
-#include <iostream>
-using namespace std;
 void coutANDcin() // requires "iostream" library
 {
     string name;
@@ -17,7 +21,6 @@ void coutANDcin() // requires "iostream" library
     cout << "hi, " << name << endl;
 }
 
-#include <cstring>
 void stringsInCStyle() // C style - requires "cstring" library
 {
     char str1[100] = "hello";
@@ -45,7 +48,6 @@ void stringsInCppStyle() // CPP style - requires no libraries
         cout << "s1 == s3" << endl;
 }
 
-#include <fstream>
 void workWithFiles() // requires "fstream" library
 {
     // reading from a file
@@ -58,12 +60,49 @@ void workWithFiles() // requires "fstream" library
     toFile << "hi, " << content << endl;
 }
 
+void testStrings() // ptr vs array-like declaration, const & non-const strings
+{
+    char *a = "hello";
+    char b[] = "hello";
+    std::cout << a << " " << b << std::endl;
+    std::cout << &a << " " << &b << std::endl;
+    std::cout << a[0] << " " << b[0] << std::endl;
+    std::cout << *a << " " << *b << std::endl;
+    /* result has to ollk like this:
+    hello hello
+    0x6afefc 0x6afef6
+    h h
+    h h
+    */
+    // this has to lead to execution error:
+    char *sptr = "hello";
+    sptr[0] = 'x';
+    // and this has to work perfectly:
+    char s[] = "hello";
+    s[0] = 'x';
+    const char s1[] = "hello";
+    const char *s2 = "hello";
+    /*
+    В первом случае создается массив и в него копируется содержимое строкового литерала.
+    Во втором случае берется строковый литерал (который является неизменяемым массивом) и приводится к указателю и сохраняется в s.
+    Итого в первом случае у вас есть копия данных, а во втором у вас всего лишь указатель на данные.
+    */
+}
+
+int strcmpAlternative(const char *a, const char *b)
+{
+    while (*a && *b && *a == *b)
+        ++a, ++b;
+    return *a - *b;
+}
+
 int main()
 {
     stringsInCStyle();
     stringsInCppStyle();
     printfANDscanf();
     coutANDcin();
+    testStrings();
 
     return 0;
 }
