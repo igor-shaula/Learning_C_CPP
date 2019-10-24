@@ -52,11 +52,11 @@ void workWithFiles() // requires "fstream" library
 {
     // reading from a file
     string content;
-    ifstream fromFile("input.txt");
+    ifstream fromFile("testFileForInput.txt");
     fromFile >> content;
-    cout << content;
+    cout << content << endl;
     // writing to a file
-    ofstream toFile("output.txt");
+    ofstream toFile("testFileForOutput.txt");
     toFile << "hi, " << content << endl;
 }
 
@@ -96,13 +96,31 @@ int strcmpAlternative(const char *a, const char *b)
     return *a - *b;
 }
 
+/*
+// redirection of input stream - useful for testing:
+
+// 1st variant - can be used in C as well:
+freopen("input.txt", "r", stdin); // перенаправление стандартного потока в стиле C
+
+// 2nd variant - only CPP style:
+#include <iostream>
+#include <fstream>
+std::streambuf *stdin_bcp=std::cin.rdbuf(); // сохраняем старый поток stdin
+std::ifstream ifs("input.txt"); // Создаём поток для чтения из файла "input.txt"
+std::cin.rdbuf(ifs.rdbuf()); // Перенаправили стандартный ввод на ввод из файла
+//..... Ваш код ........
+std::cin.rdbuf(stdin_bcp); // восстанавливаем поток stdin по умолчанию
+ifs.close(); // закрываем поток чтения из файла.
+*/
+
 int main()
 {
     stringsInCStyle();
     stringsInCppStyle();
     printfANDscanf();
     coutANDcin();
-    testStrings();
+    workWithFiles();
+    // testStrings();
 
     return 0;
 }
