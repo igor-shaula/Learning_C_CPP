@@ -1,8 +1,25 @@
-#include <cstring>
-void stringsInCStyle()
+#include <cstdio>
+void printfANDscanf() // C style - requires "cstdio"
 {
-    // C style - requires library "cstring"
+    int a = 0, b = 0;
+    printf("enter a & b: ");
+    scanf("%d %d", &a, &b); // dangerous here - in fact any type of pointer can be sent here
+    printf("a + b = %d\n", (a + b));
+}
 
+#include <iostream>
+using namespace std;
+void coutANDcin() // requires "iostream" library
+{
+    string name;
+    cout << "enter any name: ";
+    cin >> name;
+    cout << "hi, " << name << endl;
+}
+
+#include <cstring>
+void stringsInCStyle() // C style - requires "cstring" library
+{
     char str1[100] = "hello";
     cout << strlen(str1) << endl;
 
@@ -15,10 +32,8 @@ void stringsInCStyle()
         cout << "str1 == str3" << endl;
 }
 
-void stringsInCppStyle()
+void stringsInCppStyle() // CPP style - requires no libraries
 {
-    // CPP style - requires no libraries
-
     string s1 = "HELLO";
     cout << s1.size() << endl;
 
@@ -30,24 +45,17 @@ void stringsInCppStyle()
         cout << "s1 == s3" << endl;
 }
 
-#include <cstdio>
-void printfANDscanf()
+#include <fstream>
+void workWithFiles() // requires "fstream" library
 {
-    // C style - requires "cstdio"
-    int a = 0, b = 0;
-    printf("enter a & b: ");
-    scanf("%d %d", &a, &b); // dangerous here - in fact any type of pointer can be sent here
-    printf("a + b = %d\n", (a + b));
-}
-
-#include <iostream>
-using namespace std;
-void coutANDcin()
-{
-    string name;
-    cout << "enter any name: ";
-    cin >> name;
-    cout << "hi, " << name << endl;
+    // reading from a file
+    string content;
+    ifstream fromFile("input.txt");
+    fromFile >> content;
+    cout << content;
+    // writing to a file
+    ofstream toFile("output.txt");
+    toFile << "hi, " << content << endl;
 }
 
 int main()
