@@ -5,15 +5,29 @@ using namespace std;
 
 int main()
 {
-    char s1[100] = "hello";
-    cout << strlen(s1) << endl;
+    // block 1 - C style
 
-    char s2[] = ", world";
-    strcat(s1, s2);
-    cout << strlen(s1) << endl;
+    char str1[100] = "hello";
+    cout << strlen(str1) << endl;
 
-    char s3[6] = {72, 101, 108, 108, 111};
-    if (strcmp(s1, s3) == 0)
+    char str2[] = ", world";
+    strcat(str1, str2);
+    cout << strlen(str1) << endl;
+
+    char str3[6] = {72, 101, 108, 108, 111};
+    if (strcmp(str1, str3) == 0)
+        cout << "str1 == str3" << endl;
+
+    // block 2 - CPP style
+
+    string s1 = "HELLO";
+    cout << s1.size() << endl;
+
+    string s2 = ", world";
+    s1 = s1 + s2;
+    cout << s1.size() << endl;
+
+    if (s1 == s2)
         cout << "s1 == s3" << endl;
 
     return 0;
