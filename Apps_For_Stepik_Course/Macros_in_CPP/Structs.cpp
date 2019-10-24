@@ -1,13 +1,26 @@
 #include <cmath>
+#include <iostream>
+using namespace std;
 
 struct Point
 {
     double x, y;
+    void shift(double x, double y)
+    {
+        this->x += x;
+        this->y += y;
+    }
 };
 
 struct Segment
 {
     Point p1, p2;
+    double length() // this method has implicit access to all data of this structure
+    {
+        double dx = p1.x - p2.x;
+        double dy = p1.y - p2.y;
+        return sqrt(dx * dx + dy * dy);
+    }
 };
 
 double length(Segment s) // 4*double in fact are copied during this function invocation
@@ -45,6 +58,8 @@ void useAllStructs()
     Point p1 = {0.4, 1.4};
     Point p2 = {1.2, 6.3};
     Segment s = {p1, p2};
+    Segment sm = {{0.5, 1.5}, {1.0, 6.5}};
+    cout << sm.length() << endl;
 
     // shortened form of initialization:
     Segment AB = {(Point){5.2, 0.4}, (Point){3.9, 0.8}};
