@@ -26,6 +26,16 @@ struct String
     {
         delete[] str;
     }
+    void append(String &other)
+    {
+        size += other.size;
+        char *previous = str;
+        str = new char[size]; // this size is bigger than previous
+        strcpy(str, previous);
+        delete[] previous;
+        str = strcat(str, other.str);
+        str[size] = '\0';
+    }
 };
 
 int main()
@@ -45,5 +55,9 @@ int main()
     size_t n;
     cin >> c >> n;
     cout << String(n, c).str << endl;
+    String h1("Hello");
+    String h2(",World");
+    h1.append(h2);
+    cout << h1.str << "\\size=" << h1.size << endl;
     return 0;
 }
