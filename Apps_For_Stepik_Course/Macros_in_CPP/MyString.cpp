@@ -28,12 +28,20 @@ struct String
     }
     void append(String &other)
     {
+        cout << str << "\\size: " << size << endl;
+        cout << other.str << "\\size: " << other.size << endl;
+        char *tmp = new char[size];
         size += other.size;
-        char *previous = str;
-        str = new char[size]; // this size is bigger than previous
-        strcpy(str, previous);
-        delete[] previous;
-        str = strcat(str, other.str);
+        cout << "new size: " << size << endl;
+        // char *tmp = str;
+        strcpy(tmp, str);
+        delete[] str;
+        str = new char[size + 1]; // this time "size" is bigger than previous
+        // str[0] = '\0';
+        strcat(str, tmp);
+        delete[] tmp;
+        strcat(str, other.str);
+        // strcpy(str + strlen(tmp), other.str);
         str[size] = '\0';
     }
 };
