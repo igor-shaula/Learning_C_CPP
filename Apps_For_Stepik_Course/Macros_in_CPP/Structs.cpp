@@ -78,7 +78,7 @@ void useAllStructs()
     {
         size_t a, b;
         int *data;
-        int &get(size_t i, size_t j)
+        int &get(size_t i, size_t j) // link to an element of the array
         {
             return data[i * b + j];
         };
@@ -88,7 +88,7 @@ void useAllStructs()
     for (size_t i = 0; i < m.a; i++)
         for (size_t j = 0; j < m.b; j++)
             if (m.get(i, j) < 0)
-                m.get(i, j) = 0;
+                m.get(i, j) = 0; // we can write because link is an L-value type
 }
 
 int main()
