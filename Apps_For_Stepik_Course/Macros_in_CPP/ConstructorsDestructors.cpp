@@ -38,6 +38,19 @@ struct PointE
     explicit PointE(double x = 0, double y = 0) {}
 };
 
+// nuances with default constructor:
+struct PointDC
+{
+    double x, y;
+    // no constructor at all here - but it will be generated
+};
+struct PointDCA
+{
+    double x, y;
+    // default constructor will not be created as we have an alternative constructor
+    PointDCA(double x, double y) : x(x), y(y) {}
+};
+
 void useAllStructs()
 {
     Point p0 = Point();
@@ -67,6 +80,16 @@ void useAllStructs()
     // PointE pe1_ = {1.2};
     PointE pe2 = PointE(1.2, 3.4);
     // PointE pe2_ = {1.2, 3.4};
+
+    PointDC pdc = PointDC();
+    PointDC pdc_ = {};
+
+    // PointDCA pdca0 = PointDCA(); // not possible - default constructor is absent here
+    // PointDCA pdca0_ = {};        // not possible as well
+    // PointDCA pdca1 = PointDCA(1.2); // not possible again - no constructor with 1 parameter
+    // PointDCA pdca1_ = {1.2};        // not possible as we even have no default values in 2p constructor
+    PointDCA pdca2 = PointDCA(1.2, 3.4); // only constructor with 2 parameters are required and compilable
+    PointDCA pdca2_ = {1.2, 3.4};        // this form is also possible as we do not use "explicit" in constructor
 }
 
 int main()
