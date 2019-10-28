@@ -65,22 +65,30 @@ struct String
     }
 
     // merged code from effectiveConcat into append:
-    // void append1(String &other)
-    // {
-    //     size += other.size;
-    //     char *newStr = new char[size + 1];
-    //     // copying values from our first string into the new bigger one:
-    //     for (; *str != '\0'; str++, newStr++)
-    //         *newStr = *str;
-    //     // copying values from other string to found place:
-    //     for (; *(other.str) != '\0'; (other.str)++, newStr++)
-    //         *newStr = *(other.str);
-    //     newStr[size] = '\0';
-    //     // cleaning memory under old str pointer:
-    //     delete[] str;
-    //     // repointing our struct field to the new place:
-    //     str = newStr;
-    // }
+    void append1(String &other)
+    {
+        // at first we have to save content of existing string somewhere:
+        char *tmp = new char[size + 1];
+        for (; *str != '\0'; str++, tmp++)
+            *tmp = *str;
+        tmp[size] = '\0';
+        // now we can clean previous structure from the memory:
+        delete[] str;
+        // resetting the size to include new data from other string:
+        size += other.size;
+
+        str = new char[size + 1];
+        // copying values from our tmp string into the new bigger one:
+        for (; *tmp != '\0'; tmp++, str++)
+            *str = *tmp;
+        // cleaning memory from used tmp data:
+        delete[] tmp;
+        tmp = 0;
+        // copying values from other string to found place:
+        for (; *(other.str) != '\0'; (other.str)++, str++)
+            *str = *(other.str);
+        str[size] = '\0';
+    }
 };
 
 int main()
@@ -103,7 +111,7 @@ int main()
     String h1("Hello");
     String h2(",World");
     // h1.append(h2);
-    h1.appendManual(h2);
+    h1.append1(h2);
     cout << h1.str << "\\size=" << h1.size << endl;
     return 0;
 }
