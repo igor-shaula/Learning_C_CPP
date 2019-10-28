@@ -10,10 +10,7 @@ class IntArray
 public:
     explicit IntArray(size_t size) : size(size), data(new int[size]) {}
 
-    ~IntArray()
-    {
-        delete[] data;
-    }
+    ~IntArray() { delete[] data; }
 
     size_t size() { return size; }
 
@@ -30,6 +27,19 @@ public:
         data = newData;
         size = newSize;
     }
+};
+
+class IntArrayAlt
+{              // different inner organization but its API for outer usage is the same
+    int *data; // the only container - holds size in itself on the first position
+public:
+    explicit IntArrayAlt(size_t size) : data(new int[size + 1]) { data[0] = size; };
+
+    ~IntArrayAlt() { delete[] data; }
+
+    size_t size() { return data[0]; }
+
+    int &get(size_t i) { return data[i + 1]; }
 };
 
 int main()
