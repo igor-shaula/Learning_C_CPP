@@ -44,6 +44,43 @@ struct String
         // strcpy(str + strlen(tmp), other.str);
         str[size] = '\0';
     }
+
+    // another attempt:
+    void effectiveConcat(char *to, const char *from)
+    {
+        for (; *to != '\0'; to++)
+            ;
+        for (; *from != '\0'; to++, from++)
+            *to = *from;
+        *to = '\0';
+    }
+    void appendManual(String &other)
+    {
+        // detect new size - it must not include final zero symbol:
+        size += other.size;
+        // trying to use previously written & accepted function for concatenation:
+        effectiveConcat(str, other.str);
+        // at the end we place the closing zero:
+        str[size] = '\0';
+    }
+
+    // merged code from effectiveConcat into append:
+    // void append1(String &other)
+    // {
+    //     size += other.size;
+    //     char *newStr = new char[size + 1];
+    //     // copying values from our first string into the new bigger one:
+    //     for (; *str != '\0'; str++, newStr++)
+    //         *newStr = *str;
+    //     // copying values from other string to found place:
+    //     for (; *(other.str) != '\0'; (other.str)++, newStr++)
+    //         *newStr = *(other.str);
+    //     newStr[size] = '\0';
+    //     // cleaning memory under old str pointer:
+    //     delete[] str;
+    //     // repointing our struct field to the new place:
+    //     str = newStr;
+    // }
 };
 
 int main()
@@ -65,7 +102,8 @@ int main()
     cout << String(n, c).str << endl;
     String h1("Hello");
     String h2(",World");
-    h1.append(h2);
+    // h1.append(h2);
+    h1.appendManual(h2);
     cout << h1.str << "\\size=" << h1.size << endl;
     return 0;
 }
