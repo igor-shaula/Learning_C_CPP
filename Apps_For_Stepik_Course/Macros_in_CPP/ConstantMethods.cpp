@@ -10,11 +10,17 @@ struct IntArray
     IntArray *createConst() const; // fix in declaration needed
 
     // we can define two versions of a method - usual and const:
-    int get(size_t i) const { return data[i]; } // does not modify anything
-    int &get(size_t i) { return data[i]; }      // returns a link with which we can modify content under it
+    int get(size_t i) const // does not modify anything
+    {
+        return data[i]; // data is a pointer and it's constant here - we cannot change this value
+        counter++;      // keyword "mutable" allows us to change this value even inside constant method!
+    }
+    int &get(size_t i) { return data[i]; } // returns a link with which we can modify content under it
 private:
     size_t size;
     int *data;
+    mutable size_t counter; // changing of this value is allowed inside constant method
+    // but be careful with mutable - it should not influence on logical constancy!
 };
 
 // constant methods cannot change fields of structure - because their "this" points to const
