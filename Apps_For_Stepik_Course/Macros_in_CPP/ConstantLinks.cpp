@@ -21,6 +21,6 @@ struct Segment
 
 // another benefit of constant link - we can use RValue there:
 Segment s;
-Point p = s.midpoint(Segment(Point(0, 0), Point(1, 1))); // inner Segment object has no name
+Point p = s.midpoint(Segment(Point(0, 0), Point(1, 1))); // inner Segment object is temporary instance
 
 // if midpoint(Segment & s) without const - line above would not compile
