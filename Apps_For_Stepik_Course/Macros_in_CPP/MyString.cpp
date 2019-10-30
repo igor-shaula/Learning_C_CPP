@@ -89,6 +89,27 @@ struct String
             *str = *(other.str);
         str[size] = '\0';
     }
+
+    String(const String &other) : size(other.size), str(new char[size + 1])
+    {
+        for (size_t i = 0; i != size; i++)
+            str[i] = other.str[i];
+        str[size] = '\0';
+    }
+
+    String &operator=(String const &other)
+    {
+        if (this != &other)
+        {
+            delete[] str;
+            size = other.size;
+            str = new char[size + 1];
+            for (size_t i = 0; i != size; i++)
+                str[i] = other.str[i];
+            str[size] = '\0';
+        }
+        return *this;
+    }
 };
 
 int main()
