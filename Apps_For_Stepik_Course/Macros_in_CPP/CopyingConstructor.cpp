@@ -2,6 +2,7 @@ struct IntArray
 {
     IntArray(size_t i) : size(i) { data = new int[size]; }
 
+    // when we need completely new instance with its own memory:
     IntArray(IntArray const &a) : size(a.size), data(new int[size]) // our custom COPYING constructor
     // note that const & is present in method signature - to avoid passing object by its value
     {
@@ -9,6 +10,20 @@ struct IntArray
             data[i] = a.data[i]; // we in fact are creating another copy of data in memory
     }
     // if we haven't declared copying constructor ourselves - it would be created automatically
+
+    // when we already have an instance but need to repoint it to a new region of memory:
+    IntArray &operator=(IntArray const &a) // we need this because default behavior of "=" is different
+    {
+        if (this != &a)
+        {
+            delete[] data;        // preparing the place for data to be copied from "a" instance
+            size = a.size;        // of course new size can be different
+            data = new int[size]; // this memory is new and now is about to be initialized:
+            for (size_t i = 0; i != size; i++)
+                data[i] = a.data[i];
+        }
+        return *this; // taking object under "this" pointer
+    }
 
 private:
     size_t size;
