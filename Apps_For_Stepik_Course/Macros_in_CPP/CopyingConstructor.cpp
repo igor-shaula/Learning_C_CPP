@@ -25,6 +25,30 @@ struct IntArray
         return *this; // taking object under "this" pointer
     }
 
+    // useful method:
+    void swap(IntArray &a) // just replaces fields of this and given object
+    {
+        size_t const t1 = size;
+        size = a.size;
+        a.size = t1;
+        int *const t2 = data;
+        data = a.data;
+        a.data = t2;
+    }
+    void swapStd(IntArray &a) // does the same as previous custom swap
+    {
+        std::swap(size, a.size);
+        std::swap(data, a.data);
+    }
+    // second variant of overriding operator '=' using method 'swap':
+    IntArray &operator=(IntArray const &a) // in fact same functionality as in previous realization
+    {
+        // serves for memory efficiency - but there will be no mistakes this time if checking is absent
+        if (this != &a)
+            IntArray(a).swap(*this); // IntArray(a) gives us temporary instance
+        return *this;
+    }
+
 private:
     size_t size;
     int *data;
