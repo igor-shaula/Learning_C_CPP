@@ -48,6 +48,15 @@ struct IntArray
             IntArray(a).swap(*this); // IntArray(a) gives us temporary instance
         return *this;
     }
+    /*
+    there is a way of protecting from invocation of copying constructors & operator:
+    private:
+        IntArray(IntArray const & a);
+        IntArray & operator=(IntArray const & a);
+    // note that these are only declarations with absent body - and there has to be NO body
+    // outer code cannot use private structure methods - otherwise compilation error will occur
+    // also these things cannot be used by inner struct's code - just because they have no body
+    */
 
 private:
     size_t size;
@@ -66,3 +75,11 @@ int main()
     // 2 - destructor for a2 is invoked - but as a1 and a2 are the same - this region of memory is already cleared
     // 3 - destructor for a1 is invoked - but again we have error here as memory cannot be cleared more than once
 }
+/*
+copiler is able to generate 4 methods by default:
+1 - default constructor;
+2 - copying constructor;
+3 - assignment operator (=);
+4 - destructor;
+if we had to set at least one our custom from 2nd, 3rd or 4th option - we ofte have to set all others
+*/
