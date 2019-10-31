@@ -41,13 +41,12 @@ private:
 };
 
 void fooSays(const Foo &foo) { foo.say(); }
-// 1 - we have to get instance of foo somehow - of course via its derivative!
-
+// we have to get instance of foo somehow for this function to work - of course via its derivative!
 struct FooChild : Foo
 {
     FooChild(char const *msg) : Foo(msg) {}
 };
-
+// now comes the main point of interest in given test:
 const FooChild get_foo(const char *msg)
 {
     return FooChild(msg);
