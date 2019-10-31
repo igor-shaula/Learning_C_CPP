@@ -15,6 +15,28 @@ struct Vector2d
     double mult(Vector2d const &p) const { return x * p.x, y * p.y; }
 };
 
+struct BaseFile
+{
+    void write(char const *s);
+};
+struct FormattedFile : BaseFile
+{
+    void write(int i);
+    void write(double d);
+    using BaseFile::write; // allows this method set from base class to be included to a list of overloaded methods
+};
+
+struct String
+{
+    String(char *c) : str(c) {}
+    /* ... */
+    char &at(size_t idx) { return str[idx]; }
+    char at(size_t idx) const { return str[idx]; }
+    /* ... */
+    size_t size;
+    char *str;
+};
+
 int main()
 {
     // primitives:
@@ -28,6 +50,15 @@ int main()
     Vector2d p(1, 2);
     Vector2d q = p.mult(10); // returns Vector2d(10, 20) & copies created object to 'q' - copying constructor works
     double r = p.mult(q);    // overloaded method works this time
+
+    // solving puzzle:
+    String greet("Hello");
+    char ch1 = greet.at(0);
+    cout << ch1 << endl;
+
+    String const const_greet("Hello, Const!");
+    char const &ch2 = const_greet.at(0);
+    cout << ch2 << endl;
 
     return 0;
 }
