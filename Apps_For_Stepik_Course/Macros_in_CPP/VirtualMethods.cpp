@@ -43,3 +43,11 @@ int main()
     delete s; // as we have virtual destructor in base class - at first ~Student() is called, and then ~Person
     return 0;
 }
+/*
+what is polymorphism ? -> ability to work with different data types in one style ..
+
+OVERLOADING - is a static form of polymorphism - it's done during compilation time ..
+
+OVERRIDING / VIRTUAL METHODS - form of dynamic polymorphism - choosing a method works durin execution time ..
+dynamic polymorphism is the one of three OOP main concepts/ideas which are often asked ..
+*/
