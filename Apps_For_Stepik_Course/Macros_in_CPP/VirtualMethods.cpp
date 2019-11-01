@@ -14,11 +14,18 @@ private:
     string name_;
 };
 
-struct Professor : Person
+struct Teacher : Person
+{
+    string occupation() {}
+    virtual string course() {} // this method will be present in virtual methods table of class Professor
+};
+
+struct Professor : Teacher
 {
     Professor(string s) : Person(s) {}
     string name() const { return "Prof. " + Person::name(); }
     string occupation() const { return "professor"; }
+    // method course() is not overriden - so we'll use its base realization from class Teacher
 };
 
 struct Student : Person
