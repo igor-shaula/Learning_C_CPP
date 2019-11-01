@@ -5,6 +5,7 @@ struct Expression // base type
 {
     virtual double evaluate() const = 0;
     virtual double getValue() const = 0;
+    virtual void setValue(double valueIn) = 0;
     virtual double getLeft() const = 0;
     virtual double getRight() const = 0;
 };
@@ -17,9 +18,11 @@ struct Number : Expression
 
     double getValue() const { return value; }
 
+    void setValue(double valueIn) { value = valueIn; }
+
 private:
-    virtual double getLeft() const {};
-    virtual double getRight() const {};
+    double getLeft() const {};
+    double getRight() const {};
     double value;
 };
 
@@ -30,7 +33,13 @@ struct BinaryOperation : Expression
       которые вам нужно реализовать.
      */
     BinaryOperation(Expression const *left, char op, Expression const *right)
-        : left(left), op(op), right(right) {}
+        : left(left), op(op), right(right)
+    {
+        Number n(evaluate());
+        ((Expression *)this)->setValue(n.getValue());
+        cout << ((Expression *)this)->getValue() << endl;
+        // cout << "saving value in BinaryOperation(...): " << ((Expression *)this)->getValue() << endl; // this gives unpredictable shit
+    }
 
     double evaluate() const
     {
@@ -54,6 +63,7 @@ struct BinaryOperation : Expression
 
 private:
     double getValue() const {};
+    void setValue(double valueIn){};
     Expression const *left;
     Expression const *right;
     char op;
@@ -62,15 +72,16 @@ private:
 int main()
 {
     // this code block has to work: sample of 3 + 4.5 * 5
-    // 1 - сначала создаём объекты для подвыражения 4.5 * 5
+
     Expression *sub = new BinaryOperation(new Number(4.5), '*', new Number(5));
-    // потом используем его в выражении для +
+    cout << "value in sub: " << sub->getValue() << endl;
+
     cout << "first evaluation: " << sub->evaluate() << endl;
+
     Expression *expr = new BinaryOperation(new Number(3), '+', sub);
     cout << "left: " << expr->getLeft() << endl;
     cout << "right: " << expr->getRight() << endl;
 
-    // вычисляем и выводим результат: 25.5
     std::cout << expr->evaluate() << std::endl;
 
     // тут освобождаются *все* выделенные объекты
