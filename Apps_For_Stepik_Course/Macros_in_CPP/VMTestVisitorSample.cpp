@@ -20,7 +20,6 @@ struct Expression // base type
     virtual ~Expression() {}
     // visit() allows us to add only one method instead of many in Expression, Number & BinaryOperation.
     virtual void visit(Visitor *visitor) const = 0;
-    Expression const *getExpression() const { return this; }
 };
 
 struct Number : Expression
@@ -89,7 +88,24 @@ struct PrintBinaryOperationsVisitor : Visitor
         bop->getLeft()->visit(this);
         cout << bop->getOp() << ' ';
         bop->getRight()->visit(this);
-        cout << " -> " << bop->evaluate() << endl;
+        cout << "-> " << bop->evaluate() << endl;
+    }
+};
+
+struct PrintVisitor : Visitor
+{
+    void visitNumber(Number const *number)
+    {
+        std::cout << number->getValue();
+    }
+
+    void visitBinaryOperation(BinaryOperation const *bop)
+    {
+        std::cout << '(';
+        bop->getLeft()->visit(this);
+        std::cout << bop->getOp();
+        bop->getRight()->visit(this);
+        std::cout << ')';
     }
 };
 
@@ -105,7 +121,8 @@ int main()
 
     // added for Visitor use:
     Expression const *exprV = expr;
-    PrintBinaryOperationsVisitor visitor;
+    // PrintBinaryOperationsVisitor visitor;
+    PrintVisitor visitor;
     exprV->visit(&visitor);
 
     delete expr; // sub будет правым операндом expr, поэтому его удалять не нужно
