@@ -51,6 +51,35 @@ struct SecondChildPrivate : private ChildPrivate
     }
 };
 
+struct BaseDevice
+{
+    // BaseDevice(void *data, size_t size) : data(data), size(size) {}
+    void send(void *data, size_t size)
+    {
+        cout << "start sending" << endl;
+        sendImpl(data, size);
+        cout << "stop sending" << endl;
+    }
+
+private:
+    virtual void sendImpl(void *data, size_t size) { cout << "you should not see this"; }
+    void *data;
+    size_t size;
+};
+
+struct Router : BaseDevice
+{
+    // Router(void *data, size_t size) : BaseDevice(data, size) {}
+
+private:
+    // main thing here - it's possible to OVERRIDE even PRIVATE method from base class /
+    void sendImpl(void *data, size_t size)
+    {
+        cout << "implementation works instead of base - that's correct!" << endl;
+        cout << "sending data: " << *((int *)data) << " , size: " << size << endl;
+    }
+};
+
 int main()
 {
     // that's why real OOP-style use works only with public inheritance:
@@ -61,6 +90,12 @@ int main()
     // Base *scprot = new SecondChildProtected(1, 2, 3); // inaccessible base class ChildProtected
     // Base *scpiv = new SecondChildPrivate(1, 2, 3);    // inaccessible base class ChildPrivate
     delete cpub, scpub;
+
+    int data = 42;
+    int *ptr = &data;
+    // BaseDevice *bd = new Router(ptr, 4);
+    BaseDevice *bd = new Router();
+    bd->send(ptr, 2);
     return 0;
 }
 
