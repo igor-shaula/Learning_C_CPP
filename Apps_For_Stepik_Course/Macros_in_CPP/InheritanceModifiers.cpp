@@ -60,8 +60,10 @@ struct BaseDevice
         sendImpl(data, size);
         cout << "stop sending" << endl;
     }
+    // virtual void sendPureV(void *data, size_t size) = 0;
 
 private:
+    // realization from here will never be used - derivatives must use their own sendImpl() /
     virtual void sendImpl(void *data, size_t size) { cout << "you should not see this"; }
     void *data;
     size_t size;
@@ -69,7 +71,13 @@ private:
 
 struct Router : BaseDevice
 {
-    // Router(void *data, size_t size) : BaseDevice(data, size) {}
+    // // undefined reference to `BaseDevice::sendPureV(void*, unsigned long)'
+    // void sendPureV(void *data, size_t size)
+    // {
+    //     cout << "implementation works instead of base - that's correct!" << endl;
+    //     cout << "sending data: " << *((int *)data) << " , size: " << size << endl;
+    //     BaseDevice::sendPureV(data, size);
+    // }
 
 private:
     // main thing here - it's possible to OVERRIDE even PRIVATE method from base class /
@@ -77,6 +85,7 @@ private:
     {
         cout << "implementation works instead of base - that's correct!" << endl;
         cout << "sending data: " << *((int *)data) << " , size: " << size << endl;
+        // BaseDevice::send(data, size);
     }
 };
 
@@ -96,6 +105,8 @@ int main()
     // BaseDevice *bd = new Router(ptr, 4);
     BaseDevice *bd = new Router();
     bd->send(ptr, 2);
+    // bd->sendPureV(ptr, 4);
+    delete bd;
     return 0;
 }
 
@@ -105,3 +116,7 @@ classic OOP inheritance is in fact public inheritance - other types behave diffe
 private & protected inheritance is better replaceable by agregation /
 the only reason to use protected & private inheritance - ability to rewrite methods of base class /
 */
+
+// interface - is an abstract class without fields and with all methods being abstract /
+// all methods of interface are pure virtual - but destructor has to be real - for compilability /
+// the only question is - what is pure virtual method with definition ? how is it possible ? /
