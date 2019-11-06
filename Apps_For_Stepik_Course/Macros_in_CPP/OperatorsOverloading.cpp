@@ -58,6 +58,22 @@ std::ostream &operator<(std::ostream &os, Vector const &v)
 // cin & cout are in fact objects of istream & ostream that have overloaded operators of bit shifting //
 // istream & ostream are base classes for all streams of input-output //
 
+struct String
+{
+    String(char *data) : data_(data) {}
+    operator bool() const { return size_ != 0; } // casting (String) to (bool)
+    operator char const *() const                // castin (String) to (char const *)
+    {
+        if (this)
+            return data_;
+        return ""; // this empty string will not be deleted on } as it lives in constant pool region of memory
+    }
+
+private:
+    char *data_;
+    size_t size_;
+};
+
 void useAllOverloadedOperators()
 {
     Vector v(1, 2);
@@ -95,7 +111,12 @@ void useAllOverloadedOperators()
     cin >> v4;
     cout << "changed value for v4: " << &v4 << endl;
     // for now there are some problems with output - 0xSOMETHING is printed instead of what we'd set before
-    v4.print(); // but overloaded operator >> for cin works well /
+    v4.print(); // but overloaded operator >> for cin works well //
+
+    char c[] = {'O', 'K'};
+    String s(c);
+    cout << "casting String to bool: " << (bool)s << endl;
+    cout << "casting String to char const *: " << (char const *)s << endl;
 }
 
 // note that operators (type) [] () -> ->* = can be overloaded ONLY INSIDE CLASSES //
