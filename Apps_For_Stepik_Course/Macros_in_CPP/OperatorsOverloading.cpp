@@ -61,18 +61,41 @@ std::ostream &operator<(std::ostream &os, Vector const &v)
 struct String
 {
     String(char *data) : data_(data) {}
+    // type casting operator MUST be overloaded only as a method - and it must have NO type of returned value //
     operator bool() const { return size_ != 0; } // casting (String) to (bool)
     operator char const *() const                // castin (String) to (char const *)
+    // in C++2003 standart there is no way of using 'explicit' before overloading type-casting operator //
     {
-        if (this)
+        if (*this) // WARNING: there is implicit cast from String to bool here //
             return data_;
         return ""; // this empty string will not be deleted on } as it lives in constant pool region of memory
+    }
+    size_t size() const { return size_; }
+    char *data() const { return data_; }
+    String(size_t size)
+    {
+        size_ = size;
+        delete[] data_;
+        data_ = new char[size_];
     }
 
 private:
     char *data_;
     size_t size_;
 };
+
+// this is NOT finished
+String operator&&(String const &s1, String const &s2)
+{
+    size_t size_new = s1.size() + s2.size();
+    String *s = new String(size_new);
+    // copy all values from s1 to s, than copy all values from s2 to s
+    for (size_t i1 = 0; i1 != s1.size(); ++i1)
+        s[i1] = s1[i1];
+    for (size_t i2 = 0; i2 != s2.size(); ++i2)
+        s[s1.size() + i2] = s1[i2];
+    return *s;
+}
 
 void useAllOverloadedOperators()
 {
@@ -117,6 +140,10 @@ void useAllOverloadedOperators()
     String s(c);
     cout << "casting String to bool: " << (bool)s << endl;
     cout << "casting String to char const *: " << (char const *)s << endl;
+
+    String ss(s && s);
+    cout << "custom && result: " << &ss << endl;
+    delete ss;
 }
 
 // note that operators (type) [] () -> ->* = can be overloaded ONLY INSIDE CLASSES //
