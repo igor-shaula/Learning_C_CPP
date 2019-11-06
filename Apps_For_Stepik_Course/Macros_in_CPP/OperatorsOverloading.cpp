@@ -24,6 +24,26 @@ struct Vector
     bool operator()(int i1, int i2) {}                          // wil act like another function with 2 parameters
 };
 
+struct Num
+{
+    int n;
+    Num(int n) : n(n) {}
+    // overloading PREFIX form of operator:
+    Num &operator++() // prefix form always has no parameters in overloading method //
+    {
+        n += 1;
+        return *this;
+    }
+    // overloading POSTFIX form of operator:
+    Num operator++(int) // this nameless int is a dummy parameter - just for having another method signature
+    {
+        Num tmp(*this); // creating a copy of instance with current state - we'll have to return it
+        ++(*this);      // changing original instance
+        return tmp;     // returning previously saved state of original instance - but in fact this is its copy
+    }
+    // that's why prefix form of increment/decrement is considered FASTER and is more likey to be used
+};
+
 void useAllOverloadedOperators()
 {
     Vector v(1, 2);
@@ -44,11 +64,20 @@ void useAllOverloadedOperators()
     cout << "v2[0]: " << v2[0] << endl;
     cout << "v2(2):" << v2(2) << endl;
     cout << "v2(3, 4):" << v2(3, 4) << endl;
+
+    Num n1(5);
+    cout << "n1 = " << n1.n << endl;
+    Num n2 = ++n1;
+    cout << "n2 = ++n1: " << n2.n << endl;
+    cout << "new n1: " << n1.n << endl;
+    Num n3 = n1++;
+    cout << "n3 = n1++: " << n3.n << endl;
+    cout << "new n1: " << n1.n << endl;
 }
 
-// note that operators (type) [] () -> ->* = can be overloaded ONLY INSIDE CLASSES
+// note that operators (type) [] () -> ->* = can be overloaded ONLY INSIDE CLASSES //
 
-int main()
+main()
 {
     useAllOverloadedOperators();
     return 0;
