@@ -44,6 +44,20 @@ struct Num
     // that's why prefix form of increment/decrement is considered FASTER and is more likey to be used
 };
 
+// overloading of >> and << operators has to be done outside structures as we don't have access to their classes
+std::istream &operator>>(std::istream &is, Vector &v) // input stream
+{
+    is >> v.x >> v.y; // here we have 2 invocations of reading values from keyboard
+    return is;
+}
+std::ostream &operator<(std::ostream &os, Vector const &v)
+{
+    os << "overloaded <<: x=" << v.x << ",y=" << v.y;
+    return os;
+}
+// cin & cout are in fact objects of istream & ostream that have overloaded operators of bit shifting //
+// istream & ostream are base classes for all streams of input-output //
+
 void useAllOverloadedOperators()
 {
     Vector v(1, 2);
@@ -73,6 +87,15 @@ void useAllOverloadedOperators()
     Num n3 = n1++;
     cout << "n3 = n1++: " << n3.n << endl;
     cout << "new n1: " << n1.n << endl;
+
+    cout << &v1 << endl;
+    Vector v4(4, 5);
+    cout << "initial value for v4: " << &v4 << endl;
+    cout << "now set new values for x & y in v4: ";
+    cin >> v4;
+    cout << "changed value for v4: " << &v4 << endl;
+    // for now there are some problems with output - 0xSOMETHING is printed instead of what we'd set before
+    v4.print(); // but overloaded operator >> for cin works well /
 }
 
 // note that operators (type) [] () -> ->* = can be overloaded ONLY INSIDE CLASSES //
