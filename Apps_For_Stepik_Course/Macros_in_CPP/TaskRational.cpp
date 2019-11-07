@@ -1,3 +1,6 @@
+#include <iostream>
+using namespace std;
+
 struct Rational
 {
     Rational(int numerator = 0, int denominator = 1) : numerator_(numerator), denominator_(denominator) {}
@@ -30,6 +33,21 @@ struct Rational
     // following two methods are not mentioned in task's description but were present in given presample of code //
     void inv();
     double to_double() const;
+
+    void print()
+    {
+        cout << numerator_ << '/' << denominator_;
+    }
+    void println()
+    {
+        print();
+        cout << endl;
+    }
+    void println(char const *c)
+    {
+        cout << c << ':';
+        println();
+    }
 
     // all variants of overloading addition operator //
     Rational operator+() {} // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
@@ -64,6 +82,14 @@ Rational operator/=(int i, Rational r) {}
 
 void testOverloadedOperators()
 {
+    Rational r1(1, 2);
+    r1.println();
+    Rational r2 = -r1;
+    r2.println();
+    Rational r3 = r1 + r1;
+    r3.println("r3");
+    Rational r4 = r1 + 1;
+    r4.println("r4");
 }
 
 int main()
