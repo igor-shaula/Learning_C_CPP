@@ -79,10 +79,34 @@ struct String
         data_ = new char[size_];
     }
 
+    // overloading of arithmetic & bit operators:
+    String(char const *cstr) // as a constant link is given here - we cannot simply reassign inner data_ to it //
+    {
+        size_t i = 0;
+        for (; cstr[i] != '\0'; ++i)
+            ;
+        size_ = i;
+        data_ = new char[size_];
+        for (size_t j = 0; j != size_; ++j)
+            data_[j] = cstr[j];
+    }
+    String &operator+=(String const &s) // having this operator here is nice because it changes left object 'this' //
+    {
+        *this = *this && s;
+        return *this;
+    }
+    // String operator+(String const & s) const {...} - if we did that - implicit cast for first element would not work
+    // for that reason it's much better to have overloading of '+' operator outside String structure,
+    // because at first any char array will be implicitly converteed to String using constructor from above,
+    // and only then operator will process two instances of String class //
+
 private:
     char *data_;
     size_t size_;
 };
+
+String operator+(String s1, String const &s2) { return s1 += s2; }
+// using const for s2 allows to save memory on copying s2 object by passing only the link to it //
 
 // this is NOT finished
 String operator&&(String const &s1, String const &s2)
