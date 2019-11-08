@@ -78,28 +78,52 @@ public:
         return Rational(numerator_, denominator_);
     }
     Rational operator+=(int n) { return *this + n; }
-
     Rational operator-() // cannot be const method as we use non-const neg() inside - and it changes numerator //
     {
         neg();
         return *this;
     }
+    Rational operator-(Rational const &r)
+    {
+        numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
+        return Rational(numerator_, denominator_);
+    }
+    Rational operator-=(Rational const &r) { return *this - r; }
+    Rational operator*(Rational const &r)
+    {
+        numerator_ *= r.numerator_;
+        denominator_ *= r.denominator_;
+        return Rational(numerator_, denominator_);
+    }
+    Rational operator*=(Rational const &r) { return *this * r; }
     Rational operator*(int n)
     {
-        return Rational(numerator_ * n, denominator_);
+        numerator_ *= n;
+        return Rational(numerator_, denominator_);
     }
+    Rational operator*=(int n) { return *this * n; }
+    Rational operator/(Rational const &r)
+    {
+        numerator_ *= r.denominator_;
+        denominator_ *= r.numerator_;
+        return Rational(numerator_, denominator_);
+    }
+    Rational operator/=(Rational const &r) { return *this / r; }
     Rational operator/(int n)
     {
-        return Rational(numerator_, denominator_ * n);
+        denominator_ *= n;
+        return Rational(numerator_, denominator_);
     }
+    Rational operator/=(int n) { return *this / n; }
 };
 
-bool verify(const Rational &r, int num, int denom, string comment = "") // last parameter here has default value //
-{
-    r.print();
-    bool result = r.numerator() == num && r.denominator() == denom;
-    cout << ':' << (result ? "_OK" : "_FAILED") << '_' << comment << endl;
-}
+Rational operator+(int i, Rational r) { return r + i; }
+Rational operator-(int i, Rational r) { return -r + i; }
+Rational operator*(int i, Rational r) { return r * i; }
+Rational operator/(int i, Rational r) { return r.inverted() * i; }
+// there is no way of overloading all these operators with only one primitive argument //
+// also there is no sense in keeping operator(Rational, int) here - outside the struct //
 
 Rational r;
 
@@ -113,12 +137,13 @@ void prepareValueR()
     // r.println("after R");
 }
 
-Rational operator+(int i, Rational r) { return r + i; }
-Rational operator-(int i, Rational r) { return -r + i; }
-Rational operator*(int i, Rational r) { return r * i; }
-Rational operator/(int i, Rational r) { return r.inverted() * i; }
-// there is no way of overloading all these operators with only one primitive argument //
-// also there is no sense in keeping
+bool verify(const Rational &r, int num, int denom, string comment = "") // last parameter here has default value //
+{
+    r.print();
+    bool result = r.numerator() == num && r.denominator() == denom;
+    cout << ':' << (result ? "_OK" : "_FAILED") << '_' << comment << endl;
+    prepareValueR();
+}
 
 void testOverloadedOperators()
 {
@@ -131,21 +156,18 @@ void testOverloadedOperators()
     Rational r2 = -r;
     verify(r2, -1, 2, "r2");
 
-    prepareValueR();
     Rational r3 = r + r;
     verify(r3, 4, 4, "r3");
 
     Rational r4 = r + 1;
-    verify(r4, 8, 4, "r4");
+    verify(r4, 3, 2, "r4");
 
-    prepareValueR();
     Rational r5 = 1 + r;
     verify(r5, 3, 2, "r5");
 
     Rational r6 = r * 2;
     verify(r6, 2, 2, "r6");
 
-    prepareValueR();
     Rational r7 = 2 * r;
     verify(r7, 2, 2, "r7");
 
@@ -154,6 +176,31 @@ void testOverloadedOperators()
 
     Rational r9 = r / 2;
     verify(r9, 1, 4, "r9");
+
+    Rational r10 = r;
+    r10 += r;
+    verify(r10, 4, 4, "r10");
+    Rational r11 = r;
+    r11 += 1;
+    verify(r11, 3, 2, "r11");
+    Rational r12 = r;
+    r12 -= (2 * r);
+    verify(r12, -2, 4, "r12");
+    Rational r13 = r;
+    r13 -= 1;
+    verify(r13, -1, 2, "r13");
+    Rational r14 = r;
+    r14 *= r;
+    verify(r14, 1, 4, "r14");
+    Rational r15 = r;
+    r15 *= 2;
+    verify(r15, 2, 2, "r15");
+    Rational r16 = r;
+    r16 /= (r / 2);
+    verify(r16, 4, 2, "r16");
+    Rational r17 = r;
+    r17 /= 2;
+    verify(r17, 1, 4, "r17");
 }
 
 int main()
