@@ -10,6 +10,7 @@ private:
 public:
     Rational(int numerator = 0, int denominator = 1) : numerator_(numerator), denominator_(denominator) {}
 
+    // methods (add, sub, mul, div, neg, inv) have to be non-const as they are declared so in the task //
     void add(Rational rational)
     {
         numerator_ += rational.numerator_;
@@ -30,16 +31,15 @@ public:
         numerator_ /= rational.numerator_;
         denominator_ /= rational.denominator_;
     }
-
     void neg()
     {
         numerator_ = -numerator_; // denominator remains the same because '-' affects numerator at first
     }
     // following two methods are not mentioned in task's description but were present in given presample of code //
     void inv();
-    double to_double() const;
+    double to_double() const; // only this method was declared const in the task initially //
 
-    // UTILS = = =
+    // MY ADDITIONS = = =
 
     int numerator() const { return numerator_; }
     int denominator() const { return denominator_; }
@@ -88,6 +88,10 @@ public:
     {
         return Rational(numerator_ * n, denominator_);
     }
+    Rational operator/(int n)
+    {
+        return Rational(numerator_, denominator_ * n);
+    }
 };
 
 bool verify(const Rational &r, int num, int denom, string comment = "") // last parameter here has default value //
@@ -98,10 +102,6 @@ bool verify(const Rational &r, int num, int denom, string comment = "") // last 
 }
 
 Rational r;
-// void prepareValueR()
-// {
-//     r = {1, 2}; // compelled action to restore initial value of this object //
-// }
 
 void prepareValueR()
 {
@@ -117,6 +117,8 @@ Rational operator+(int i, Rational r) { return r + i; }
 Rational operator-(int i, Rational r) { return -r + i; }
 Rational operator*(int i, Rational r) { return r * i; }
 Rational operator/(int i, Rational r) { return r.inverted() * i; }
+// there is no way of overloading all these operators with only one primitive argument //
+// also there is no sense in keeping
 
 void testOverloadedOperators()
 {
@@ -146,6 +148,12 @@ void testOverloadedOperators()
     prepareValueR();
     Rational r7 = 2 * r;
     verify(r7, 2, 2, "r7");
+
+    Rational r8 = 1 / r;
+    verify(r8, 2, 1, "r8");
+
+    Rational r9 = r / 2;
+    verify(r9, 1, 4, "r9");
 }
 
 int main()
