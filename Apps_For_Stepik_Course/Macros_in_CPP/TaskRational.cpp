@@ -118,13 +118,14 @@ public:
     Rational &operator/=(int n) { return *this / n; }
 };
 
-Rational operator+(int i, Rational r) { return r + i; }
-Rational operator-(int i, Rational r) { return -r + i; }
-Rational operator*(int i, Rational r) { return r * i; }
-Rational operator/(int i, Rational r)
+Rational &operator+(int i, Rational const &r) { return Rational(r.numerator(), r.denominator()) + i; }
+Rational &operator-(int i, Rational const &r) { return -Rational(r.numerator(), r.denominator()) + i; }
+Rational &operator*(int i, Rational const &r) { return Rational(r.numerator(), r.denominator()) * i; }
+Rational &operator/(int i, Rational const &r)
 {
-    r.inv();
-    return r * i;
+    Rational nr(r.numerator(), r.denominator());
+    nr.inv();
+    return nr * i;
 }
 // there is no way of overloading all these operators with only one primitive argument //
 // also there is no sense in keeping operator(Rational, int) here - outside the struct //
