@@ -78,6 +78,7 @@ Vector operator*(int n, Vector const &v)
 {
     return v * n;
 }
+// all non-member overloaded operators above cannot be const - because language rules disallow that
 
 int main()
 {

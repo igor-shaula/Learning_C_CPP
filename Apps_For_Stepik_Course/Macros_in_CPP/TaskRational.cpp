@@ -3,37 +3,46 @@ using namespace std;
 
 struct Rational
 {
+private:
+    int numerator_;
+    int denominator_;
+
+public:
     Rational(int numerator = 0, int denominator = 1) : numerator_(numerator), denominator_(denominator) {}
 
     void add(Rational rational)
     {
-        this->numerator_ += rational.numerator_;
-        this->denominator_ += rational.denominator_;
+        numerator_ += rational.numerator_;
+        denominator_ += rational.denominator_;
     }
     void sub(Rational rational)
     {
-        this->numerator_ -= rational.numerator_;
-        this->denominator_ -= rational.denominator_;
+        numerator_ -= rational.numerator_;
+        denominator_ -= rational.denominator_;
     }
     void mul(Rational rational)
     {
-        this->numerator_ *= rational.numerator_;
-        this->denominator_ *= rational.denominator_;
+        numerator_ *= rational.numerator_;
+        denominator_ *= rational.denominator_;
     }
     void div(Rational rational)
     {
-        this->numerator_ /= rational.numerator_;
-        this->denominator_ /= rational.denominator_;
+        numerator_ /= rational.numerator_;
+        denominator_ /= rational.denominator_;
     }
 
     void neg()
     {
-        this->numerator_ = -this->numerator_; // denominator remains the same because '-' affects numerator at first
+        numerator_ = -numerator_; // denominator remains the same because '-' affects numerator at first
     }
     // following two methods are not mentioned in task's description but were present in given presample of code //
     void inv();
     double to_double() const;
 
+    // UTILS = = =
+
+    int numerator() const { return numerator_; }
+    int denominator() const { return denominator_; }
     void print()
     {
         cout << numerator_ << '/' << denominator_;
@@ -49,31 +58,37 @@ struct Rational
         println();
     }
 
-    // all variants of overloading addition operator //
+    // all variants of overloading addition operator = = =
+
     Rational operator+() {} // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
     Rational operator+(Rational const &r)
     {
-        this->numerator_ = this->numerator_ * r.denominator_ + r.numerator_ * this->denominator_;
-        this->denominator_ = this->denominator_ * r.denominator_;
+        numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
         return Rational(numerator_, denominator_);
     }
     Rational operator+(int i)
     {
-        this->numerator_ += i * this->denominator_;
-        return Rational(this->numerator_, this->denominator_);
+        numerator_ += i * denominator_;
+        return Rational(numerator_, denominator_);
     }
     Rational operator+=(Rational const &r) { return *this + r; }
+    Rational operator+=(int n) { return *this + n; }
 
-    Rational operator-()
+    // all variants of overloading subtraction operator = = =
+
+    Rational operator-() // cannot be const method as we use non-const neg() inside - and it changes numerator //
     {
-        this->neg();
+        neg();
         return *this;
     }
-
-private:
-    int numerator_;
-    int denominator_;
 };
+
+bool verify(string name, const Rational &r, int num, int denom)
+{
+    bool result = r.numerator() == num && r.denominator() == denom;
+    cout << name << ':' << (result ? "OK" : "FAILED") << endl;
+}
 
 Rational operator+=(int i, Rational r) { return r + i; }
 Rational operator-=(int i, Rational r) { return -r + i; }
@@ -82,14 +97,21 @@ Rational operator/=(int i, Rational r) {}
 
 void testOverloadedOperators()
 {
-    Rational r1(1, 2);
-    r1.println();
-    Rational r2 = -r1;
-    r2.println();
-    Rational r3 = r1 + r1;
-    r3.println("r3");
-    Rational r4 = r1 + 1;
-    r4.println("r4");
+    Rational r(1, 2); // initial value - has to remain unchanged but i'll do that later //
+    verify("r1", r, 1, 2);
+
+    Rational r1 = +r;
+    verify("r1", r1, 1, 2);
+
+    Rational r2 = -r;
+    verify("r2", r2, -1, 2);
+
+    r = {1, 2}; // compelled action to restore initial value of this object //
+    Rational r3 = r + r;
+    verify("r3", r3, 4, 4);
+
+    Rational r4 = r + 1;
+    verify("r4", r4, 8, 4);
 }
 
 int main()
