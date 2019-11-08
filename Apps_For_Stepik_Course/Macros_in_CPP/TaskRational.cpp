@@ -91,28 +91,37 @@ bool verify(const Rational &r, int num, int denom, string comment = "") // last 
     cout << ':' << (result ? "_OK" : "_FAILED") << '_' << comment << endl;
 }
 
-Rational operator+=(int i, Rational r) { return r + i; }
-Rational operator-=(int i, Rational r) { return -r + i; }
-Rational operator*=(int i, Rational r) {}
-Rational operator/=(int i, Rational r) {}
+Rational operator+(int i, Rational r) { return r + i; }
+Rational operator-(int i, Rational r) { return -r + i; }
+Rational operator*(int i, Rational r) {}
+Rational operator/(int i, Rational r) {}
 
 void testOverloadedOperators()
 {
     Rational r(1, 2); // initial value - has to remain unchanged but i'll do that later //
     verify(r, 1, 2);
 
-    Rational r1 = +r; // this gives very strange output //
+    Rational r1 = +r;
     verify(r1, 1, 2);
 
     Rational r2 = -r;
     verify(r2, -1, 2);
 
     r = {1, 2}; // compelled action to restore initial value of this object //
+
     Rational r3 = r + r;
     verify(r3, 4, 4);
+    // r.println("r");
 
     Rational r4 = r + 1;
     verify(r4, 8, 4);
+    // r.println("r");
+
+    r = {1, 2}; // compelled action to restore initial value of this object //
+
+    Rational r5 = 1 + r;
+    verify(r5, 3, 2);
+    // r.println("r");
 }
 
 int main()
