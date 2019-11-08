@@ -35,8 +35,12 @@ public:
     {
         numerator_ = -numerator_; // denominator remains the same because '-' affects numerator at first
     }
-    // following two methods are not mentioned in task's description but were present in given presample of code //
-    void inv();
+    void inv() // inversion of our Rational
+    {
+        int tmp = numerator_;
+        numerator_ = denominator_;
+        denominator_ = tmp;
+    }
     double to_double() const; // only this method was declared const in the task initially //
 
     // MY ADDITIONS = = =
@@ -57,19 +61,19 @@ public:
         cout << c << ':';
         println();
     }
-    Rational inverted()
-    {
-        return Rational(denominator_, numerator_);
-    }
 
     // all variants of overloading operators as methods = = =
 
-    Rational operator+() { return *this; } // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
+    Rational operator+() const { return *this; }
+    // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
     Rational operator+(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
         return Rational(numerator_, denominator_);
+        // int num = numerator_ * r.denominator_ + r.numerator_ * denominator_;
+        // int denom = denominator_ * r.denominator_;
+        // return Rational(num, denom);
     }
     Rational operator+=(Rational const &r) { return *this + r; }
     Rational operator+(int i)
@@ -88,8 +92,13 @@ public:
         numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
         return Rational(numerator_, denominator_);
+        // int num = numerator_ * r.denominator_ + r.numerator_ * denominator_;
+        // int denom = denominator_ * r.denominator_;
+        // return Rational(num, denom);
     }
     Rational operator-=(Rational const &r) { return *this - r; }
+    Rational operator-(int n) { return *this + (-n); }
+    Rational operator-=(int n) { return *this - n; }
     Rational operator*(Rational const &r)
     {
         numerator_ *= r.numerator_;
@@ -121,7 +130,11 @@ public:
 Rational operator+(int i, Rational r) { return r + i; }
 Rational operator-(int i, Rational r) { return -r + i; }
 Rational operator*(int i, Rational r) { return r * i; }
-Rational operator/(int i, Rational r) { return r.inverted() * i; }
+Rational operator/(int i, Rational r)
+{
+    r.inv();
+    return r * i;
+}
 // there is no way of overloading all these operators with only one primitive argument //
 // also there is no sense in keeping operator(Rational, int) here - outside the struct //
 
