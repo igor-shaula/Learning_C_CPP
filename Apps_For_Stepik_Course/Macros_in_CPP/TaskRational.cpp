@@ -43,16 +43,16 @@ public:
 
     int numerator() const { return numerator_; }
     int denominator() const { return denominator_; }
-    void print()
+    void print() const
     {
         cout << numerator_ << '/' << denominator_;
     }
-    void println()
+    void println() const
     {
         print();
         cout << endl;
     }
-    void println(char const *c)
+    void println(char const *c) const
     {
         cout << c << ':';
         println();
@@ -60,7 +60,7 @@ public:
 
     // all variants of overloading addition operator = = =
 
-    Rational operator+() {} // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
+    Rational operator+() { return *this; } // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
     Rational operator+(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
@@ -84,10 +84,11 @@ public:
     }
 };
 
-bool verify(string name, const Rational &r, int num, int denom)
+bool verify(const Rational &r, int num, int denom, string comment = "") // last parameter here has default value //
 {
+    r.print();
     bool result = r.numerator() == num && r.denominator() == denom;
-    cout << name << ':' << (result ? "OK" : "FAILED") << endl;
+    cout << ':' << (result ? "_OK" : "_FAILED") << '_' << comment << endl;
 }
 
 Rational operator+=(int i, Rational r) { return r + i; }
@@ -98,20 +99,20 @@ Rational operator/=(int i, Rational r) {}
 void testOverloadedOperators()
 {
     Rational r(1, 2); // initial value - has to remain unchanged but i'll do that later //
-    verify("r1", r, 1, 2);
+    verify(r, 1, 2);
 
-    Rational r1 = +r;
-    verify("r1", r1, 1, 2);
+    Rational r1 = +r; // this gives very strange output //
+    verify(r1, 1, 2);
 
     Rational r2 = -r;
-    verify("r2", r2, -1, 2);
+    verify(r2, -1, 2);
 
     r = {1, 2}; // compelled action to restore initial value of this object //
     Rational r3 = r + r;
-    verify("r3", r3, 4, 4);
+    verify(r3, 4, 4);
 
     Rational r4 = r + 1;
-    verify("r4", r4, 8, 4);
+    verify(r4, 8, 4);
 }
 
 int main()
