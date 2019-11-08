@@ -64,67 +64,58 @@ public:
 
     // all variants of overloading operators as methods = = =
 
-    Rational operator+() const { return *this; }
+    // Rational operator+() const { return *this; } // this also can be compiled //
+    Rational operator+() const { return Rational(numerator_, denominator_); }
     // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
-    Rational operator+(Rational const &r)
+    Rational &operator+(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
-        return Rational(numerator_, denominator_);
-        // int num = numerator_ * r.denominator_ + r.numerator_ * denominator_;
-        // int denom = denominator_ * r.denominator_;
-        // return Rational(num, denom);
-    }
-    Rational operator+=(Rational const &r) { return *this + r; }
-    Rational operator+(int i)
-    {
-        numerator_ += i * denominator_;
-        return Rational(numerator_, denominator_);
-    }
-    Rational operator+=(int n) { return *this + n; }
-    Rational operator-() // cannot be const method as we use non-const neg() inside - and it changes numerator //
-    {
-        neg();
         return *this;
     }
-    Rational operator-(Rational const &r)
+    Rational &operator+=(Rational const &r) { return *this + r; }
+    Rational &operator+(int i)
+    {
+        numerator_ += i * denominator_;
+        return *this;
+    }
+    Rational &operator+=(int n) { return *this + n; }
+    Rational operator-() const { return Rational(-1 * numerator_, denominator_); }
+    Rational &operator-(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
-        return Rational(numerator_, denominator_);
-        // int num = numerator_ * r.denominator_ + r.numerator_ * denominator_;
-        // int denom = denominator_ * r.denominator_;
-        // return Rational(num, denom);
+        return *this;
     }
-    Rational operator-=(Rational const &r) { return *this - r; }
-    Rational operator-(int n) { return *this + (-n); }
-    Rational operator-=(int n) { return *this - n; }
-    Rational operator*(Rational const &r)
+    Rational &operator-=(Rational const &r) { return *this - r; }
+    Rational &operator-(int n) { return *this + (-n); }
+    Rational &operator-=(int n) { return *this - n; }
+    Rational &operator*(Rational const &r)
     {
         numerator_ *= r.numerator_;
         denominator_ *= r.denominator_;
-        return Rational(numerator_, denominator_);
+        return *this;
     }
-    Rational operator*=(Rational const &r) { return *this * r; }
-    Rational operator*(int n)
+    Rational &operator*=(Rational const &r) { return *this * r; }
+    Rational &operator*(int n)
     {
         numerator_ *= n;
-        return Rational(numerator_, denominator_);
+        return *this;
     }
-    Rational operator*=(int n) { return *this * n; }
-    Rational operator/(Rational const &r)
+    Rational &operator*=(int n) { return *this * n; }
+    Rational &operator/(Rational const &r)
     {
         numerator_ *= r.denominator_;
         denominator_ *= r.numerator_;
-        return Rational(numerator_, denominator_);
+        return *this;
     }
-    Rational operator/=(Rational const &r) { return *this / r; }
-    Rational operator/(int n)
+    Rational &operator/=(Rational const &r) { return *this / r; }
+    Rational &operator/(int n)
     {
         denominator_ *= n;
-        return Rational(numerator_, denominator_);
+        return *this;
     }
-    Rational operator/=(int n) { return *this / n; }
+    Rational &operator/=(int n) { return *this / n; }
 };
 
 Rational operator+(int i, Rational r) { return r + i; }
