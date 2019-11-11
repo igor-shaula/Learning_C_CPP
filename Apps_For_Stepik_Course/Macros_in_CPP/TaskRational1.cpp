@@ -62,32 +62,59 @@ public:
         println();
     }
 
-    // all variants of overloading operators as methods = = =
+    // SOLUTION - what was really needed for the task = = =
+
+    Rational &operator+=(Rational const &r)
+    {
+        numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
+        return *this;
+    }
+    Rational &operator-=(Rational const &r)
+    {
+        numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
+        return *this;
+    }
+    Rational &operator*=(Rational const &r)
+    {
+        numerator_ *= r.numerator_;
+        denominator_ *= r.denominator_;
+        return *this;
+    }
+    Rational &operator/=(Rational const &r)
+    {
+        numerator_ *= r.denominator_;
+        denominator_ *= r.numerator_;
+        return *this;
+    }
 
     // Rational operator+() const { return *this; } // this also can be compiled //
     Rational operator+() const { return Rational(numerator_, denominator_); }
-    // PREFIX form - it has to leave all values as they are - so obviously do nothing here //
+    Rational operator-() const { return Rational(-1 * numerator_, denominator_); }
+
+    // ADDITIONAL variants of overloading operators as methods = = =
+
     Rational &operator+(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
         return *this;
     }
-    Rational &operator+=(Rational const &r) { return *this + r; }
+    // Rational &operator+=(Rational const &r) { return *this + r; }
     Rational &operator+(int i)
     {
         numerator_ += i * denominator_;
         return *this;
     }
     Rational &operator+=(int n) { return *this + n; }
-    Rational operator-() const { return Rational(-1 * numerator_, denominator_); }
     Rational &operator-(Rational const &r)
     {
         numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
         denominator_ = denominator_ * r.denominator_;
         return *this;
     }
-    Rational &operator-=(Rational const &r) { return *this - r; }
+    // Rational &operator-=(Rational const &r) { return *this - r; }
     Rational &operator-(int n) { return *this + (-n); }
     Rational &operator-=(int n) { return *this - n; }
     Rational &operator*(Rational const &r)
@@ -96,7 +123,7 @@ public:
         denominator_ *= r.denominator_;
         return *this;
     }
-    Rational &operator*=(Rational const &r) { return *this * r; }
+    // Rational &operator*=(Rational const &r) { return *this * r; }
     Rational &operator*(int n)
     {
         numerator_ *= n;
@@ -109,7 +136,7 @@ public:
         denominator_ *= r.numerator_;
         return *this;
     }
-    Rational &operator/=(Rational const &r) { return *this / r; }
+    // Rational &operator/=(Rational const &r) { return *this / r; }
     Rational &operator/(int n)
     {
         denominator_ *= n;

@@ -122,30 +122,11 @@ public:
     Rational operator/=(int n) { return *this / n; }
 };
 
-Rational operator+(Rational const &l, Rational const &r)
-{
-    int num = l.numerator() * r.denominator() + r.numerator() * l.denominator();
-    int denom = l.denominator() * r.denominator();
-    return Rational(num, denom);
-}
-Rational operator-(Rational const &l, Rational const &r)
-{
-    int num = l.numerator() * r.denominator() - r.numerator() * l.denominator();
-    int denom = l.denominator() * r.denominator();
-    return Rational(num, denom);
-}
-Rational operator*(Rational const &l, Rational const &r)
-{
-    int num = l.numerator() * r.numerator();
-    int denom = l.denominator() * r.denominator();
-    return Rational(num, denom);
-}
-Rational operator/(Rational const &l, Rational const &r)
-{
-    int num = l.numerator() * r.denominator();
-    int denom = l.denominator() * r.numerator();
-    return Rational(num, denom);
-}
+// these four are the only that was needed for completion of the task //
+Rational operator+(Rational l, Rational const &r) { return l += r; }
+Rational operator-(Rational l, Rational const &r) { return l -= r; }
+Rational operator*(Rational l, Rational const &r) { return l *= r; }
+Rational operator/(Rational l, Rational const &r) { return l /= r; }
 
 Rational operator+(int i, Rational const &r) { return Rational(r.numerator(), r.denominator()) + i; }
 Rational operator-(int i, Rational const &r) { return -Rational(r.numerator(), r.denominator()) + i; }
