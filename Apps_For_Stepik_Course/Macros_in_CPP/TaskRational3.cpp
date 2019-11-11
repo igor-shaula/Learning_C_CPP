@@ -68,6 +68,11 @@ public:
     Rational operator+() const { return Rational(numerator_, denominator_); }
     Rational operator-() const { return Rational(-1 * numerator_, denominator_); }
 
+    // operator double()
+    // {
+    //     return (double)numerator_ / (double)denominator_;
+    // }
+
     // COMPLETELY MY ADDITIONS = = =
 
     int numerator() const { return numerator_; }
@@ -127,12 +132,17 @@ void prepareValueR()
     // r.println("after R");
 }
 
-bool verify(const Rational &r, int num, int denom, string comment = "") // last parameter here has default value //
+bool verify(const Rational &r, const int num, const int denom, const string comment = "") // last parameter here has default value //
 {
     r.print();
     bool result = r.numerator() == num && r.denominator() == denom;
     cout << ':' << (result ? "_OK" : "_FAILED") << '_' << comment << endl;
     prepareValueR();
+}
+
+void verify(const bool b, const string comment)
+{
+    cout << comment << ':' << (b ? "OK" : "FAILED") << endl;
 }
 
 void testOverloadedOperators()
@@ -193,14 +203,14 @@ void testOverloadedOperators()
     verify(r17, 1, 4, "r17");
 
     Rational r20 = r, r21 = {1, 2}, r22 = {2, 3};
-    // verify(r20 == r21, "r20 == r21");
-    // verify(r20 != r22, "r20 != r22");
-    // verify(r21 < r22, "r21 < r22");
-    // verify(r22 > r21, "r22 > r21");
-    // verify(r21 <= r22, "r21 <= r22");
-    // verify(r21 <= r20, "r21 <= r22");
-    // verify(r22 >= r21, "r22 >= r21");
-    // verify(r21 >= r20, "r21 >= r20");
+    verify(r20 == r21, "r20 == r21");
+    verify(r20 != r22, "r20 != r22");
+    verify(r21 < r22, "r21 < r22");
+    verify(r22 > r21, "r22 > r21");
+    verify(r21 <= r22, "r21 <= r22");
+    verify(r21 <= r20, "r21 <= r22");
+    verify(r22 >= r21, "r22 >= r21");
+    verify(r21 >= r20, "r21 >= r20");
 }
 
 int main()
