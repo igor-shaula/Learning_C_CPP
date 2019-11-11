@@ -3,24 +3,70 @@ using namespace std;
 
 struct Rational
 {
-    Rational(int numerator = 0, int denominator = 1);
+public:
+    // GIVEN FROM TASK - but with bodies done by me = = =
 
-    void add(Rational rational);
-    void sub(Rational rational);
-    void mul(Rational rational);
-    void div(Rational rational);
+    Rational(int numerator = 0, int denominator = 1) : numerator_(numerator), denominator_(denominator) {}
 
-    void neg();
-    void inv();
-    double to_double() const;
+    void add(Rational rational)
+    {
+        numerator_ += rational.numerator_;
+        denominator_ += rational.denominator_;
+    }
+    void sub(Rational rational)
+    {
+        numerator_ -= rational.numerator_;
+        denominator_ -= rational.denominator_;
+    }
+    void mul(Rational rational)
+    {
+        numerator_ *= rational.numerator_;
+        denominator_ *= rational.denominator_;
+    }
+    void div(Rational rational)
+    {
+        numerator_ /= rational.numerator_;
+        denominator_ /= rational.denominator_;
+    }
+    void neg()
+    {
+        numerator_ = -numerator_; // denominator remains the same because '-' affects numerator at first
+    }
+    void inv() // inversion of our Rational
+    {
+        int tmp = numerator_;
+        numerator_ = denominator_;
+        denominator_ = tmp;
+    }
+    double to_double() const; // only this method was declared const in the task initially //
 
-    Rational &operator+=(Rational rational);
-    Rational &operator-=(Rational rational);
-    Rational &operator*=(Rational rational);
-    Rational &operator/=(Rational rational);
+    Rational &operator+=(Rational r)
+    {
+        numerator_ = numerator_ * r.denominator_ + r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
+        return *this;
+    }
+    Rational &operator-=(Rational r)
+    {
+        numerator_ = numerator_ * r.denominator_ - r.numerator_ * denominator_;
+        denominator_ = denominator_ * r.denominator_;
+        return *this;
+    }
+    Rational &operator*=(Rational r)
+    {
+        numerator_ *= r.numerator_;
+        denominator_ *= r.denominator_;
+        return *this;
+    }
+    Rational &operator/=(Rational r)
+    {
+        numerator_ *= r.denominator_;
+        denominator_ *= r.numerator_;
+        return *this;
+    }
 
-    Rational operator-() const;
-    Rational operator+() const;
+    Rational operator+() const { return Rational(numerator_, denominator_); }
+    Rational operator-() const { return Rational(-1 * numerator_, denominator_); }
 
     // COMPLETELY MY ADDITIONS = = =
 
@@ -46,10 +92,26 @@ private:
     int denominator_;
 };
 
-Rational operator+(Rational lhs, Rational rhs);
-Rational operator-(Rational lhs, Rational rhs);
-Rational operator*(Rational lhs, Rational rhs);
-Rational operator/(Rational lhs, Rational rhs);
+Rational operator+(Rational l, Rational r) { return l += r; }
+Rational operator-(Rational l, Rational r) { return l -= r; }
+Rational operator*(Rational l, Rational r) { return l *= r; }
+Rational operator/(Rational l, Rational r) { return l /= r; }
+
+// SOLUTION FOR TASK 3 = = =
+
+bool operator<(Rational const &l, Rational const &r)
+{
+    return l.numerator() * r.denominator() < r.numerator() * l.denominator();
+}
+bool operator>(Rational const &l, Rational const &r) { return r < l; }
+bool operator<=(Rational const &l, Rational const &r) { return !(r < l); }
+bool operator>=(Rational const &l, Rational const &r) { return !(l < r); }
+bool operator==(Rational const &l, Rational const &r) { return !(l < r) && !(r < l); } // compact logical form
+bool operator!=(Rational const &l, Rational const &r) { return !(l == r); }
+// bool operator==(Rational const &l, Rational const &r) // faster alternative version
+// {
+//     return l.numerator() * r.denominator() == r.numerator() * l.denominator();
+// }
 
 // MY ADDITIONS = = =
 
@@ -129,6 +191,16 @@ void testOverloadedOperators()
     Rational r17 = r;
     r17 /= 2;
     verify(r17, 1, 4, "r17");
+
+    Rational r20 = r, r21 = {1, 2}, r22 = {2, 3};
+    // verify(r20 == r21, "r20 == r21");
+    // verify(r20 != r22, "r20 != r22");
+    // verify(r21 < r22, "r21 < r22");
+    // verify(r22 > r21, "r22 > r21");
+    // verify(r21 <= r22, "r21 <= r22");
+    // verify(r21 <= r20, "r21 <= r22");
+    // verify(r22 >= r21, "r22 >= r21");
+    // verify(r21 >= r20, "r21 >= r20");
 }
 
 int main()
