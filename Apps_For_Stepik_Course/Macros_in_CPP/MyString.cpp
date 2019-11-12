@@ -9,12 +9,20 @@ size_t myStrLen(char const *const str)
         ; // shifting pointer forward & checking every next symbol until 0 value is found
     return length;
 }
-void myStrCopy(char *const dest, char const *const src, const size_t count)
-// dest cannot be const as its content has to be changed during copying from src //
+void myStrAdd(char *const dest, char const *const src, size_t const count)
+// 'dest' value cannot be const as its content has to be changed during copying from 'src' //
 {
+    // 0 - we'll need to find amount of shift - as we add data - not rewrite initial content //
+    size_t shift = 0;
+    char *destBeginPtr = dest; // temporary variable - as 'dest' is const - so we need similar var ptr
+    // 1 - we have to shift destination pointer to string's ending - first occurance of '\0' //
+    for (; *destBeginPtr != '\0'; destBeginPtr++)
+        ++shift;      // we'll have the number of symbols in initial 'dest' - not counting the last '\0'
+    destBeginPtr = 0; // that's a paranoic action
+    // 2 - now adding data from 'src' to 'dest' //
     for (size_t i = 0; i != count; i++)
-        dest[i] = src[i];
-    // dest[count] = '\0'; // decided that this has to be done in other place - may be after invocation
+        dest[i + shift] = src[i];
+    dest[count + shift] = '\0'; // decided to complete string preparation here
 }
 
 struct MyString
@@ -24,15 +32,13 @@ private:
     char *str;
 
 public:
-    size_t getSize() const { return size; }
-    char *getCharPtr() const { return str; }
     // solution for task 1 //
     MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
         size = myStrLen(givenPtr);
         str = new char[size + 1]; // because otherwize task is not accepted by Stepik
-        myStrCopy(str, givenPtr, size);
-        str[size] = '\0';
+        myStrAdd(str, givenPtr, size);
+        // str[size] = '\0';
     }
     // solution for task 2 //
     MyString(size_t const n, char const c) // filling newly created string with specific char
@@ -46,28 +52,31 @@ public:
     ~MyString()
     {
         delete[] str;
+        size = 0;
     }
     // solution for task 3 //
     void append(MyString &other)
     {
         /*
-        before we append - we have to change size of array in dynamic memory /
+        before appending we have to change size of array in dynamic memory /
         that can be done by allocating new region of needed size using 'new[]' operator
         before that we have to save existing content in current string
-        and after that we can repoint 'str' to newly created memory region /
-        in the end we have to copy 'tmp' into new array and than 'other' as well /
+        and after saving we can repoint 'str' to newly created memory region /
+        in the end we have to copy 'tmp' and than 'other' into new array 'src' /
         */
         char *tmp = new char[size + 1];
-        myStrCopy(tmp, str, size);
-        tmp[size] = '\0';
+        tmp[0] = '\0';
+        myStrAdd(tmp, str, size);
+        // tmp[size] = '\0';
         // now initial content is saved into tmp and we can allocate new memory and point 'str' on it //
         size_t initialSize = size; // we'll need it later to avoid excess counting of tmp's length
         size += other.size;        // only data without ending zeroes
         delete[] str;              // time to clean previously used memory
         str = new char[size + 1];  // this time "size" is bigger than previous
-        myStrCopy(str, tmp, initialSize);
-        myStrCopy(str, other.getCharPtr(), other.size);
-        str[size] = '\0';
+        str[0] = '\0';
+        myStrAdd(str, tmp, initialSize);
+        myStrAdd(str, other.str, other.size);
+        // str[size] = '\0';
         delete[] tmp;
     }
     /*
@@ -136,6 +145,8 @@ public:
     //     }
     //     return *this;
     // }
+    size_t getSize() const { return size; }
+    char *getCharPtr() const { return str; }
 };
 
 int main()
@@ -156,10 +167,13 @@ int main()
     cin >> c >> n;
     cout << MyString(n, c).getCharPtr() << endl;
     MyString h1("Hello");
-    MyString h2(",World");
-    h1.append(h2);
-    MyString h3("SMTH");
-    h1.append(h3);
+    h1.append(h1);
+    // MyString h2(",World");
+    // h1.append(h2);
+    // MyString h3("SMTH");
+    // h1.append(h3);
+    cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
+    h1.append(h1);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     return 0;
 }
