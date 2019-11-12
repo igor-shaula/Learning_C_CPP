@@ -32,6 +32,8 @@ private:
     char *str;
 
 public:
+    size_t getSize() const { return size; }
+    char *getCharPtr() const { return str; }
     // solution for task 1 //
     MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
@@ -67,86 +69,27 @@ public:
         char *tmp = new char[size + 1];
         tmp[0] = '\0';
         myStrAdd(tmp, str, size);
-        // tmp[size] = '\0';
         // now initial content is saved into tmp and we can allocate new memory and point 'str' on it //
         size_t initialSize = size; // we'll need it later to avoid excess counting of tmp's length
-        size += other.size;        // only data without ending zeroes
-        delete[] str;              // time to clean previously used memory
-        str = new char[size + 1];  // this time "size" is bigger than previous
+        size_t otherSize = other.size;
+        char *otherStr = other.str;
+
+        char *tmpOther = new char[other.size + 1];
+        tmpOther[0] = '\0';
+        myStrAdd(tmpOther, other.str, other.size);
+
+        size += otherSize;        // only data without ending zeroes
+        delete[] str;             // time to clean previously used memory
+        str = new char[size + 1]; // this time "size" is bigger than previous
         str[0] = '\0';
         myStrAdd(str, tmp, initialSize);
-        myStrAdd(str, other.str, other.size);
-        // str[size] = '\0';
+        cout << "1st:" << str << endl;
+        // myStrAdd(str, otherStr, otherSize);
+        myStrAdd(str, tmpOther, otherSize);
+        cout << "2nd:" << str << endl;
         delete[] tmp;
+        delete[] tmpOther;
     }
-    /*
-    // another attempt:
-    void effectiveConcat(char *to, const char *from)
-    {
-        for (; *to != '\0'; to++)
-            ;
-        for (; *from != '\0'; to++, from++)
-            *to = *from;
-        *to = '\0';
-    }
-    void appendManual(MyString &other)
-    {
-        // detect new size - it must not include final zero symbol:
-        size += other.size;
-        // trying to use previously written & accepted function for concatenation:
-        effectiveConcat(str, other.str);
-        // at the end we place the closing zero:
-        str[size] = '\0';
-    }
-
-    // merged code from effectiveConcat into append:
-    void append1(MyString &other)
-    {
-        // at first we have to save content of existing string somewhere:
-        char *tmp = new char[size + 1];
-        for (; *str != '\0'; str++, tmp++)
-            *tmp = *str;
-        tmp[size] = '\0';
-        // now we can clean previous structure from the memory:
-        delete[] str;
-        // resetting the size to include new data from other string:
-        size += other.size;
-
-        str = new char[size + 1];
-        // copying values from our tmp string into the new bigger one:
-        for (; *tmp != '\0'; tmp++, str++)
-            *str = *tmp;
-        // cleaning memory from used tmp data:
-        delete[] tmp;
-        tmp = 0;
-        // copying values from other string to found place:
-        for (; *(other.str) != '\0'; (other.str)++, str++)
-            *str = *(other.str);
-        str[size] = '\0';
-    }
-*/
-    // MyString(const MyString &other) : size(other.size), str(new char[size + 1])
-    // {
-    //     for (size_t i = 0; i != size; i++)
-    //         str[i] = other.str[i];
-    //     str[size] = '\0';
-    // }
-
-    // MyString &operator=(MyString const &other)
-    // {
-    //     if (this != &other)
-    //     {
-    //         delete[] str;
-    //         size = other.size;
-    //         str = new char[size + 1];
-    //         for (size_t i = 0; i != size; i++)
-    //             str[i] = other.str[i];
-    //         str[size] = '\0';
-    //     }
-    //     return *this;
-    // }
-    size_t getSize() const { return size; }
-    char *getCharPtr() const { return str; }
 };
 
 int main()
@@ -167,12 +110,12 @@ int main()
     cin >> c >> n;
     cout << MyString(n, c).getCharPtr() << endl;
     MyString h1("Hello");
-    h1.append(h1);
-    // MyString h2(",World");
-    // h1.append(h2);
-    // MyString h3("SMTH");
-    // h1.append(h3);
+    MyString h2(",World");
+    h1.append(h2);
+    MyString h3("SMTH");
+    h1.append(h3);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
+    h1.append(h1);
     h1.append(h1);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     return 0;
