@@ -27,15 +27,15 @@ public:
     size_t getSize() const { return size; }
     char *getCharPtr() const { return str; }
     // solution for task 1 //
-    MyString(char const *str = "") // creating empty string by default
+    MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
-        size = myStrLen(str);
-        this->str = new char[size + 1]; // because otherwize task is not accepted by Stepik
-        myStrCopy(this->str, str, size);
-        this->str[size] = '\0';
+        size = myStrLen(givenPtr);
+        str = new char[size + 1]; // because otherwize task is not accepted by Stepik
+        myStrCopy(str, givenPtr, size);
+        str[size] = '\0';
     }
     // solution for task 2 //
-    MyString(size_t n, char c) // filling newly created string with specific char
+    MyString(size_t const n, char const c) // filling newly created string with specific char
     {
         size = n;
         str = new char[size + 1];
@@ -58,19 +58,19 @@ public:
         in the end we have to copy 'tmp' into new array and than 'other' as well /
         */
         char *tmp = new char[size + 1];
-        myStrCopy(tmp, this->str, size);
+        myStrCopy(tmp, str, size);
         tmp[size] = '\0';
         // now initial content is saved into tmp and we can allocate new memory and point 'str' on it //
-        delete[] str;
         size_t initialSize = size; // we'll need it later to avoid excess counting of tmp's length
         size += other.size;        // only data without ending zeroes
+        delete[] str;              // time to clean previously used memory
         str = new char[size + 1];  // this time "size" is bigger than previous
         myStrCopy(str, tmp, initialSize);
         myStrCopy(str, other.getCharPtr(), other.size);
         str[size] = '\0';
         delete[] tmp;
     }
-
+    /*
     // another attempt:
     void effectiveConcat(char *to, const char *from)
     {
@@ -115,27 +115,27 @@ public:
             *str = *(other.str);
         str[size] = '\0';
     }
+*/
+    // MyString(const MyString &other) : size(other.size), str(new char[size + 1])
+    // {
+    //     for (size_t i = 0; i != size; i++)
+    //         str[i] = other.str[i];
+    //     str[size] = '\0';
+    // }
 
-    MyString(const MyString &other) : size(other.size), str(new char[size + 1])
-    {
-        for (size_t i = 0; i != size; i++)
-            str[i] = other.str[i];
-        str[size] = '\0';
-    }
-
-    MyString &operator=(MyString const &other)
-    {
-        if (this != &other)
-        {
-            delete[] str;
-            size = other.size;
-            str = new char[size + 1];
-            for (size_t i = 0; i != size; i++)
-                str[i] = other.str[i];
-            str[size] = '\0';
-        }
-        return *this;
-    }
+    // MyString &operator=(MyString const &other)
+    // {
+    //     if (this != &other)
+    //     {
+    //         delete[] str;
+    //         size = other.size;
+    //         str = new char[size + 1];
+    //         for (size_t i = 0; i != size; i++)
+    //             str[i] = other.str[i];
+    //         str[size] = '\0';
+    //     }
+    //     return *this;
+    // }
 };
 
 int main()
@@ -158,6 +158,8 @@ int main()
     MyString h1("Hello");
     MyString h2(",World");
     h1.append(h2);
+    MyString h3("SMTH");
+    h1.append(h3);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     return 0;
 }
