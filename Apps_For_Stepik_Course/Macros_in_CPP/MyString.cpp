@@ -1,16 +1,16 @@
 #include <iostream>
 using namespace std;
 
-size_t myStrLen(char const *str)
+// useful utils for upcoming tasks - decided to avoid using any given standard function //
+size_t myStrLen(char const *const str)
 {
     size_t length = 0;
-    for (; *str != '\0'; str++)
-        length++; // shifting pointer forward & checking every next symbol until 0 value is found //
+    for (; *(str + length) != '\0'; length++)
+        ; // shifting pointer forward & checking every next symbol until 0 value is found
     return length;
 }
-
-void myStrCopy(char *dest, char const *src, size_t count)
-// dest cannot be const as its content has to be changed during copying from src
+void myStrCopy(char *const dest, char const *const src, const size_t count)
+// dest cannot be const as its content has to be changed during copying from src //
 {
     for (size_t i = 0; i != count; i++)
         dest[i] = src[i];
@@ -26,14 +26,15 @@ private:
 public:
     size_t getSize() const { return size; }
     char *getCharPtr() const { return str; }
-
-    MyString(char const *str = "") // solution for task 1 - creating empty string by default
+    // solution for task 1 //
+    MyString(char const *str = "") // creating empty string by default
     {
         size = myStrLen(str);
         this->str = new char[size + 1]; // because otherwize task is not accepted by Stepik
         myStrCopy(this->str, str, size);
         this->str[size] = '\0';
     }
+    // solution for task 2 //
     MyString(size_t n, char c) // filling newly created string with specific char
     {
         size = n;
@@ -46,24 +47,29 @@ public:
     {
         delete[] str;
     }
-    // void append(MyString &other)
-    // {
-    //     cout << str << "\\size: " << size << endl;
-    //     cout << other.str << "\\size: " << other.size << endl;
-    //     char *tmp = new char[size];
-    //     size += other.size;
-    //     cout << "new size: " << size << endl;
-    //     // char *tmp = str;
-    //     strcpy(tmp, str);
-    //     delete[] str;
-    //     str = new char[size + 1]; // this time "size" is bigger than previous
-    //     // str[0] = '\0';
-    //     strcat(str, tmp);
-    //     delete[] tmp;
-    //     strcat(str, other.str);
-    //     // strcpy(str + strlen(tmp), other.str);
-    //     str[size] = '\0';
-    // }
+    // solution for task 3 //
+    void append(MyString &other)
+    {
+        /*
+        before we append - we have to change size of array in dynamic memory /
+        that can be done by allocating new region of needed size using 'new[]' operator
+        before that we have to save existing content in current string
+        and after that we can repoint 'str' to newly created memory region /
+        in the end we have to copy 'tmp' into new array and than 'other' as well /
+        */
+        char *tmp = new char[size + 1];
+        myStrCopy(tmp, this->str, size);
+        tmp[size] = '\0';
+        // now initial content is saved into tmp and we can allocate new memory and point 'str' on it //
+        delete[] str;
+        size_t initialSize = size; // we'll need it later to avoid excess counting of tmp's length
+        size += other.size;        // only data without ending zeroes
+        str = new char[size + 1];  // this time "size" is bigger than previous
+        myStrCopy(str, tmp, initialSize);
+        myStrCopy(str, other.getCharPtr(), other.size);
+        str[size] = '\0';
+        delete[] tmp;
+    }
 
     // another attempt:
     void effectiveConcat(char *to, const char *from)
@@ -151,8 +157,7 @@ int main()
     cout << MyString(n, c).getCharPtr() << endl;
     MyString h1("Hello");
     MyString h2(",World");
-    // h1.append(h2);
-    h1.append1(h2);
+    h1.append(h2);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     return 0;
 }
