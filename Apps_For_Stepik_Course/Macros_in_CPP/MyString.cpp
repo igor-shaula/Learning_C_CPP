@@ -1,20 +1,40 @@
 #include <iostream>
-#include <cstddef> // size_t
-#include <cstring> // strlen, strcpy
 using namespace std;
 
-struct String
+size_t myStrLen(char const *str)
 {
-    unsigned size;
+    size_t length = 0;
+    for (; *str != '\0'; str++)
+        length++; // shifting pointer forward & checking every next symbol until 0 value is found //
+    return length;
+}
+
+void myStrCopy(char *dest, char const *src, size_t count)
+// dest cannot be const as its content has to be changed during copying from src
+{
+    for (size_t i = 0; i != count; i++)
+        dest[i] = src[i];
+    // dest[count] = '\0'; // decided that this has to be done in other place - may be after invocation
+}
+
+struct MyString
+{
+private:
+    size_t size;
     char *str;
-    String(const char *str = "")
+
+public:
+    size_t getSize() const { return size; }
+    char *getCharPtr() const { return str; }
+
+    MyString(char const *str = "") // solution for task 1 - creating empty string by default
     {
-        size = strlen(str);
+        size = myStrLen(str);
         this->str = new char[size + 1]; // because otherwize task is not accepted by Stepik
-        strcpy(this->str, str);
-        // this->str[size] = '\0'; // only after copying this line has its effect - but it's not needed!
+        myStrCopy(this->str, str, size);
+        this->str[size] = '\0';
     }
-    String(size_t n, char c)
+    MyString(size_t n, char c) // filling newly created string with specific char
     {
         size = n;
         str = new char[size + 1];
@@ -22,28 +42,28 @@ struct String
             str[i] = c;
         str[size] = '\0';
     }
-    ~String()
+    ~MyString()
     {
         delete[] str;
     }
-    void append(String &other)
-    {
-        cout << str << "\\size: " << size << endl;
-        cout << other.str << "\\size: " << other.size << endl;
-        char *tmp = new char[size];
-        size += other.size;
-        cout << "new size: " << size << endl;
-        // char *tmp = str;
-        strcpy(tmp, str);
-        delete[] str;
-        str = new char[size + 1]; // this time "size" is bigger than previous
-        // str[0] = '\0';
-        strcat(str, tmp);
-        delete[] tmp;
-        strcat(str, other.str);
-        // strcpy(str + strlen(tmp), other.str);
-        str[size] = '\0';
-    }
+    // void append(MyString &other)
+    // {
+    //     cout << str << "\\size: " << size << endl;
+    //     cout << other.str << "\\size: " << other.size << endl;
+    //     char *tmp = new char[size];
+    //     size += other.size;
+    //     cout << "new size: " << size << endl;
+    //     // char *tmp = str;
+    //     strcpy(tmp, str);
+    //     delete[] str;
+    //     str = new char[size + 1]; // this time "size" is bigger than previous
+    //     // str[0] = '\0';
+    //     strcat(str, tmp);
+    //     delete[] tmp;
+    //     strcat(str, other.str);
+    //     // strcpy(str + strlen(tmp), other.str);
+    //     str[size] = '\0';
+    // }
 
     // another attempt:
     void effectiveConcat(char *to, const char *from)
@@ -54,7 +74,7 @@ struct String
             *to = *from;
         *to = '\0';
     }
-    void appendManual(String &other)
+    void appendManual(MyString &other)
     {
         // detect new size - it must not include final zero symbol:
         size += other.size;
@@ -65,7 +85,7 @@ struct String
     }
 
     // merged code from effectiveConcat into append:
-    void append1(String &other)
+    void append1(MyString &other)
     {
         // at first we have to save content of existing string somewhere:
         char *tmp = new char[size + 1];
@@ -90,14 +110,14 @@ struct String
         str[size] = '\0';
     }
 
-    String(const String &other) : size(other.size), str(new char[size + 1])
+    MyString(const MyString &other) : size(other.size), str(new char[size + 1])
     {
         for (size_t i = 0; i != size; i++)
             str[i] = other.str[i];
         str[size] = '\0';
     }
 
-    String &operator=(String const &other)
+    MyString &operator=(MyString const &other)
     {
         if (this != &other)
         {
@@ -117,22 +137,22 @@ int main()
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
     // cin >> initialString;
-    String s = String(initialString);
-    cout << s.str << endl;
-    cout << strlen(initialString) << ' ' << strlen(s.str) << endl;
+    MyString s = MyString(initialString);
+    cout << s.getCharPtr() << endl;
+    cout << myStrLen(initialString) << ' ' << myStrLen(s.getCharPtr()) << endl;
     // initialString[0] = 'I'; // avoiding of "Segmentation fault"
-    s.str[0] = '_';
+    s.getCharPtr()[0] = '_';
     cout << initialString << endl;
-    cout << s.str << endl;
+    cout << s.getCharPtr() << endl;
     cout << "enter a symbol and number of repetiotions for this symbol: ";
     char c;
     size_t n;
     cin >> c >> n;
-    cout << String(n, c).str << endl;
-    String h1("Hello");
-    String h2(",World");
+    cout << MyString(n, c).getCharPtr() << endl;
+    MyString h1("Hello");
+    MyString h2(",World");
     // h1.append(h2);
     h1.append1(h2);
-    cout << h1.str << "\\size=" << h1.size << endl;
+    cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     return 0;
 }
