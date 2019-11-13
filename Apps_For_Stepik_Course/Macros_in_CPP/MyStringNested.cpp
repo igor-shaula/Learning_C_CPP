@@ -115,25 +115,43 @@ public:
     // }
     struct SubString
     {
+        SubString() // default empty constructor is really needed here
+        {
+            innerSize = 1;
+            innerStr = new char[innerSize];
+            innerStr[0] = '\0';
+        };
         SubString(char const c)
         {
             innerStr = new char[2];
             innerStr[0] = c;
             innerStr[1] = '\0';
         }
+        SubString(MyString const &s)
+        {
+            innerSize = s.size;
+            innerStr = s.str;
+        }
+        // standard getters //
         char *getInnerStr() const { return innerStr; }
         size_t getInnerSize() const { return innerSize; }
+        // setters //
+        char *&getInnerStr() { return innerStr; }
+        size_t &getInnerSize() { return innerSize; }
 
     private:
         char *innerStr;
         size_t innerSize;
     }; // end of struct SubString
 
-    MyString::SubString subStringFrom(int const i) const
+    SubString const subStringFrom(int const i) const
     {
-        return SubString((this->str)[i]);
+        SubString ss;
+        ss.getInnerSize() = size - i;              // subtracting number of symbols before given position
+        ss.getInnerStr() = str + i * sizeof(char); // shifting pointer needed amount of steps forward
+        return ss;
     }
-    MyString::SubString const operator[](int const i) const
+    SubString const operator[](int const i) const
     {
         const SubString ss = subStringFrom(i);
         return ss;
@@ -153,8 +171,10 @@ void verify(MyString::SubString const &given, MyString::SubString const &right)
 int main()
 {
     MyString const hello("hello");
-    MyString::SubString const ss = hello[0];
-    verify(ss, 'h');
+    MyString::SubString const ss0 = hello[0];
+    verify(ss0, MyString("hello"));
+    MyString::SubString const ss1 = hello[1];
+    verify(ss1, MyString("ello"));
     // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
     // MyString const ell = hello[1][4];  // теперь в ell хранится подстрока "ell"
     /*
