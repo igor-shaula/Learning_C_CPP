@@ -29,13 +29,14 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
 
 struct MyString
 {
+    // struct SubString {};
 private:
     size_t size;
     char *str;
 
 public:
     size_t getSize() const { return size; }
-    char *getCharPtr() const { return str; }
+    virtual char *getCharPtr() const { return str; }
     // solution for task 1 //
     MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
@@ -108,10 +109,55 @@ public:
         }
         return *this;
     }
+    // char operator[](int const i) const
+    // {
+    //     char c = (this->str)[i];
+    //     return c;
+    // }
+    struct SubString
+    {
+        SubString(char const c)
+        {
+            innerStr = new char[2];
+            innerStr[0] = c;
+            innerStr[1] = '\0';
+        }
+        char *getInnerStr() const { return innerStr; }
+        size_t getInnerSize() const { return innerSize; }
+
+    private:
+        char *innerStr;
+        size_t innerSize;
+    };
+    MyString::SubString subStringFrom(int const i) const
+    {
+        return SubString((this->str)[i]);
+    }
+    MyString::SubString const operator[](int const i) const
+    {
+        const SubString ss = subStringFrom(i);
+        return ss;
+    }
 };
+
+void verify(char const given, char const right)
+{
+    cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
+}
+void verify(MyString::SubString const &given, MyString::SubString const &right)
+{
+    cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
+    // cout << given.getInnerStr() << ':' << (given.getInnerStr() == right.getInnerStr() ? "OK" : "FAILED") << endl;
+}
 
 int main()
 {
+    MyString const hello("hello");
+    MyString::SubString const ss = hello[0];
+    verify(ss, 'h');
+    // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
+    // MyString const ell = hello[1][4];  // теперь в ell хранится подстрока "ell"
+    /*
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
     // cin >> initialString;
@@ -136,5 +182,6 @@ int main()
     h1.append(h1);
     h1.append(h1);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
+*/
     return 0;
 }
