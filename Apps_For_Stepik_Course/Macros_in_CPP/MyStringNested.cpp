@@ -117,8 +117,8 @@ public:
     {
         SubString() // default empty constructor is really needed here
         {
-            innerSize = 1;
-            innerStr = new char[innerSize];
+            innerSize = 0;
+            innerStr = new char[1];
             innerStr[0] = '\0';
         };
         SubString(char const c)
@@ -142,10 +142,16 @@ public:
         MyString const subMyString(int const i) const
         {
             MyString ms;
+            cout << "i=" << i << " innerSize=" << innerSize << "innerStr=" << innerStr << endl;
             ms.size = innerSize - i;
-            char *tmp = new char[ms.size + 1];
-            for (size_t j = 0; j != i; j++)
+            // we need a reduced copy of given string //
+            char *tmp = new char[ms.size];
+            size_t j = 0;
+            // size_t j = i - 1; // going from end to start
+            for (; j != i - 1; j++)
+                // for (; j >= 0; --j)
                 tmp[j] = innerStr[j];
+            tmp[j + 1] = '\0';
             ms.str = tmp;
             return MyString(ms.str);
         }
@@ -161,24 +167,24 @@ public:
         size_t innerSize;
     }; // end of struct SubString
 
-    SubString const subStringFrom(int const i) const
+    MyString::SubString const subStringFrom(int const i) const
     {
         SubString ss;
         ss.getInnerSize() = size - i;              // subtracting number of symbols before given position
         ss.getInnerStr() = str + i * sizeof(char); // shifting pointer needed amount of steps forward
         return ss;
     }
-    SubString const operator[](int const i) const
+    MyString::SubString const operator[](int const i) const
     {
         const SubString ss = subStringFrom(i);
         return ss;
     }
 };
 
-void verify(char const given, char const right)
-{
-    cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
-}
+// void verify(char const given, char const right)
+// {
+//     cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
+// }
 void verify(MyString::SubString const &given, MyString::SubString const &right)
 {
     cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
@@ -196,6 +202,8 @@ int main()
     verify(hell, MyString("hell"));
     MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
     verify(ell, MyString("ell"));
+    MyString const el = hello[1][3];
+    verify(el, MyString("el"));
     /*
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
