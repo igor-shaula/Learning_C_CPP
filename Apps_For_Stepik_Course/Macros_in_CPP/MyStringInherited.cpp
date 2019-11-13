@@ -27,9 +27,10 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
     dest[count + shift] = '\0'; // decided to complete string preparation here
 }
 
+struct SubString2;
+
 struct MyString
 {
-    // struct SubString {};
 private:
     size_t size;
     char *str;
@@ -109,6 +110,9 @@ public:
         }
         return *this;
     }
+
+    SubString2 any();
+
     // char operator[](int const i) const
     // {
     //     char c = (this->str)[i];
@@ -138,6 +142,27 @@ public:
         const SubString ss = subStringFrom(i);
         return ss;
     }
+};
+
+struct SubString2 : MyString
+{
+};
+
+SubString2 MyString::any()
+{
+    cout << "OKKKK" << endl;
+    return SubString2();
+}
+
+struct B;
+
+struct A
+{
+    B any();
+};
+
+struct B : A
+{
 };
 
 void verify(char const given, char const right)
