@@ -65,29 +65,25 @@ public:
         before that we have to save existing content in current string
         and after saving we can repoint 'str' to newly created memory region /
         in the end we have to copy 'tmp' and than 'other' into new array 'src' /
+        one more thing - we need second 'tmp' container for 'other' instance -
+        in case when we add string to itself - 'this' and 'other' are in fact the same //
         */
         char *tmp = new char[size + 1];
         tmp[0] = '\0';
         myStrAdd(tmp, str, size);
-        // now initial content is saved into tmp and we can allocate new memory and point 'str' on it //
-        size_t initialSize = size; // we'll need it later to avoid excess counting of tmp's length
-        size_t otherSize = other.size;
-        char *otherStr = other.str;
-
         char *tmpOther = new char[other.size + 1];
         tmpOther[0] = '\0';
         myStrAdd(tmpOther, other.str, other.size);
-
-        size += otherSize;        // only data without ending zeroes
-        delete[] str;             // time to clean previously used memory
-        str = new char[size + 1]; // this time "size" is bigger than previous
+        // now initial content is saved into tmps and we can allocate new memory and point 'str' on it //
+        delete[] str;                         // time to clean previously used memory
+        size_t initialSizeThis = size;        // we'll need it later to avoid excess counting of tmp's length
+        size_t initialSizeOther = other.size; // needed for case when we add string to itself
+        size += initialSizeOther;             // only data without ending zeroes
+        str = new char[size + 1];             // this time "size" is bigger than previous
         str[0] = '\0';
-        myStrAdd(str, tmp, initialSize);
-        cout << "1st:" << str << endl;
-        // myStrAdd(str, otherStr, otherSize);
-        myStrAdd(str, tmpOther, otherSize);
-        cout << "2nd:" << str << endl;
+        myStrAdd(str, tmp, initialSizeThis);
         delete[] tmp;
+        myStrAdd(str, tmpOther, initialSizeOther);
         delete[] tmpOther;
     }
 };
