@@ -138,6 +138,23 @@ public:
         // setters //
         char *&getInnerStr() { return innerStr; }
         size_t &getInnerSize() { return innerSize; }
+        // we'll need this method right after its declaration //
+        MyString const subMyString(int const i) const
+        {
+            MyString ms;
+            ms.size = innerSize - i;
+            char *tmp = new char[ms.size + 1];
+            for (size_t j = 0; j != i; j++)
+                tmp[j] = innerStr[j];
+            ms.str = tmp;
+            return MyString(ms.str);
+        }
+        // creating content for second use of [] operator - it has to be MyString again //
+        MyString const operator[](int const i) const
+        {
+            const MyString ms = subMyString(i);
+            return ms;
+        }
 
     private:
         char *innerStr;
@@ -175,8 +192,10 @@ int main()
     verify(ss0, MyString("hello"));
     MyString::SubString const ss1 = hello[1];
     verify(ss1, MyString("ello"));
-    // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
-    // MyString const ell = hello[1][4];  // теперь в ell хранится подстрока "ell"
+    MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
+    verify(hell, MyString("hell"));
+    MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
+    verify(ell, MyString("ell"));
     /*
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
