@@ -142,6 +142,20 @@ public:
                 innerStr[i] = given[i];
             innerStr[innerSize] = '\0';
         }
+        // SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr) {}
+        SubString &operator=(SubString const &other)
+        {
+            if (this != &other) // to avoid unnecessary operations if we have the same instance
+            {
+                delete[] innerStr;
+                innerSize = other.innerSize;
+                innerStr = new char[innerSize + 1];
+                for (size_t i = 0; i != innerSize; i++)
+                    innerStr[i] = other.innerStr[i];
+                innerStr[innerSize] = '\0';
+            }
+            return *this;
+        }
         // standard getters //
         char *getInnerStr() const { return innerStr; }
         size_t getInnerSize() const { return innerSize; }
