@@ -132,6 +132,16 @@ public:
             innerSize = s.size;
             innerStr = s.str;
         }
+        SubString(char const *given)
+        {
+            // cout << "started constructor of SubString" << endl;
+            innerSize = myStrLen(given);
+            // cout << "innerSize=" << innerSize << endl;
+            innerStr = new char[innerSize + 1];
+            for (size_t i = 0; i != innerSize; ++i)
+                innerStr[i] = given[i];
+            innerStr[innerSize] = '\0';
+        }
         // standard getters //
         char *getInnerStr() const { return innerStr; }
         size_t getInnerSize() const { return innerSize; }
@@ -139,10 +149,10 @@ public:
         char *&getInnerStr() { return innerStr; }
         size_t &getInnerSize() { return innerSize; }
         // we'll need this method right after its declaration //
-        MyString const subMyString(int const i) const
+        MyString const subMyString(int const i) const // not including symbol by given index
         {
             MyString ms;
-            cout << "i=" << i << " innerSize=" << innerSize << "innerStr=" << innerStr << endl;
+            cout << "i=" << i << " innerSize=" << innerSize << ", innerStr=" << innerStr << endl;
             ms.size = innerSize - i;
             // we need a reduced copy of given string //
             char *tmp = new char[ms.size];
@@ -185,25 +195,67 @@ public:
 // {
 //     cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
 // }
+
 void verify(MyString::SubString const &given, MyString::SubString const &right)
 {
-    cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
-    // cout << given.getInnerStr() << ':' << (given.getInnerStr() == right.getInnerStr() ? "OK" : "FAILED") << endl;
+    /* 1 - comparing sizes */
+    size_t givenSize = given.getInnerSize();
+    size_t rightSize = right.getInnerSize();
+    // cout << "givenSize=" << givenSize << ", rightSize=" << rightSize << endl;
+    bool diffIsFound = givenSize != rightSize;
+    if (diffIsFound)
+    {
+        cout << given.getInnerStr() << ':' << "FAILED because innerSize is wrong: " << givenSize << endl;
+        return;
+    }
+    /* 2 - comparing content */
+    char *givenStrPtr = given.getInnerStr();
+    char *rightStrPtr = right.getInnerStr();
+    for (size_t i = 0; i != givenSize; ++i)
+        if (givenStrPtr[i] != rightStrPtr[i])
+        {
+            diffIsFound = true;
+            break;
+        }
+    // cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
+    cout << given.getInnerStr() << ':' << (diffIsFound ? "FAILED" : "OK") << endl;
 }
 
 int main()
 {
-    MyString const hello("hello");
-    MyString::SubString const ss0 = hello[0];
-    verify(ss0, MyString("hello"));
-    MyString::SubString const ss1 = hello[1];
-    verify(ss1, MyString("ello"));
-    MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
-    verify(hell, MyString("hell"));
-    MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
-    verify(ell, MyString("ell"));
-    MyString const el = hello[1][3];
-    verify(el, MyString("el"));
+    // MyString const hello("hello");
+    // MyString::SubString const ss0 = hello[0];
+    // verify(ss0, MyString("hello"));
+    // MyString::SubString const ss1 = hello[1];
+    // verify(ss1, MyString("ello"));
+    // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
+    // verify(hell, MyString("hell"));
+    // MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
+    // verify(ell, MyString("ell"));
+    // MyString const el = hello[1][3];
+    // verify(el, MyString("el"));
+
+    MyString const s("0123456789");
+
+    MyString::SubString const s0 = s[0];
+    cout << "\ts0 created: " << s0.getInnerStr() << endl;
+    verify(s0, "0123456789");
+    MyString::SubString const s1 = s[1];
+    cout << "\ts1 created: " << s1.getInnerStr() << endl;
+    verify(s1, "123456789");
+    MyString::SubString const s8 = s[8];
+    cout << "\ts8 created: " << s8.getInnerStr() << endl;
+    verify(s8, "89");
+    MyString::SubString const s9 = s[9];
+    cout << "\ts9 created: " << s9.getInnerStr() << endl;
+    verify(s9, "9");
+    MyString::SubString const s10 = s[10];
+    cout << "\ts10 created: " << s10.getInnerStr() << endl;
+    verify(s10, "");
+
+    // MyString const s04 = s[0][4];
+    // verify(s04, MyString("0123"));
+
     /*
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
