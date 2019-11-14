@@ -196,29 +196,41 @@ public:
 //     cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
 // }
 
-void verify(MyString::SubString const &given, MyString::SubString const &right)
+bool diffInSize(size_t givenSize, size_t rightSize) { return givenSize != rightSize; }
+
+bool diffInContent(char *givenStrPtr, char *rightStrPtr)
 {
-    /* 1 - comparing sizes */
-    size_t givenSize = given.getInnerSize();
-    size_t rightSize = right.getInnerSize();
-    // cout << "givenSize=" << givenSize << ", rightSize=" << rightSize << endl;
-    bool diffIsFound = givenSize != rightSize;
-    if (diffIsFound)
-    {
-        cout << given.getInnerStr() << ':' << "FAILED because innerSize is wrong: " << givenSize << endl;
-        return;
-    }
-    /* 2 - comparing content */
-    char *givenStrPtr = given.getInnerStr();
-    char *rightStrPtr = right.getInnerStr();
-    for (size_t i = 0; i != givenSize; ++i)
+    bool diffIsFound = false;
+    for (size_t i = 0; i != myStrLen(givenStrPtr); ++i)
         if (givenStrPtr[i] != rightStrPtr[i])
         {
             diffIsFound = true;
             break;
         }
-    // cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
-    cout << given.getInnerStr() << ':' << (diffIsFound ? "FAILED" : "OK") << endl;
+    return diffIsFound;
+}
+
+void verify(MyString::SubString const &given, MyString::SubString const &right)
+{
+    /* 1 - comparing sizes */
+    if (diffInSize(given.getInnerSize(), right.getInnerSize()))
+    {
+        cout << given.getInnerStr() << ':' << "FAILED because innerSize is wrong: " << given.getInnerSize() << endl;
+        return;
+    }
+    /* 2 - comparing content */
+    if (diffInContent(given.getInnerStr(), right.getInnerStr()))
+    {
+        cout << given.getInnerStr() << ':' << "FAILED because innerStr is wrong!" << endl;
+        return;
+    }
+    /* 3 - if we've reached here - it seems that all is OK */
+    cout << given.getInnerStr() << ':' << "OK" << endl;
+}
+
+void verify(MyString const &givenMS, char const *right)
+{
+    // compareSizes()
 }
 
 int main()
@@ -235,26 +247,30 @@ int main()
     // MyString const el = hello[1][3];
     // verify(el, MyString("el"));
 
-    MyString const s("0123456789");
+    MyString const ms("0123456789");
 
-    MyString::SubString const s0 = s[0];
-    cout << "\ts0 created: " << s0.getInnerStr() << endl;
-    verify(s0, "0123456789");
-    MyString::SubString const s1 = s[1];
-    cout << "\ts1 created: " << s1.getInnerStr() << endl;
-    verify(s1, "123456789");
-    MyString::SubString const s8 = s[8];
-    cout << "\ts8 created: " << s8.getInnerStr() << endl;
-    verify(s8, "89");
-    MyString::SubString const s9 = s[9];
-    cout << "\ts9 created: " << s9.getInnerStr() << endl;
-    verify(s9, "9");
-    MyString::SubString const s10 = s[10];
-    cout << "\ts10 created: " << s10.getInnerStr() << endl;
-    verify(s10, "");
+    /* checking is SubString is created correctly from first [] */
+    MyString::SubString const ss0 = ms[0];
+    cout << "\tss0 created: " << ss0.getInnerStr() << endl;
+    verify(ss0, "0123456789");
+    MyString::SubString const ss1 = ms[1];
+    cout << "\tss1 created: " << ss1.getInnerStr() << endl;
+    verify(ss1, "123456789");
+    MyString::SubString const ss8 = ms[8];
+    cout << "\tss8 created: " << ss8.getInnerStr() << endl;
+    verify(ss8, "89");
+    MyString::SubString const ss9 = ms[9];
+    cout << "\tss9 created: " << ss9.getInnerStr() << endl;
+    verify(ss9, "9");
+    MyString::SubString const ss10 = ms[10];
+    cout << "\tss10 created: " << ss10.getInnerStr() << endl;
+    verify(ss10, "");
 
-    // MyString const s04 = s[0][4];
-    // verify(s04, MyString("0123"));
+    /* checking if MyString is created correctly from second [] */
+
+    MyString const ms0_10 = ms[0][10];
+    cout << "\tms0_10 created: " << ms0_10.getCharPtr() << endl;
+    verify(ms0_10, "0123");
 
     /*
     // cout << "enter any string:" << endl;
