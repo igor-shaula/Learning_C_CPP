@@ -121,12 +121,12 @@ public:
             innerStr = new char[1];
             innerStr[0] = '\0';
         };
-        SubString(char const c)
-        {
-            innerStr = new char[2];
-            innerStr[0] = c;
-            innerStr[1] = '\0';
-        }
+        // SubString(char const c)
+        // {
+        //     innerStr = new char[2];
+        //     innerStr[0] = c;
+        //     innerStr[1] = '\0';
+        // }
         SubString(MyString const &s)
         {
             innerSize = s.size;
@@ -142,7 +142,14 @@ public:
                 innerStr[i] = given[i];
             innerStr[innerSize] = '\0';
         }
-        // SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr) {}
+        SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr) {}
+        ~SubString()
+        {
+            delete[] innerStr;
+            innerSize = 0;
+            shift = 0;
+            // THE PROBLEM IS HERE - memory leak appear in Stepik test if this destructor is not set
+        }
         SubString &operator=(SubString const &other)
         {
             if (this != &other) // to avoid unnecessary operations if we have the same instance
@@ -159,36 +166,39 @@ public:
         // standard getters //
         char *getInnerStr() const { return innerStr; }
         size_t getInnerSize() const { return innerSize; }
+        int getShift() const { return shift; }
         // setters //
         char *&getInnerStr() { return innerStr; }
         size_t &getInnerSize() { return innerSize; }
+        int &getShift() { return shift; }
         // we'll need this method right after its declaration //
-        MyString const subMyString(int const i) const // not including symbol by given index
+        MyString const innerSubStringFrom(int const i) const // not including symbol by given index - 9
         {
-            MyString ms;
-            cout << "i=" << i << " innerSize=" << innerSize << ", innerStr=" << innerStr << endl;
-            ms.size = innerSize - i;
-            // we need a reduced copy of given string //
-            char *tmp = new char[ms.size];
+            MyString msResult;
+            cout << "\tGIVEN SubString:" << innerStr << ':' << innerSize << endl;
+            msResult.size = i - shift; // one more for closing zero
+            // cout << "msResult.size=" << msResult.size << endl;
+            char *tmp = new char[msResult.size + 1]; // we need a reduced copy of given string
+            // cout << "size of tmp = " << myStrLen(tmp) << endl;
             size_t j = 0;
-            // size_t j = i - 1; // going from end to start
-            for (; j != i - 1; j++)
-                // for (; j >= 0; --j)
+            for (; j != msResult.size; ++j)
                 tmp[j] = innerStr[j];
             tmp[j + 1] = '\0';
-            ms.str = tmp;
-            return MyString(ms.str);
+            msResult.str = tmp;
+            cout << "\tCREATED MyString:" << msResult.str << ':' << msResult.size << endl;
+            return msResult;
         }
         // creating content for second use of [] operator - it has to be MyString again //
         MyString const operator[](int const i) const
         {
-            const MyString ms = subMyString(i);
-            return ms;
+            const MyString msResult = innerSubStringFrom(i);
+            return msResult;
         }
 
     private:
         char *innerStr;
         size_t innerSize;
+        int shift;
     }; // end of struct SubString
 
     MyString::SubString const subStringFrom(int const i) const
@@ -196,6 +206,7 @@ public:
         SubString ss;
         ss.getInnerSize() = size - i;              // subtracting number of symbols before given position
         ss.getInnerStr() = str + i * sizeof(char); // shifting pointer needed amount of steps forward
+        ss.getShift() = i;
         return ss;
     }
     MyString::SubString const operator[](int const i) const
@@ -212,7 +223,7 @@ public:
 
 bool diffInSize(size_t givenSize, size_t rightSize) { return givenSize != rightSize; }
 
-bool diffInContent(char *givenStrPtr, char *rightStrPtr)
+bool diffInContent(char *givenStrPtr, char const *rightStrPtr)
 {
     bool diffIsFound = false;
     for (size_t i = 0; i != myStrLen(givenStrPtr); ++i)
@@ -239,52 +250,73 @@ void verify(MyString::SubString const &given, MyString::SubString const &right)
         return;
     }
     /* 3 - if we've reached here - it seems that all is OK */
-    cout << given.getInnerStr() << ':' << "OK" << endl;
+    cout << "OK_" << ':' << given.getInnerStr() << endl;
 }
 
 void verify(MyString const &givenMS, char const *right)
 {
-    // compareSizes()
+    if (diffInSize(givenMS.getSize(), myStrLen(right)))
+    {
+        cout << givenMS.getCharPtr() << ':' << "FAILED because size is wrong: " << givenMS.getSize() << endl;
+        return;
+    }
+    if (diffInContent(givenMS.getCharPtr(), right))
+    {
+        cout << givenMS.getCharPtr() << ':' << "FAILED because str is wrong!" << endl;
+        return;
+    }
+    cout << "OK_" << ':' << givenMS.getCharPtr() << endl;
 }
 
 int main()
 {
-    // MyString const hello("hello");
-    // MyString::SubString const ss0 = hello[0];
-    // verify(ss0, MyString("hello"));
-    // MyString::SubString const ss1 = hello[1];
-    // verify(ss1, MyString("ello"));
-    // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
-    // verify(hell, MyString("hell"));
-    // MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
-    // verify(ell, MyString("ell"));
-    // MyString const el = hello[1][3];
-    // verify(el, MyString("el"));
-
-    MyString const ms("0123456789");
+    MyString const msResult("0123456789");
 
     /* checking is SubString is created correctly from first [] */
-    MyString::SubString const ss0 = ms[0];
+    MyString::SubString const ss0 = msResult[0];
     cout << "\tss0 created: " << ss0.getInnerStr() << endl;
     verify(ss0, "0123456789");
-    MyString::SubString const ss1 = ms[1];
+    MyString::SubString const ss1 = msResult[1];
     cout << "\tss1 created: " << ss1.getInnerStr() << endl;
     verify(ss1, "123456789");
-    MyString::SubString const ss8 = ms[8];
+    MyString::SubString const ss8 = msResult[8];
     cout << "\tss8 created: " << ss8.getInnerStr() << endl;
     verify(ss8, "89");
-    MyString::SubString const ss9 = ms[9];
+    MyString::SubString const ss9 = msResult[9];
     cout << "\tss9 created: " << ss9.getInnerStr() << endl;
     verify(ss9, "9");
-    MyString::SubString const ss10 = ms[10];
+    MyString::SubString const ss10 = msResult[10];
     cout << "\tss10 created: " << ss10.getInnerStr() << endl;
     verify(ss10, "");
 
     /* checking if MyString is created correctly from second [] */
 
-    MyString const ms0_10 = ms[0][10];
+    MyString const ms0_10 = msResult[0][10];
     cout << "\tms0_10 created: " << ms0_10.getCharPtr() << endl;
-    verify(ms0_10, "0123");
+    verify(ms0_10, "0123456789");
+    MyString const ms1_10 = msResult[1][10];
+    cout << "\tms1_10 created: " << ms1_10.getCharPtr() << endl;
+    verify(ms1_10, "123456789");
+    MyString const ms0_9 = msResult[0][9];
+    cout << "\tms0_9 created: " << ms0_9.getCharPtr() << endl;
+    verify(ms0_9, "012345678");
+    MyString const ms1_9 = msResult[1][9];
+    cout << "\tms1_9 created: " << ms1_9.getCharPtr() << endl;
+    verify(ms1_9, "12345678");
+
+    MyString const hello("hello");
+    MyString::SubString const s0 = hello[0];
+    verify(s0, MyString("hello"));
+    MyString::SubString const s1 = hello[1];
+    verify(s1, MyString("ello"));
+    MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
+    verify(hell, MyString("hell"));
+    MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
+    verify(ell, MyString("ell"));
+    MyString const el = hello[1][3];
+    verify(el, MyString("el"));
+    MyString const l = hello[2][3];
+    verify(l, MyString("l"));
 
     /*
     // cout << "enter any string:" << endl;
