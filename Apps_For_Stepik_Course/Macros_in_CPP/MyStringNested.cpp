@@ -115,11 +115,18 @@ public:
     // }
     struct SubString
     {
+    private:
+        size_t innerSize;
+        char *innerStr;
+        int shift;
+
+    public:
         SubString() // default empty constructor is really needed here
         {
             innerSize = 0;
             innerStr = new char[1];
             innerStr[0] = '\0';
+            shift = 0;
         };
         // SubString(char const c)
         // {
@@ -131,6 +138,7 @@ public:
         {
             innerSize = s.size;
             innerStr = s.str;
+            shift = 0;
         }
         SubString(char const *given)
         {
@@ -141,15 +149,16 @@ public:
             for (size_t i = 0; i != innerSize; ++i)
                 innerStr[i] = given[i];
             innerStr[innerSize] = '\0';
+            shift = 0;
         }
-        SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr) {}
-/*         ~SubString()
+        SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr), shift(ss.shift) {}
+        ~SubString()
         {
             delete[] innerStr;
             innerSize = 0;
             shift = 0;
             // THE PROBLEM IS HERE - memory leak appear in Stepik test if this destructor is not set
-        } */
+        }
         SubString &operator=(SubString const &other)
         {
             if (this != &other) // to avoid unnecessary operations if we have the same instance
@@ -160,6 +169,7 @@ public:
                 for (size_t i = 0; i != innerSize; i++)
                     innerStr[i] = other.innerStr[i];
                 innerStr[innerSize] = '\0';
+                shift = other.shift;
             }
             return *this;
         }
@@ -189,17 +199,12 @@ public:
             cout << "\tCREATED MyString:" << msResult.str << ':' << msResult.size << endl;
             return msResult;
         }
-
-    private:
-        char *innerStr;
-        size_t innerSize;
-        int shift;
     }; // end of struct SubString
 
-public: // we're again inside MyString structure
+    // we're again inside MyString structure
     MyString::SubString const operator[](int const i) const
     {
-        SubString ss;
+        SubString ss;                 // here implicitly invoked default constructor allocates memory
         ss.getInnerSize() = size - i; // subtracting number of symbols before given position
         /* we need real copying here instead of just relinking the pointer */
         char *innerStr = new char[ss.getInnerSize() + 1];
@@ -208,6 +213,7 @@ public: // we're again inside MyString structure
         innerStr[ss.getInnerSize()] = '\0';
         cout << "before delete in subStringFrom" << endl;
         delete[] ss.getInnerStr(); // needed because in default constructor we have created 'new char[1]'
+        cout << "after delete in subStringFrom" << endl;
         ss.getInnerStr() = innerStr;
         ss.getShift() = i;
         return ss;
@@ -266,11 +272,9 @@ void verify(MyString const &givenMS, char const *right)
     cout << "OK_" << ':' << givenMS.getCharPtr() << endl;
 }
 
-int main()
+void testFirstBracketWork() // checking is SubString is created correctly from first []
 {
     MyString const msResult("0123456789");
-
-    /* checking is SubString is created correctly from first [] */
     MyString::SubString const ss0 = msResult[0];
     cout << "\tss0 created: " << ss0.getInnerStr() << endl;
     verify(ss0, "0123456789");
@@ -286,9 +290,13 @@ int main()
     MyString::SubString const ss10 = msResult[10];
     cout << "\tss10 created: " << ss10.getInnerStr() << endl;
     verify(ss10, "");
+    cout << "END OF FIRST [] TEST" << endl
+         << endl;
+}
 
-    /* checking if MyString is created correctly from second [] */
-
+void testSecondBracketWork() // checking if MyString is created correctly from second []
+{
+    MyString const msResult("0123456789");
     MyString const ms0_10 = msResult[0][10];
     cout << "\tms0_10 created: " << ms0_10.getCharPtr() << endl;
     verify(ms0_10, "0123456789");
@@ -301,7 +309,12 @@ int main()
     MyString const ms1_9 = msResult[1][9];
     cout << "\tms1_9 created: " << ms1_9.getCharPtr() << endl;
     verify(ms1_9, "12345678");
+    cout << "END OF SECOND [] TEST" << endl
+         << endl;
+}
 
+void testSecondBracketWorkWithGivenSample()
+{
     MyString const hello("hello");
     MyString::SubString const s0 = hello[0];
     verify(s0, MyString("hello"));
@@ -315,32 +328,14 @@ int main()
     verify(el, MyString("el"));
     MyString const l = hello[2][3];
     verify(l, MyString("l"));
+    cout << "END OF SECOND [] TEST WITH GIVEN SAMPLE" << endl
+         << endl;
+}
 
-    /*
-    // cout << "enter any string:" << endl;
-    char *initialString = "initial";
-    // cin >> initialString;
-    MyString s = MyString(initialString);
-    cout << s.getCharPtr() << endl;
-    cout << myStrLen(initialString) << ' ' << myStrLen(s.getCharPtr()) << endl;
-    // initialString[0] = 'I'; // avoiding of "Segmentation fault"
-    s.getCharPtr()[0] = '_';
-    cout << initialString << endl;
-    cout << s.getCharPtr() << endl;
-    cout << "enter a symbol and number of repetiotions for this symbol: ";
-    char c;
-    size_t n;
-    cin >> c >> n;
-    cout << MyString(n, c).getCharPtr() << endl;
-    MyString h1("Hello");
-    MyString h2(",World");
-    h1.append(h2);
-    MyString h3("SMTH");
-    h1.append(h3);
-    cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
-    h1.append(h1);
-    h1.append(h1);
-    cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
-*/
+int main()
+{
+    testFirstBracketWork();
+    testSecondBracketWork();
+    testSecondBracketWorkWithGivenSample();
     return 0;
 }
