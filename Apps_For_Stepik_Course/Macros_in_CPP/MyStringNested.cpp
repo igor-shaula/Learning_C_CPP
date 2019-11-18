@@ -143,19 +143,19 @@ public:
             innerStr[innerSize] = '\0';
         }
         SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr) {}
-        ~SubString()
+/*         ~SubString()
         {
             delete[] innerStr;
             innerSize = 0;
             shift = 0;
             // THE PROBLEM IS HERE - memory leak appear in Stepik test if this destructor is not set
-        }
+        } */
         SubString &operator=(SubString const &other)
         {
             if (this != &other) // to avoid unnecessary operations if we have the same instance
             {
-                delete[] innerStr;
                 innerSize = other.innerSize;
+                delete[] innerStr;
                 innerStr = new char[innerSize + 1];
                 for (size_t i = 0; i != innerSize; i++)
                     innerStr[i] = other.innerStr[i];
@@ -171,8 +171,9 @@ public:
         char *&getInnerStr() { return innerStr; }
         size_t &getInnerSize() { return innerSize; }
         int &getShift() { return shift; }
-        // we'll need this method right after its declaration //
-        MyString const innerSubStringFrom(int const i) const // not including symbol by given index - 9
+
+        // creating content for second use of [] operator - it has to be MyString again //
+        MyString const operator[](int const i) const // not including symbol by given index
         {
             MyString msResult;
             cout << "\tGIVEN SubString:" << innerStr << ':' << innerSize << endl;
@@ -188,12 +189,6 @@ public:
             cout << "\tCREATED MyString:" << msResult.str << ':' << msResult.size << endl;
             return msResult;
         }
-        // creating content for second use of [] operator - it has to be MyString again //
-        MyString const operator[](int const i) const
-        {
-            const MyString msResult = innerSubStringFrom(i);
-            return msResult;
-        }
 
     private:
         char *innerStr;
@@ -201,17 +196,20 @@ public:
         int shift;
     }; // end of struct SubString
 
-    MyString::SubString const subStringFrom(int const i) const
-    {
-        SubString ss;
-        ss.getInnerSize() = size - i;              // subtracting number of symbols before given position
-        ss.getInnerStr() = str + i * sizeof(char); // shifting pointer needed amount of steps forward
-        ss.getShift() = i;
-        return ss;
-    }
+public: // we're again inside MyString structure
     MyString::SubString const operator[](int const i) const
     {
-        const SubString ss = subStringFrom(i);
+        SubString ss;
+        ss.getInnerSize() = size - i; // subtracting number of symbols before given position
+        /* we need real copying here instead of just relinking the pointer */
+        char *innerStr = new char[ss.getInnerSize() + 1];
+        for (size_t j = 0; j < ss.getInnerSize(); j++)
+            innerStr[j] = str[j + i * sizeof(char)]; // shifting pointer needed amount of steps forward
+        innerStr[ss.getInnerSize()] = '\0';
+        cout << "before delete in subStringFrom" << endl;
+        delete[] ss.getInnerStr(); // needed because in default constructor we have created 'new char[1]'
+        ss.getInnerStr() = innerStr;
+        ss.getShift() = i;
         return ss;
     }
 };
