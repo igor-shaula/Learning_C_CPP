@@ -37,7 +37,7 @@ public:
     size_t getSize() const { return size; }
     virtual char *getCharPtr() const { return str; }
     // solution for task 1 //
-    MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
+    MyString(char const *const givenPtr) // creating empty string by default - 'str' ptr is not const here
     {
         size = myStrLen(givenPtr);
         str = new char[size + 1]; // because otherwize task is not accepted by Stepik
@@ -53,8 +53,15 @@ public:
             str[i] = c;
         str[size] = '\0';
     }
+    MyString()
+    {
+        size = 0;
+        str = new char[1];
+        str[0] = '\0';
+    }
     ~MyString()
     {
+        cout << "about to delete[] in MyString:" << str << endl;
         delete[] str;
         size = 0;
     }
@@ -154,7 +161,11 @@ public:
         SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr), shift(ss.shift) {}
         ~SubString()
         {
-            delete[] innerStr;
+            if (innerStr != 0)
+            {
+                cout << "about to delete[] in SubString:" << innerStr << endl;
+                delete[] innerStr;
+            }
             innerSize = 0;
             shift = 0;
             // THE PROBLEM IS HERE - memory leak appear in Stepik test if this destructor is not set
@@ -194,7 +205,10 @@ public:
             size_t j = 0;
             for (; j != msResult.size; ++j)
                 tmp[j] = innerStr[j];
-            tmp[j + 1] = '\0';
+            tmp[msResult.size] = '\0';
+            cout << "before delete[] msResult.str:" << msResult.str << endl;
+            delete[] msResult.str;
+            cout << "after delete[] msResult.str" << endl;
             msResult.str = tmp;
             cout << "\tCREATED MyString:" << msResult.str << ':' << msResult.size << endl;
             return msResult;
@@ -211,9 +225,9 @@ public:
         for (size_t j = 0; j < ss.getInnerSize(); j++)
             innerStr[j] = str[j + i * sizeof(char)]; // shifting pointer needed amount of steps forward
         innerStr[ss.getInnerSize()] = '\0';
-        cout << "before delete in subStringFrom" << endl;
-        delete[] ss.getInnerStr(); // needed because in default constructor we have created 'new char[1]'
-        cout << "after delete in subStringFrom" << endl;
+        // cout << "before delete[] ss.getInnerStr():" << ss.getInnerStr() << endl;
+        // delete[] ss.getInnerStr(); // needed because in default constructor we have created 'new char[1]'
+        // cout << "after delete[] ss.getInnerStr()" << endl;
         ss.getInnerStr() = innerStr;
         ss.getShift() = i;
         return ss;
@@ -274,68 +288,73 @@ void verify(MyString const &givenMS, char const *right)
 
 void testFirstBracketWork() // checking is SubString is created correctly from first []
 {
-    MyString const msResult("0123456789");
-    MyString::SubString const ss0 = msResult[0];
+    MyString const ms1("0123456789");
+    cout << "\nSTART OF FIRST [] TEST" << endl;
+    MyString::SubString const ss0 = ms1[0];
     cout << "\tss0 created: " << ss0.getInnerStr() << endl;
     verify(ss0, "0123456789");
-    MyString::SubString const ss1 = msResult[1];
+    MyString::SubString const ss1 = ms1[1];
     cout << "\tss1 created: " << ss1.getInnerStr() << endl;
     verify(ss1, "123456789");
-    MyString::SubString const ss8 = msResult[8];
+    MyString::SubString const ss8 = ms1[8];
     cout << "\tss8 created: " << ss8.getInnerStr() << endl;
     verify(ss8, "89");
-    MyString::SubString const ss9 = msResult[9];
+    MyString::SubString const ss9 = ms1[9];
     cout << "\tss9 created: " << ss9.getInnerStr() << endl;
     verify(ss9, "9");
-    MyString::SubString const ss10 = msResult[10];
+    MyString::SubString const ss10 = ms1[10];
     cout << "\tss10 created: " << ss10.getInnerStr() << endl;
     verify(ss10, "");
-    cout << "END OF FIRST [] TEST" << endl
-         << endl;
+    cout << "END OF FIRST [] TEST" << endl;
 }
 
 void testSecondBracketWork() // checking if MyString is created correctly from second []
 {
-    MyString const msResult("0123456789");
-    MyString const ms0_10 = msResult[0][10];
+    MyString const ms2("0123456789");
+    // MyString const ms2("qwertyuiop");
+    cout << "\nSTART OF SECOND [] TEST" << endl;
+    MyString const ms0_10 = ms2[0][10];
     cout << "\tms0_10 created: " << ms0_10.getCharPtr() << endl;
     verify(ms0_10, "0123456789");
-    MyString const ms1_10 = msResult[1][10];
+    // verify(ms0_10, "qwertyuiop");
+    MyString const ms1_10 = ms2[1][10];
     cout << "\tms1_10 created: " << ms1_10.getCharPtr() << endl;
     verify(ms1_10, "123456789");
-    MyString const ms0_9 = msResult[0][9];
+    // verify(ms1_10, "wertyuiop");
+    MyString const ms0_9 = ms2[0][9];
     cout << "\tms0_9 created: " << ms0_9.getCharPtr() << endl;
     verify(ms0_9, "012345678");
-    MyString const ms1_9 = msResult[1][9];
+    // verify(ms0_9, "qwertyuio");
+    MyString const ms1_9 = ms2[1][9];
     cout << "\tms1_9 created: " << ms1_9.getCharPtr() << endl;
     verify(ms1_9, "12345678");
-    cout << "END OF SECOND [] TEST" << endl
-         << endl;
+    // verify(ms1_9, "wertyuio");
+    cout << "END OF SECOND [] TEST" << endl;
 }
 
 void testSecondBracketWorkWithGivenSample()
 {
     MyString const hello("hello");
+    cout << "\nSTART OF TESTING WITH GIVEN SAMPLE" << endl;
     MyString::SubString const s0 = hello[0];
     verify(s0, MyString("hello"));
     MyString::SubString const s1 = hello[1];
     verify(s1, MyString("ello"));
     MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
-    verify(hell, MyString("hell"));
+    verify(hell, "hell");
     MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
-    verify(ell, MyString("ell"));
+    verify(ell, "ell");
     MyString const el = hello[1][3];
-    verify(el, MyString("el"));
+    verify(el, "el");
     MyString const l = hello[2][3];
-    verify(l, MyString("l"));
-    cout << "END OF SECOND [] TEST WITH GIVEN SAMPLE" << endl
-         << endl;
+    verify(l, "l");
+    cout << "END OF TESTING WITH GIVEN SAMPLE" << endl;
 }
 
 int main()
 {
     testFirstBracketWork();
-    testSecondBracketWork();
-    testSecondBracketWorkWithGivenSample();
+    // testSecondBracketWork();
+    // testSecondBracketsWorkWithGivenSample();
     return 0;
 }
