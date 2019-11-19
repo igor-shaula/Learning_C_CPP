@@ -17,8 +17,8 @@ struct SharedPtr {
     }
     ~SharedPtr() {
         ptrCounter--;
-        cout << "destructor : ptrCounter no is : " << ptrCounter << endl;
-        if (ptrCounter <= 0) {
+        cout << "destructor : ptrCounter now is : " << ptrCounter << endl;
+        if (ptrCounter == 0) {
             delete ptr_;
             ptr_ = 0;
             cout << "destructor : nulled ptr_" << endl;
@@ -68,6 +68,7 @@ struct SharedPtr {
     int ptrCounter = 0;
     int refCounter = 0;  // depends only on quantity of different pointers - in fact how many real instances we really have
 };
+
 /*
 Для ScopedPtr мы запретили копирование, однако, копирование можно и разрешить.
 Это позволит реализовать более продвинутый умный указатель — SharedPtr.
@@ -91,3 +92,113 @@ struct SharedPtr {
 метод get, как и в случае со ScopedPtr,
 метод reset — аналогичен reset у ScopedPtr, но освобождает память, только если счетчик ссылок после декремента равен 0.
 */
+
+struct Number;
+struct BinaryOperation;
+
+// VISITOR = = =
+struct Visitor {
+    virtual void visitNumber(Number const *number) = 0;
+    virtual void visitBinaryOperation(BinaryOperation const *bop) = 0;
+    ~Visitor() {}
+};
+
+struct Expression  // base type
+{
+    virtual double evaluate() const = 0;
+    // if we add any virtual method here - we'll have to realize it in all derivatives,
+    // but we'll use Visitor pattern - to avoid adding methods in all chain of inheritance.
+    virtual ~Expression() {}
+    // visit() allows us to add only one method instead of many in Expression, Number & BinaryOperation.
+    virtual void visit(Visitor *visitor) const = 0;
+};
+
+struct Number : Expression {
+    Number(double value) : value(value) { cout << "Number " << value << " created" << endl; }
+
+    double evaluate() const { return value; }
+
+    void visit(Visitor *visitor) const { visitor->visitNumber(this); }
+
+    double getValue() const { return value; }
+
+   private:
+    double value;
+};
+
+struct BinaryOperation : Expression {
+    /*
+      Здесь op это один из 4 символов: '+', '-', '*' или '/', соответствующих операциям,
+      которые вам нужно реализовать.
+     */
+    BinaryOperation(Expression const *left, char op, Expression const *right)
+        : left(left), op(op), right(right) {}
+
+    double evaluate() const {
+        switch (op) {
+            case '+':
+                return left->evaluate() + right->evaluate();
+            case '-':
+                return left->evaluate() - right->evaluate();
+            case '*':
+                return left->evaluate() * right->evaluate();
+            case '/':
+                return left->evaluate() / right->evaluate();
+            default:
+                break;
+        }
+    };
+    ~BinaryOperation() {
+        delete left;
+        delete right;
+    }
+
+    void visit(Visitor *visitor) const { visitor->visitBinaryOperation(this); }
+
+    Expression const *getLeft() const { return left; }
+    Expression const *getRight() const { return right; }
+    char getOp() const { return op; }
+
+   private:
+    Expression const *left;
+    Expression const *right;
+    char op;
+};
+
+struct PrintBinaryOperationsVisitor : Visitor {
+    void visitNumber(Number const *number) { cout << number->getValue() << ' '; }
+
+    void visitBinaryOperation(BinaryOperation const *bop) {
+        bop->getLeft()->visit(this);
+        cout << bop->getOp() << ' ';
+        bop->getRight()->visit(this);
+        cout << "-> " << bop->evaluate() << endl;
+    }
+};
+
+struct PrintVisitor : Visitor {
+    void visitNumber(Number const *number) {
+        std::cout << number->getValue();
+    }
+
+    void visitBinaryOperation(BinaryOperation const *bop) {
+        std::cout << '(';
+        bop->getLeft()->visit(this);
+        std::cout << bop->getOp();
+        bop->getRight()->visit(this);
+        std::cout << ')';
+    }
+};
+
+void runAllTests() {
+    Number n1(1.5);
+    Number n2 = n1;
+    SharedPtr sp1(&n1);
+    SharedPtr sp2(&n2);
+    // SharedPtr spe1 = sp1;
+    // SharedPtr spe2 = sp2;
+}
+int main() {
+    runAllTests();
+    return 0;
+}
