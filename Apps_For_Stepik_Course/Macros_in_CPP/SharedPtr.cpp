@@ -5,44 +5,6 @@ struct Expression;
 struct Number;
 struct BinaryOperation;
 
-struct ScopedPtr {
-    ~ScopedPtr() {
-        counter--;
-        cout << "destructor : counter is: " << counter << endl;
-        if (counter <= 0) {
-            delete ptr_;
-            ptr_ = 0;
-            cout << "destructor : nulled ptr_";
-        }
-    }
-    Expression *get() const {
-        return ptr_;
-    }
-    Expression *release() {  // as i understand, counter has to remain untouched here
-        Expression *tmp = ptr_;
-        // delete ptr_;
-        ptr_ = 0;
-        return tmp;
-    }
-    void reset(Expression *ptr = 0) {
-        delete ptr_;
-        ptr_ = ptr;
-    }
-    Expression &operator*() const {
-        return *ptr_;
-    }
-    Expression *operator->() const {
-        return ptr_;
-    }
-
-   private:
-    ScopedPtr(const ScopedPtr &);
-    ScopedPtr &operator=(const ScopedPtr &);
-
-    Expression *ptr_;
-    int counter = 0;
-};
-
 struct SharedPtr {
     explicit SharedPtr(Expression *ptr = 0) {
         cout << "constructor : given ptr: " << ptr << endl;
@@ -70,13 +32,36 @@ struct SharedPtr {
         if (other.ptr_ != 0)
             refCounter++;  // this has to be the only place of this counter incrementation
     }
-    SharedPtr &operator=(const SharedPtr &) {
-        (this->refCounter)--;
+    SharedPtr &operator=(const SharedPtr &other) {
+        if (this->ptr_ != 0)
+            (this->refCounter)--;
+        else {
+        }
+        // if (other.ptr_ != 0)
+        // (other.refCounter)++;
+        // todo - continue here
     }
-    // Expression* get() const
-    // void reset(Expression *ptr = 0)
-    // Expression& operator*() const
-    // Expression* operator->() const
+    Expression *get() const {
+        return ptr_;
+    }
+    void reset(Expression *ptr = 0) {
+        delete ptr_;
+        ptr_ = ptr;
+        // if(ptr_ != 0)
+        // investigate all cases that might occur here
+    }
+    /* method release() is absent in the task */
+    Expression *release() {  // as i understand, counter has to remain untouched here
+        Expression *tmp = ptr_;
+        ptr_ = 0;
+        return tmp;
+    }
+    Expression &operator*() const {
+        return *ptr_;
+    }
+    Expression *operator->() const {
+        return ptr_;
+    }
 
    private:
     Expression *ptr_;
@@ -98,12 +83,11 @@ struct SharedPtr {
 (конструктор копирования создает еще один SharedPtr с указателем на тот же самый объект),
 в деструкторе мы уменьшаем значение счетчика на 1, если в объекте SharedPtr хранится ненулевой указатель
 (мы удаляем один SharedPtr, который указывает на объект в куче),
-оператор присваивания уменьшает счетчик ссылок левого операнда на 1,
-если внутри левого SharedPtr хранится ненулевой указатель, увеличивает счетчик правого SharedPtr на 1,
-если в правом SharedPtr хранится ненулевой указатель
+оператор присваивания:
+уменьшает счетчик ссылок левого операнда на 1, если внутри левого SharedPtr хранится ненулевой указатель,
+увеличивает счетчик правого SharedPtr на 1, если в правом SharedPtr хранится ненулевой указатель
 (обычное дело для оператора присваивания — сначала освобождаем старые ресурсы, потом выделяем новые, но при этом нужно быть особенно внимательным с присваиванием самому себе).
 Для класса SharedPtr могут оказаться полезными следующие методы (кроме операторов * и ->, конструктора копирования, оператора присваивания, деструктора и конструктора):
-
 метод get, как и в случае со ScopedPtr,
 метод reset — аналогичен reset у ScopedPtr, но освобождает память, только если счетчик ссылок после декремента равен 0.
 */
