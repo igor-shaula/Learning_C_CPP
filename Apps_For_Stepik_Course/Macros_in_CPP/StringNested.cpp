@@ -27,7 +27,7 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
     dest[count + shift] = '\0'; // decided to complete string preparation here
 }
 
-struct MyString
+struct String
 {
 private:
     size_t size;
@@ -38,7 +38,7 @@ public:
     virtual char *getCharPtr() const { return str; }
     // solution for task 1 //
     // MyString(char const *const givenPtr) // creating empty string by default - 'str' ptr is not const here
-    MyString(const char *givenPtr = "") // GIVEN IN THE TASK
+    String(const char *givenPtr = "") // GIVEN IN THE TASK
     {
         size = myStrLen(givenPtr);
         str = new char[size + 1];      // because otherwize task is not accepted by Stepik
@@ -47,7 +47,7 @@ public:
     }
     // solution for task 2 //
     // MyString(size_t const n, char const c) // filling newly created string with specific char
-    MyString(size_t n, char c) // GIVEN IN THE TASK
+    String(size_t n, char c) // GIVEN IN THE TASK
     {
         size = n;
         str = new char[size + 1];
@@ -63,14 +63,14 @@ public:
     //     str[0] = '\0';
     //     // cout << "\tcreated MyString:" << str << endl;
     // }
-    ~MyString()
+    ~String()
     {
         // cout << "\tabout to delete[] MyString:" << str << endl;
         delete[] str;
         size = 0;
     }
     // solution for task 3 //
-    void append(const MyString &other) // GIVEN IN THE TASK
+    void append(const String &other) // GIVEN IN THE TASK
     {
         /*
         before appending we have to change size of array in dynamic memory /
@@ -100,14 +100,14 @@ public:
         delete[] tmpOther;
     }
     // ADDITIONS FROM LECTURES :
-    MyString(const MyString &other) : size(other.size), str(new char[size + 1]) // GIVEN IN THE TASK
+    String(const String &other) : size(other.size), str(new char[size + 1]) // GIVEN IN THE TASK
     {
         for (size_t i = 0; i != size; i++)
             str[i] = other.str[i];
         str[size] = '\0';
         // cout << "\tcreated MyString:" << str << endl;
     }
-    MyString &operator=(const MyString &other) // GIVEN IN THE TASK
+    String &operator=(const String &other) // GIVEN IN THE TASK
     {
         if (this != &other) // to avoid unnecessary operations if we have the same instance
         {
@@ -139,7 +139,7 @@ public:
         //     innerStr[0] = c;
         //     innerStr[1] = '\0';
         // }
-        SubString(MyString const &s)
+        SubString(String const &s)
         {
             innerSize = s.size;
             innerStr = s.str;
@@ -202,9 +202,9 @@ public:
         int &getShift() { return shift; }
 
         // creating content for second use of [] operator - it has to be MyString again //
-        MyString const operator[](int const i) const // not including symbol by given index
+        String const operator[](int const i) const // not including symbol by given index
         {
-            MyString msResult;
+            String msResult;
             // cout << "\tGIVEN SubString:" << innerStr << ':' << innerSize << endl;
             msResult.size = i - shift; // one more for closing zero
             // cout << "\tmsResult.size=" << msResult.size << endl;
@@ -222,7 +222,7 @@ public:
     }; // end of struct SubString
 
     // we're again inside MyString structure
-    MyString::SubString const operator[](int const i) const // seems to be OK as first [] tests are OK
+    String::SubString const operator[](int const i) const // seems to be OK as first [] tests are OK
     {
         SubString ss;                 // here implicitly invoked default constructor allocates memory
         ss.getInnerSize() = size - i; // subtracting number of symbols before given position
@@ -259,7 +259,7 @@ bool diffInContent(char const *const givenStrPtr, char const *const rightStrPtr)
     return diffIsFound;
 }
 
-void verify(MyString::SubString const &given, char const *right)
+void verify(String::SubString const &given, char const *right)
 {
     /* 1 - comparing sizes */
     if (diffInSize(given.getInnerSize(), myStrLen(right)))
@@ -277,7 +277,7 @@ void verify(MyString::SubString const &given, char const *right)
     cout << "OK_" << ':' << given.getInnerStr() << endl;
 }
 
-void verify(MyString const &givenMS, char const *right)
+void verify(String const &givenMS, char const *right)
 {
     if (diffInSize(givenMS.getSize(), myStrLen(right)))
     {
@@ -294,21 +294,21 @@ void verify(MyString const &givenMS, char const *right)
 
 void testFirstBracketWork() // checking is SubString is created correctly from first []
 {
-    MyString const ms1("0123456789");
+    String const ms1("0123456789");
     cout << "\nSTART OF FIRST [] TEST" << endl;
-    MyString::SubString const ss0 = ms1[0];
+    String::SubString const ss0 = ms1[0];
     cout << "\tss0 created: " << ss0.getInnerStr() << endl;
     verify(ss0, "0123456789");
-    MyString::SubString const ss1 = ms1[1];
+    String::SubString const ss1 = ms1[1];
     cout << "\tss1 created: " << ss1.getInnerStr() << endl;
     verify(ss1, "123456789");
-    MyString::SubString const ss8 = ms1[8];
+    String::SubString const ss8 = ms1[8];
     cout << "\tss8 created: " << ss8.getInnerStr() << endl;
     verify(ss8, "89");
-    MyString::SubString const ss9 = ms1[9];
+    String::SubString const ss9 = ms1[9];
     cout << "\tss9 created: " << ss9.getInnerStr() << endl;
     verify(ss9, "9");
-    MyString::SubString const ss10 = ms1[10];
+    String::SubString const ss10 = ms1[10];
     cout << "\tss10 created: " << ss10.getInnerStr() << endl;
     verify(ss10, "");
     cout << "END OF FIRST [] TEST" << endl;
@@ -316,22 +316,22 @@ void testFirstBracketWork() // checking is SubString is created correctly from f
 
 void testSecondBracketWork() // checking if MyString is created correctly from second []
 {
-    MyString const ms2("0123456789");
+    String const ms2("0123456789");
     // MyString const ms2("qwertyuiop");
     cout << "\nSTART OF SECOND [] TEST" << endl;
-    MyString const ms0_10 = ms2[0][10];
+    String const ms0_10 = ms2[0][10];
     cout << "\tms0_10 created: " << ms0_10.getCharPtr() << endl;
     verify(ms0_10, "0123456789");
     // verify(ms0_10, "qwertyuiop");
-    MyString const ms1_10 = ms2[1][10];
+    String const ms1_10 = ms2[1][10];
     cout << "\tms1_10 created: " << ms1_10.getCharPtr() << endl;
     verify(ms1_10, "123456789");
     // verify(ms1_10, "wertyuiop");
-    MyString const ms0_9 = ms2[0][9];
+    String const ms0_9 = ms2[0][9];
     cout << "\tms0_9 created: " << ms0_9.getCharPtr() << endl;
     verify(ms0_9, "012345678");
     // verify(ms0_9, "qwertyuio");
-    MyString const ms1_9 = ms2[1][9];
+    String const ms1_9 = ms2[1][9];
     cout << "\tms1_9 created: " << ms1_9.getCharPtr() << endl;
     verify(ms1_9, "12345678");
     // verify(ms1_9, "wertyuio");
@@ -340,21 +340,21 @@ void testSecondBracketWork() // checking if MyString is created correctly from s
 
 void testSecondBracketsWorkWithGivenSample()
 {
-    MyString const hello("hello");
+    String const hello("hello");
     cout << "\nSTART OF TESTING WITH GIVEN SAMPLE" << endl;
-    MyString::SubString const s0 = hello[0];
+    String::SubString const s0 = hello[0];
     cout << s0.getInnerStr() << endl;
     verify(s0, "hello");
-    MyString::SubString const s1 = hello[1];
+    String::SubString const s1 = hello[1];
     cout << s1.getInnerStr() << endl;
     verify(s1, "ello");
-    MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
+    String const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
     verify(hell, "hell");
-    MyString const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
+    String const ell = hello[1][4]; // теперь в ell хранится подстрока "ell"
     verify(ell, "ell");
-    MyString const el = hello[1][3];
+    String const el = hello[1][3];
     verify(el, "el");
-    MyString const l = hello[2][3];
+    String const l = hello[2][3];
     verify(l, "l");
     cout << "END OF TESTING WITH GIVEN SAMPLE" << endl;
 }

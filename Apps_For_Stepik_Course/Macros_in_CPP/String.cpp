@@ -25,7 +25,7 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
     dest[count + shift] = '\0'; // decided to complete string preparation here
 }
 
-struct MyString
+struct String
 {
 private:
     size_t size;
@@ -35,7 +35,7 @@ public:
     size_t getSize() const { return size; }
     char *getCharPtr() const { return str; }
     // solution for task 1 //
-    MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
+    String(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
         size = myStrLen(givenPtr);
         str = new char[size + 1]; // because otherwize task is not accepted by Stepik
@@ -43,7 +43,7 @@ public:
         // str[size] = '\0';
     }
     // solution for task 2 //
-    MyString(size_t const n, char const c) // filling newly created string with specific char
+    String(size_t const n, char const c) // filling newly created string with specific char
     {
         size = n;
         str = new char[size + 1];
@@ -51,13 +51,13 @@ public:
             str[i] = c;
         str[size] = '\0';
     }
-    ~MyString()
+    ~String()
     {
         delete[] str;
         size = 0;
     }
     // solution for task 3 //
-    void append(MyString &other)
+    void append(String &other)
     {
         /*
         before appending we have to change size of array in dynamic memory /
@@ -93,7 +93,7 @@ int main()
     // cout << "enter any string:" << endl;
     char *initialString = "initial";
     // cin >> initialString;
-    MyString s = MyString(initialString);
+    String s = String(initialString);
     cout << s.getCharPtr() << endl;
     cout << myStrLen(initialString) << ' ' << myStrLen(s.getCharPtr()) << endl;
     // initialString[0] = 'I'; // avoiding of "Segmentation fault"
@@ -104,11 +104,11 @@ int main()
     char c;
     size_t n;
     cin >> c >> n;
-    cout << MyString(n, c).getCharPtr() << endl;
-    MyString h1("Hello");
-    MyString h2(",World");
+    cout << String(n, c).getCharPtr() << endl;
+    String h1("Hello");
+    String h2(",World");
     h1.append(h2);
-    MyString h3("SMTH");
+    String h3("SMTH");
     h1.append(h3);
     cout << h1.getCharPtr() << "\\size=" << h1.getSize() << endl;
     h1.append(h1);

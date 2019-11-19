@@ -29,7 +29,7 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
 
 struct SubString2;
 
-struct MyString
+struct String
 {
 private:
     size_t size;
@@ -39,7 +39,7 @@ public:
     size_t getSize() const { return size; }
     virtual char *getCharPtr() const { return str; }
     // solution for task 1 //
-    MyString(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
+    String(char const *const givenPtr = "") // creating empty string by default - 'str' ptr is not const here
     {
         size = myStrLen(givenPtr);
         str = new char[size + 1]; // because otherwize task is not accepted by Stepik
@@ -47,7 +47,7 @@ public:
         // str[size] = '\0';
     }
     // solution for task 2 //
-    MyString(size_t const n, char const c) // filling newly created string with specific char
+    String(size_t const n, char const c) // filling newly created string with specific char
     {
         size = n;
         str = new char[size + 1];
@@ -55,13 +55,13 @@ public:
             str[i] = c;
         str[size] = '\0';
     }
-    ~MyString()
+    ~String()
     {
         delete[] str;
         size = 0;
     }
     // solution for task 3 //
-    void append(MyString &other)
+    void append(String &other)
     {
         /*
         before appending we have to change size of array in dynamic memory /
@@ -91,13 +91,13 @@ public:
         delete[] tmpOther;
     }
     // ADDITIONS FROM LECTURES :
-    MyString(const MyString &other) : size(other.size), str(new char[size + 1])
+    String(const String &other) : size(other.size), str(new char[size + 1])
     {
         for (size_t i = 0; i != size; i++)
             str[i] = other.str[i];
         str[size] = '\0';
     }
-    MyString &operator=(MyString const &other)
+    String &operator=(String const &other)
     {
         if (this != &other) // to avoid unnecessary operations if we have the same instance
         {
@@ -133,22 +133,22 @@ public:
         char *innerStr;
         size_t innerSize;
     };
-    MyString::SubString subStringFrom(int const i) const
+    String::SubString subStringFrom(int const i) const
     {
         return SubString((this->str)[i]);
     }
-    MyString::SubString const operator[](int const i) const
+    String::SubString const operator[](int const i) const
     {
         const SubString ss = subStringFrom(i);
         return ss;
     }
 };
 
-struct SubString2 : MyString
+struct SubString2 : String
 {
 };
 
-SubString2 MyString::any()
+SubString2 String::any()
 {
     cout << "OKKKK" << endl;
     return SubString2();
@@ -169,7 +169,7 @@ void verify(char const given, char const right)
 {
     cout << given << ':' << (given == right ? "OK" : "FAILED") << endl;
 }
-void verify(MyString::SubString const &given, MyString::SubString const &right)
+void verify(String::SubString const &given, String::SubString const &right)
 {
     cout << given.getInnerStr() << ':' << right.getInnerStr() << endl;
     // cout << given.getInnerStr() << ':' << (given.getInnerStr() == right.getInnerStr() ? "OK" : "FAILED") << endl;
@@ -177,8 +177,8 @@ void verify(MyString::SubString const &given, MyString::SubString const &right)
 
 int main()
 {
-    MyString const hello("hello");
-    MyString::SubString const ss = hello[0];
+    String const hello("hello");
+    String::SubString const ss = hello[0];
     verify(ss, 'h');
     // MyString const hell = hello[0][4]; // теперь в hell хранится подстрока "hell"
     // MyString const ell = hello[1][4];  // теперь в ell хранится подстрока "ell"
