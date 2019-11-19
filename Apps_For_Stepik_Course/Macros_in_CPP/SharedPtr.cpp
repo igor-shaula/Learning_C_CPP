@@ -191,12 +191,38 @@ struct PrintVisitor : Visitor {
 };
 
 void runAllTests() {
-    Number n1(1.5);
-    Number n2 = n1;
-    SharedPtr sp1(&n1);
-    SharedPtr sp2(&n2);
+    // Number n1(1.5);
+    // Number n2 = n1;
+    // SharedPtr sp1(&n1);
+    // SharedPtr sp2(&n2);
     // SharedPtr spe1 = sp1;
     // SharedPtr spe2 = sp2;
+
+    SharedPtr p1;
+    {
+        SharedPtr p2(new Number(1.1));
+        // SharedPtr p2(new Expression("expr1"));
+        SharedPtr p3(new Number(1.2));
+        // SharedPtr p3(new Expression("expr2"));
+        SharedPtr p4(p2);
+        SharedPtr p5;
+        p5 = p2;
+        p5 = p4;
+        p1 = p5;
+        p3.reset(NULL);
+        p3 = p5;
+        p5.reset(NULL);
+        SharedPtr p6;
+        SharedPtr p7;
+        p7 = p7;
+        p7.reset(NULL);
+        p7.reset(new Number(1.3));
+        // p7.reset(new Expression("expr3"));
+        SharedPtr p8(new Number(1.4));
+        // SharedPtr p8(new Expression("expr4"));
+        p8.reset(NULL);
+    }
+    p1 = p1;
 }
 int main() {
     runAllTests();
