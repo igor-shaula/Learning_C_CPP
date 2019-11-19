@@ -1,19 +1,87 @@
+#include <iostream>
+using namespace std;
+
 struct Expression;
 struct Number;
 struct BinaryOperation;
 
-struct SharedPtr
-{
-    // реализуйте следующие методы
-    //
-    // explicit SharedPtr(Expression *ptr = 0)
-    // ~SharedPtr()
-    // SharedPtr(const SharedPtr &)
-    // SharedPtr& operator=(const SharedPtr &)
+struct ScopedPtr {
+    ~ScopedPtr() {
+        counter--;
+        cout << "destructor : counter is: " << counter << endl;
+        if (counter <= 0) {
+            delete ptr_;
+            ptr_ = 0;
+            cout << "destructor : nulled ptr_";
+        }
+    }
+    Expression *get() const {
+        return ptr_;
+    }
+    Expression *release() {  // as i understand, counter has to remain untouched here
+        Expression *tmp = ptr_;
+        // delete ptr_;
+        ptr_ = 0;
+        return tmp;
+    }
+    void reset(Expression *ptr = 0) {
+        delete ptr_;
+        ptr_ = ptr;
+    }
+    Expression &operator*() const {
+        return *ptr_;
+    }
+    Expression *operator->() const {
+        return ptr_;
+    }
+
+   private:
+    ScopedPtr(const ScopedPtr &);
+    ScopedPtr &operator=(const ScopedPtr &);
+
+    Expression *ptr_;
+    int counter = 0;
+};
+
+struct SharedPtr {
+    explicit SharedPtr(Expression *ptr = 0) {
+        cout << "constructor : given ptr: " << ptr << endl;
+        if (ptr != 0) {
+            ptr_ = ptr;
+            ptrCounter++;
+            refCounter = 1;
+            cout << "constructor : ptrCounter is : " << ptrCounter << endl;
+        }
+    }
+    ~SharedPtr() {
+        ptrCounter--;
+        cout << "destructor : ptrCounter no is : " << ptrCounter << endl;
+        if (ptrCounter <= 0) {
+            delete ptr_;
+            ptr_ = 0;
+            cout << "destructor : nulled ptr_" << endl;
+        }
+        if (ptr_ != 0) {
+            refCounter--;
+            cout << "destructor : refCounter now is : " << refCounter << endl;
+        }
+    }
+    SharedPtr(const SharedPtr &other) {
+        if (other.ptr_ != 0)
+            refCounter++;  // this has to be the only place of this counter incrementation
+    }
+    SharedPtr &operator=(const SharedPtr &) {
+        (this->refCounter)--;
+    }
     // Expression* get() const
     // void reset(Expression *ptr = 0)
     // Expression& operator*() const
     // Expression* operator->() const
+
+   private:
+    Expression *ptr_;
+    int ptrCounter = 0;
+    int refCounter = 0;  // depends only on quantity of different pointers - in fact how many real instances we really have
 };
 /*
 Для ScopedPtr мы запретили копирование, однако, копирование можно и разрешить.

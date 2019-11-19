@@ -20,7 +20,7 @@ struct ScopedPtr {
         if (counter <= 0) {
             delete ptr_;
             ptr_ = 0;
-            cout << "destructor : nulled ptr_";
+            cout << "destructor : nulled ptr_" << endl;
         }
     }
     Expression *get() const {
@@ -50,6 +50,10 @@ struct ScopedPtr {
     Expression *ptr_;
     int counter = 0;
 };
+
+void testScopedPtrUse() {
+    // todo...
+}
 /*
 На предыдущих неделях вы уже набили достаточно шишек на ручном управлении памятью.
 Пришло время задуматься о более разумном подходе.
@@ -73,5 +77,6 @@ reset — метод заставляет ScopedPtr освободить ста�
 */
 
 int main() {
+    testScopedPtrUse();
     return 0;
 }
