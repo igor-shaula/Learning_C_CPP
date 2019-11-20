@@ -1,55 +1,5 @@
-#include <iostream>
-using namespace std;
-
-struct Expression;
-struct Number;
-struct BinaryOperation;
-
-struct ScopedPtr {
-    explicit ScopedPtr(Expression *ptr = 0) {
-        cout << "constructor : counter was: " << counter << endl;
-        if (ptr != 0) {
-            ptr_ = ptr;
-            counter++;
-            cout << "constructor : counter is: " << counter << endl;
-        }
-    }
-    ~ScopedPtr() {
-        counter--;
-        cout << "destructor : counter is: " << counter << endl;
-        if (counter <= 0) {
-            delete ptr_;
-            ptr_ = 0;
-            cout << "destructor : nulled ptr_" << endl;
-        }
-    }
-    Expression *get() const {
-        return ptr_;
-    }
-    Expression *release() {  // as i understand, counter has to remain untouched here
-        Expression *tmp = ptr_;
-        // delete ptr_;
-        ptr_ = 0;
-        return tmp;
-    }
-    void reset(Expression *ptr = 0) {
-        delete ptr_;
-        ptr_ = ptr;
-    }
-    Expression &operator*() const {
-        return *ptr_;
-    }
-    Expression *operator->() const {
-        return ptr_;
-    }
-
-   private:
-    ScopedPtr(const ScopedPtr &);
-    ScopedPtr &operator=(const ScopedPtr &);
-
-    Expression *ptr_;
-    int counter = 0;
-};
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-use-equals-delete"
 
 void testScopedPtrUse() {
     // todo...
@@ -80,3 +30,4 @@ int main() {
     testScopedPtrUse();
     return 0;
 }
+#pragma clang diagnostic pop
