@@ -3,3 +3,6 @@
 */*/.vs
 */*/main
 */*/.vscode/settings.json
+/cmake-build-debug/CMakeFiles/
+/cmake-build-debug/
+/CMakeLists.txt
