@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstddef> // size_t
-#include <cstring> // strlen, strcpy
+//#include <cstring> // strlen, strcpy
 using namespace std;
 
 // useful utils for upcoming tasks - decided to avoid using any given standard function //
@@ -17,10 +17,10 @@ void myStrAdd(char *const dest, char const *const src, size_t const count)
     // 0 - we'll need to find amount of shift - as we add data - not rewrite initial content //
     size_t shift = 0;
     char *destBeginPtr = dest; // temporary variable - as 'dest' is const - so we need similar var ptr
-    // 1 - we have to shift destination pointer to string's ending - first occurance of '\0' //
+    // 1 - we have to shift destination pointer to string's ending - first occurrence of '\0' //
     for (; *destBeginPtr != '\0'; destBeginPtr++)
         ++shift;      // we'll have the number of symbols in initial 'dest' - not counting the last '\0'
-    destBeginPtr = 0; // that's a paranoic action
+//    destBeginPtr = nullptr; // that's a paranoid action
     // 2 - now adding data from 'src' to 'dest' //
     for (size_t i = 0; i != count; i++)
         dest[i + shift] = src[i];
@@ -38,10 +38,10 @@ public:
     virtual char *getCharPtr() const { return str; }
     // solution for task 1 //
     // MyString(char const *const givenPtr) // creating empty string by default - 'str' ptr is not const here
-    String(const char *givenPtr = "") // GIVEN IN THE TASK
+    explicit String(const char *givenPtr = "") // GIVEN IN THE TASK
     {
         size = myStrLen(givenPtr);
-        str = new char[size + 1];      // because otherwize task is not accepted by Stepik
+        str = new char[size + 1];      // because otherwise task is not accepted by Stepik
         myStrAdd(str, givenPtr, size); // str[size] = '\0' is done inside myStrAdd()
         // cout << "\tcreated MyString:" << str << endl;
     }
@@ -69,6 +69,8 @@ public:
         delete[] str;
         size = 0;
     }
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
     // solution for task 3 //
     void append(const String &other) // GIVEN IN THE TASK
     {
@@ -99,6 +101,7 @@ public:
         myStrAdd(str, tmpOther, initialSizeOther);
         delete[] tmpOther;
     }
+#pragma clang diagnostic pop
     // ADDITIONS FROM LECTURES :
     String(const String &other) : size(other.size), str(new char[size + 1]) // GIVEN IN THE TASK
     {
@@ -139,7 +142,7 @@ public:
         //     innerStr[0] = c;
         //     innerStr[1] = '\0';
         // }
-        SubString(String const &s)
+/*        SubString(String const &s)
         {
             innerSize = s.size;
             innerStr = s.str;
@@ -157,10 +160,10 @@ public:
             innerStr[innerSize] = '\0';
             shift = 0;
             // cout << "\tcreated SubString:" << innerStr << endl;
-        }
+        }*/
         SubString(SubString const &ss) : innerSize(ss.innerSize), innerStr(ss.innerStr), shift(ss.shift)
         {
-            // cout << "\tcreated SubString:" << innerStr << endl;
+//             cout << "\tcreated SubString:" << innerStr << endl;
         }
         SubString() // default empty constructor is really needed here
         {
@@ -202,7 +205,7 @@ public:
         int &getShift() { return shift; }
 
         // creating content for second use of [] operator - it has to be MyString again //
-        String const operator[](int const i) const // not including symbol by given index
+        String operator[](int const i) const // not including symbol by given index
         {
             String msResult;
             // cout << "\tGIVEN SubString:" << innerStr << ':' << innerSize << endl;
@@ -222,7 +225,7 @@ public:
     }; // end of struct SubString
 
     // we're again inside MyString structure
-    String::SubString const operator[](int const i) const // seems to be OK as first [] tests are OK
+    String::SubString operator[](int const i) const // seems to be OK as first [] tests are OK
     {
         SubString ss;                 // here implicitly invoked default constructor allocates memory
         ss.getInnerSize() = size - i; // subtracting number of symbols before given position
