@@ -10,6 +10,15 @@
 using namespace std;
 
 class Singleton {
+
+private:
+    string data_;
+
+    Singleton() {} // this constructor or any other must work only once during the app life
+    Singleton(Singleton const &); // copying constructor doesn't need to be defined here
+    Singleton &operator=(Singleton const &); // assignment operator is not needed for a singleton
+
+public:
     /* the main get-method must be static - as it is invoked when we might not have an object */
     static Singleton &instance() { // returning a link is the only possible output here
         static Singleton s; // default constructor will be invoked during first pass of this line
@@ -17,13 +26,6 @@ class Singleton {
     }
 
     string &data() { return data_; }
-
-private:
-    Singleton() {} // this constructor or any other must work only once during the app life
-    Singleton(Singleton const &); // copying constructor doesn't need to be defined here
-    Singleton &operator=(Singleton const &); // assignment operator is not needed for a singleton
-
-    string data_;
 };
 
 #endif //_LEARNING_C_CPP_SINGLETON_H
