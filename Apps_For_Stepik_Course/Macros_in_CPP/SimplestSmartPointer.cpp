@@ -9,21 +9,12 @@ void testPointersInStack();
 void checkPointersInHeap();
 
 int main() {
-    checkPlainPointer();
-    checkSimplestSmartPointer();
+//    checkPlainPointer();
+//    checkSimplestSmartPointer();
 
     testPointersInStack();
     checkPointersInHeap();
     return 0;
-}
-
-void testPointersInStack() {
-    int value = 5;
-    cout << "value=" << value << endl;
-    int *a = &value; // we have to allocate memory with 'new' before using 'delete'
-    cout << "*a=" << *a << endl;
-    int *b = a; // we have to allocate memory with 'new' before using 'delete'
-    cout << "*b=" << *b << endl;
 }
 
 void println(string const &s) {
@@ -35,26 +26,42 @@ void check(bool isOk, const string &what) {
     println("\t" + result + " : " + what);
 }
 
+void testPointersInStack() {
+    int value = 5;
+    int *a = &value;
+    check(*a == value, "a");
+    int *b = a;
+    check(*b == value, "b");
+    println("FINISHED testPointersInStack()");
+}
+
 void checkPointersInHeap() {
 
-    /* test of creation 1 */
+    /* test of creation 1 - standard type */
     int value = 5;
     int *ip1 = new int(value);
     check(*ip1 == value, "ip1");
+    int *ip2; // unassigned / undefined
+    check(ip2, "ip2");
+    cout << "ip2 = " << ip2 << endl;
+//    if (ip2 != nullptr) cout << "*ip2 = " << *ip2 << endl; // interrupted by signal 11: SIGSEGV
+
+    /* test of creation 2 - special type */
     auto *s1 = new string("hello");
     SimplestSmartPointer ssp1(s1);
     check(*s1 == *ssp1, "ssp1");
-
-    /* test of creation 2 */
-//    int *ip2 = new int;
-//    check(*ip2 == 0, "ip2");
-//    auto *s2 = new string("");
-//    SimplestSmartPointer ssp2(nullptr);
-//    check(*s2 == *ssp2, "ssp2");
+    auto *s2 = new string("");
+    SimplestSmartPointer ssp2(s2);
+    check(*s2 == *ssp2, "ssp2");
+    auto *s3 = new string("\0");
+    SimplestSmartPointer ssp3(s3);
+    check(*s3 == *ssp3, "ssp3");
 
     /* test of deletion */
 
     /* test of access */
+
+    println("FINISHED checkPointersInHeap()");
 }
 
 void checkPlainPointer() {

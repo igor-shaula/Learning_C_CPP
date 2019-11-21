@@ -8,14 +8,14 @@ using namespace std;
 class SimplestSmartPointer {
 
 public:
-    SimplestSmartPointer(string *ptr) {
+    explicit SimplestSmartPointer(string *ptr) {
         ptr_ = ptr;
-        cout << "constructor worked" << endl;
+//        cout << "constructor worked" << endl;
     }
 
     ~SimplestSmartPointer() {
         delete ptr_;
-        cout << "destructor worked" << endl;
+//        cout << "destructor worked" << endl;
     }
 
     string &operator*() {
