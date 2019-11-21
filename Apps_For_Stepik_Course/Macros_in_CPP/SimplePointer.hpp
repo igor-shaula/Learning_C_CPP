@@ -1,19 +1,19 @@
-#ifndef _LEARNING_C_CPP_SIMPLESTSMARTPOINTER_HPP
-#define _LEARNING_C_CPP_SIMPLESTSMARTPOINTER_HPP
+#ifndef _LEARNING_C_CPP_SIMPLEPOINTER_HPP
+#define _LEARNING_C_CPP_SIMPLEPOINTER_HPP
 
 #include "iostream"
 
 using namespace std;
 
-class SimplestSmartPointer {
+class SimplePointer {
 
 public:
-    explicit SimplestSmartPointer(int *ptr) {
+    explicit SimplePointer(int *ptr) {
         ptr_ = ptr;
 //        cout << "constructor worked" << endl;
     }
 
-    ~SimplestSmartPointer() {
+    ~SimplePointer() {
         delete ptr_;
 //        cout << "destructor worked" << endl;
     }
@@ -26,4 +26,4 @@ private:
     int *ptr_;
 };
 
-#endif //_LEARNING_C_CPP_SIMPLESTSMARTPOINTER_HPP
+#endif //_LEARNING_C_CPP_SIMPLEPOINTER_HPP

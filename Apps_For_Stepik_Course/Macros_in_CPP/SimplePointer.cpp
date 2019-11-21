@@ -1,4 +1,4 @@
-#include "SimplestSmartPointer.hpp"
+#include "SimplePointer.hpp"
 
 void checkPointersInStack();
 
@@ -19,6 +19,9 @@ void check(bool isOk, const string &what) {
     println("\t" + result + " : " + what);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+
 void checkPointersInStack() {
     println("STARTING checkPointersInStack()");
     int value = 5;
@@ -31,10 +34,12 @@ void checkPointersInStack() {
     cout << "n = " << n << endl; // has to be random value but it's the same from launch to launch
 //    if (n != nullptr) cout << "*n = " << *n << endl; // interrupted by signal 11: SIGSEGV
 
-    // todo add here samples of using SimplestSmartPointer in stack
+    // todo add here samples of using SimplePointer in stack
 
     println("FINISHED checkPointersInStack()");
 }
+
+#pragma clang diagnostic pop
 
 void checkPointersInHeap() {
     println("STARTING checkPointersInHeap()");
@@ -48,34 +53,34 @@ void checkPointersInHeap() {
 
     /* test of creation 2 - special type */
     auto *s1 = new int(21);
-    SimplestSmartPointer ssp1(s1);
-    check(*s1 == *ssp1, "ssp1");
+    SimplePointer sp1(s1);
+    check(*s1 == *sp1, "sp1");
     auto *s2 = new int;
-    SimplestSmartPointer ssp2(s2);
-    check(*s2 == *ssp2, "ssp2");
+    SimplePointer sp2(s2);
+    check(*s2 == *sp2, "sp2");
 
     /* copying pointer wrapper */
-    SimplestSmartPointer ssp4 = ssp1;
-    check(*ssp1 == *ssp4, "ssp4");
+    SimplePointer sp4 = sp1;
+    check(*sp1 == *sp4, "sp4");
 
     /* using pointer wrapper for content modification */
-    SimplestSmartPointer ssp5 = ssp2;
+    SimplePointer sp5 = sp2;
     int newValue = 42;
-    *ssp5 = newValue;
-    check(*ssp2 == newValue, "ssp5");
+    *sp5 = newValue;
+    check(*sp2 == newValue, "sp5");
 
     /* test of deletion */
-    SimplestSmartPointer ssp6 = ssp2;
-    int tmp1 = *ssp2; // 42 after assigning from newValue
-    delete &*ssp6; // firstly getting inner *ptr_ and then taking its address
-    check(*ssp2 != tmp1, "ssp6");
+    SimplePointer sp6 = sp2;
+    int tmp1 = *sp2; // 42 after assigning from newValue
+    delete &*sp6; // firstly getting inner *ptr_ and then taking its address
+    check(*sp2 != tmp1, "sp6");
 
     /* multiple deletion */
-    SimplestSmartPointer ssp7 = ssp1;
-    int tmp2 = *ssp1;
-    delete &*ssp7; // 1
-    delete &*ssp7; // 2
-    check(*ssp1 != tmp2, "ssp7");
+    SimplePointer sp7 = sp1;
+    int tmp2 = *sp1;
+    delete &*sp7; // 1
+    delete &*sp7; // 2
+    check(*sp1 != tmp2, "sp7");
 
     println("FINISHED checkPointersInHeap()");
 }
