@@ -8,7 +8,7 @@ using namespace std;
 class SimplestSmartPointer {
 
 public:
-    explicit SimplestSmartPointer(string *ptr) {
+    explicit SimplestSmartPointer(int *ptr) {
         ptr_ = ptr;
 //        cout << "constructor worked" << endl;
     }
@@ -18,12 +18,12 @@ public:
 //        cout << "destructor worked" << endl;
     }
 
-    string &operator*() {
+    int &operator*() {
         return *ptr_;
     }
 
 private:
-    string *ptr_;
+    int *ptr_;
 };
 
 #endif //_LEARNING_C_CPP_SIMPLESTSMARTPOINTER_HPP
