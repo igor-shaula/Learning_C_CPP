@@ -4,30 +4,27 @@
 #define _LEARNING_C_CPP_SCOPEDPTR_HPP
 
 #include <iostream>
+#include "Expression.hpp"
 
 using namespace std;
 
-struct Expression;
-struct Number;
-struct BinaryOperation;
-
 struct ScopedPtr {
     explicit ScopedPtr(Expression *ptr = nullptr) {
-        cout << "constructor : counter was: " << counter << endl;
+//        cout << "constructor : counter was: " << counter << endl;
         if (ptr != nullptr) {
             ptr_ = ptr;
             counter++;
-            cout << "constructor : counter is: " << counter << endl;
+//            cout << "constructor : counter is: " << counter << endl;
         }
     }
 
     ~ScopedPtr() {
         counter--;
-        cout << "destructor : counter is: " << counter << endl;
+//        cout << "destructor : counter is: " << counter << endl;
         if (counter <= 0) {
             delete ptr_; // memory leak emerges if this deletion is absent
             ptr_ = nullptr;
-            cout << "destructor : nullified ptr_" << endl;
+//            cout << "destructor : nullified ptr_" << endl;
         }
     }
 
@@ -52,6 +49,11 @@ struct ScopedPtr {
 
     Expression *operator->() const {
         return ptr_;
+    }
+
+    bool operator==(double const *d) {
+        Number n = ptr_->evaluate();
+        return n.evaluate() == *d;
     }
 
 private:

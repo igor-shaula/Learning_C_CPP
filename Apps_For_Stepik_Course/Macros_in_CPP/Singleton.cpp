@@ -1,4 +1,4 @@
-#include "Singleton.h"
+#include "Singleton.hpp"
 #include "iostream"
 
 using namespace std;
