@@ -99,5 +99,16 @@ void checkPointersInHeap() {
 
     /* todo: find a way to correctly test destructors - single and multiple invocations of them */
 
+    Expression *e3 = new Number(3.4);
+    Expression *e3ptr;
+    {
+        ScopedPtr sp3(e3);
+        e3ptr = sp3.get();
+    }
+//    cout << e3->evaluate() << endl; // interrupted by signal 11: SIGSEGV - and that's correct
+//    cout << e3ptr->evaluate() << endl; // interrupted by signal 11: SIGSEGV - and that's correct
+    cout << "e3 == nullptr : " << (e3 == nullptr) << endl; // and this is really strange - WHY ???
+    cout << "e3 == e3ptr : " << (e3 == e3ptr) << endl;
+
     println("FINISHED checkPointersInHeap()");
 }
