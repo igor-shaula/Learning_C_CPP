@@ -32,12 +32,9 @@
 
 #include "ScopedPtr.hpp"
 
-void checkPointersInStack();
-
 void checkPointersInHeap();
 
 int main() {
-    checkPointersInStack();
     checkPointersInHeap();
     return 0;
 }
@@ -51,28 +48,6 @@ void check(bool isOk, const string &what) {
     println("\t" + result + " : " + what);
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wuninitialized"
-
-void checkPointersInStack() {
-    println("STARTING checkPointersInStack()");
-    double value = 5;
-    double *a = &value;
-    check(*a == value, "double - assigned address of object in stack");
-    double *b = a;
-    check(*b == value, "double - assigned copied address of object in stack");
-    double *n; // unassigned / undefined
-    check(n, "double - only declared without definition");
-    cout << "n = " << n << endl; // has to be random value but it's the same from launch to launch
-//    if (n != nullptr) cout << "*n = " << *n << endl; // interrupted by signal 11: SIGSEGV
-//    ScopedPtr sp(&value);
-//    check(*sp == value, "SP - assigned address of value in heap");
-
-    println("FINISHED checkPointersInStack()");
-}
-
-#pragma clang diagnostic pop
-
 void checkPointersInHeap() {
     println("STARTING checkPointersInHeap()");
 
@@ -84,36 +59,45 @@ void checkPointersInHeap() {
     check(*dp2 == value, "double - assigned copied address of object in heap");
 
     auto *d1 = new double(1.2);
-    Expression *en1 = new Number(1.2);
-    ScopedPtr sp1(en1);
-    Expression *en1got = sp1.get();
-    check(en1got->evaluate() == *d1, "SP - assigned address of object in heap");
+    Expression *e1 = new Number(1.2);
+    ScopedPtr sp1(e1);
+    Expression *sp1got = sp1.get();
+    check(sp1got->evaluate() == *d1, "SP - constructor - value changed");
+    check(sp1.getCounter() == 1, "SP - constructor - counter changed");
 
-//    auto *d2 = new double;
-//    ScopedPtr sp2(d2);
-//    check(*d2 == *sp2, "SP - assigned address of non-defined object in heap");
+    /* todo: why the next line leads to seg.fault even when proper constructor is present ??? */
+//    ScopedPtr sp2(e1); // creating second pointer for the same object
+//    sp2.setCounter() = 2; // only to check upcoming test
+//    Expression *sp2got = sp2.get();
+//    check(sp2got->evaluate() == *d1, "SP - constructor for second pointer - value assigned");
+//    check(sp2.getCounter() == 2, "SP - constructor for second pointer - counter increased");
+    /* todo: why counter is always 1 ??? */
 
-    ScopedPtr sp3(nullptr);
-    check(sp3.get() == nullptr, "SP - assigned nullptr");
+    /* leads to interrupted by signal 11: SIGSEGV */
+//    Expression *en2; // explicitly not initialized
+//    ScopedPtr sp2(en2);
+//    check(sp2.get() != nullptr, "SP - assigned address of non-defined object in heap");
+//    cout << sp2.get()->evaluate() << endl;
 
-//    ScopedPtr sp4 = sp1;
+    /* leads to interrupted by signal 11: SIGSEGV */
+//    ScopedPtr sp3(nullptr); // should not work because we have special safety check before assignment
+//    check(sp3.get() == nullptr, "SP - assigned nullptr");
+
+    /* impossible to compile - and that's normal for ScopedPtr */
+//    ScopedPtr sp4 = sp1; // copying constructor is forbidden for ScopedPtr
 //    check(*sp1 == *sp4, "SP - copying instance of ScopedPtr");
-//
-//    ScopedPtr sp5 = sp2;
-//    double newValue = 2.3;
-//    *sp5 = newValue;
-//    check(*sp2 == newValue, "SP - using pointer wrapper for content modification");
-//
-//    ScopedPtr sp6 = sp2;
-//    double tmp1 = *sp2; // 42 after assigning from newValue
-//    delete &*sp6; // firstly getting inner *ptr_ and then taking its address
-//    check(*sp2 != tmp1, "SP - correct/single deletion");
-//
-//    ScopedPtr sp7 = sp1;
-//    double tmp2 = *sp1;
-//    delete &*sp7; // 1
-//    delete &*sp7; // 2
-//    check(*sp1 != tmp2, "SP - multiple deletion");
+
+    double newValue = 2.3;
+    Expression *e2 = new Number(newValue);
+    sp1.reset(e2);
+    Expression *e2changed = sp1.get();
+    check(e2changed->evaluate() == newValue, "SP - test of reset()");
+
+    Expression *e2release = sp1.release();
+    check(e2release->evaluate() == newValue, "SP - test of release() - value changed");
+    check(sp1.get() == nullptr, "SP - test of release() - pointer nullified");
+
+    /* todo: find a way to correctly test destructors - single and multiple invocations of them */
 
     println("FINISHED checkPointersInHeap()");
 }

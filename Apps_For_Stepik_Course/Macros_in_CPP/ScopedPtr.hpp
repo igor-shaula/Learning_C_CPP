@@ -1,4 +1,5 @@
 #pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "hicpp-use-equals-delete"
 #ifndef _LEARNING_C_CPP_SCOPEDPTR_HPP
 #define _LEARNING_C_CPP_SCOPEDPTR_HPP
@@ -10,8 +11,10 @@ using namespace std;
 
 struct ScopedPtr {
     explicit ScopedPtr(Expression *ptr = nullptr) {
+//    explicit ScopedPtr(Expression *ptr) {
 //        cout << "constructor : counter was: " << counter << endl;
-        if (ptr != nullptr) {
+//        if (ptr != nullptr) {
+        if (ptr != nullptr && ptr_ != ptr) {
             ptr_ = ptr;
             counter++;
 //            cout << "constructor : counter is: " << counter << endl;
@@ -28,10 +31,6 @@ struct ScopedPtr {
         }
     }
 
-    Expression *get() const {
-        return ptr_;
-    }
-
     Expression *release() {  // as i understand, counter has to remain untouched here
         Expression *tmp = ptr_;
         ptr_ = nullptr;
@@ -43,18 +42,22 @@ struct ScopedPtr {
         ptr_ = ptr;
     }
 
-    Expression &operator*() const {
-        return *ptr_;
-    }
+    // these methods don't require to be tested as they are simple getters and setters -------------
 
-    Expression *operator->() const {
-        return ptr_;
-    }
+    Expression *get() const { return ptr_; }
+
+    Expression &operator*() const { return *ptr_; }
+
+    Expression *operator->() const { return ptr_; }
 
     bool operator==(double const *d) {
-        Number n = ptr_->evaluate();
-        return n.evaluate() == *d;
+        Number n = ptr_->evaluate(); // receiving Expression but can instead use its child - Number
+        return n.evaluate() == *d; // comparing real double values got from inside Number class
     }
+
+    int getCounter() const { return counter; }
+
+    int &setCounter() { return counter; }
 
 private:
     ScopedPtr(const ScopedPtr &);
