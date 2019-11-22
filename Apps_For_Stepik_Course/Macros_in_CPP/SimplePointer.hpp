@@ -18,9 +18,9 @@ public:
 //        cout << "destructor worked" << endl;
     }
 
-    int &operator*() {
-        return *ptr_;
-    }
+    int *get() { return ptr_; }
+
+    int &operator*() { return *ptr_; }
 
 private:
     int *ptr_;

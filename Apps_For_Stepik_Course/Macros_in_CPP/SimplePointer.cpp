@@ -26,15 +26,15 @@ void checkPointersInStack() {
     println("STARTING checkPointersInStack()");
     int value = 5;
     int *a = &value;
-    check(*a == value, "a");
+    check(*a == value, "int - assigned address of object in stack");
     int *b = a;
-    check(*b == value, "b");
+    check(*b == value, "int - assigned copied address of object in stack");
     int *n; // unassigned / undefined
-    check(n, "n");
+    check(n, "int - only declared without definition");
     cout << "n = " << n << endl; // has to be random value but it's the same from launch to launch
 //    if (n != nullptr) cout << "*n = " << *n << endl; // interrupted by signal 11: SIGSEGV
-
-    // todo add here samples of using SimplePointer in stack
+//    SimplePointer sp(&value);
+//    check(*sp == value, "SP - assigned address of value in heap");
 
     println("FINISHED checkPointersInStack()");
 }
@@ -44,43 +44,42 @@ void checkPointersInStack() {
 void checkPointersInHeap() {
     println("STARTING checkPointersInHeap()");
 
-    /* test of creation 1 - standard type */
     int value = 5;
     int *ip1 = new int(value);
-    check(*ip1 == value, "ip1");
-    int *ip2 = ip1;
-    check(*ip2 == value, "ip2");
+    check(*ip1 == value, "int - assigned address of object in heap");
 
-    /* test of creation 2 - special type */
+    int *ip2 = ip1;
+    check(*ip2 == value, "int - assigned copied address of object in heap");
+
     auto *s1 = new int(21);
     SimplePointer sp1(s1);
-    check(*s1 == *sp1, "sp1");
+    check(*s1 == *sp1, "SP - assigned address of object in heap");
+
     auto *s2 = new int;
     SimplePointer sp2(s2);
-    check(*s2 == *sp2, "sp2");
+    check(*s2 == *sp2, "SP - assigned address of non-defined object in heap");
 
-    /* copying pointer wrapper */
+    SimplePointer sp3(nullptr);
+    check(sp3.get() == nullptr, "SP - assigned nullptr");
+
     SimplePointer sp4 = sp1;
-    check(*sp1 == *sp4, "sp4");
+    check(*sp1 == *sp4, "SP - copying instance of SimplePointer");
 
-    /* using pointer wrapper for content modification */
     SimplePointer sp5 = sp2;
     int newValue = 42;
     *sp5 = newValue;
-    check(*sp2 == newValue, "sp5");
+    check(*sp2 == newValue, "SP - using pointer wrapper for content modification");
 
-    /* test of deletion */
     SimplePointer sp6 = sp2;
     int tmp1 = *sp2; // 42 after assigning from newValue
     delete &*sp6; // firstly getting inner *ptr_ and then taking its address
-    check(*sp2 != tmp1, "sp6");
+    check(*sp2 != tmp1, "SP - correct/single deletion");
 
-    /* multiple deletion */
     SimplePointer sp7 = sp1;
     int tmp2 = *sp1;
     delete &*sp7; // 1
     delete &*sp7; // 2
-    check(*sp1 != tmp2, "sp7");
+    check(*sp1 != tmp2, "SP - multiple deletion");
 
     println("FINISHED checkPointersInHeap()");
 }
