@@ -63,15 +63,11 @@ void checkPointersInHeap() {
     ScopedPtr sp1(e1);
     Expression *sp1got = sp1.get();
     check(sp1got->evaluate() == *d1, "SP - constructor - value changed");
-    check(sp1.getCounter() == 1, "SP - constructor - counter changed");
 
     /* todo: why the next line leads to seg.fault even when proper constructor is present ??? */
 //    ScopedPtr sp2(e1); // creating second pointer for the same object
-//    sp2.setCounter() = 2; // only to check upcoming test
 //    Expression *sp2got = sp2.get();
 //    check(sp2got->evaluate() == *d1, "SP - constructor for second pointer - value assigned");
-//    check(sp2.getCounter() == 2, "SP - constructor for second pointer - counter increased");
-    /* todo: why counter is always 1 ??? */
 
     /* leads to interrupted by signal 11: SIGSEGV */
 //    Expression *en2; // explicitly not initialized

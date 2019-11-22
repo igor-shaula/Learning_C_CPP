@@ -11,20 +11,16 @@ using namespace std;
 
 struct ScopedPtr {
     explicit ScopedPtr(Expression *ptr = nullptr) {
-//    explicit ScopedPtr(Expression *ptr) {
 //        cout << "constructor : counter was: " << counter << endl;
-//        if (ptr != nullptr) {
         if (ptr != nullptr && ptr_ != ptr) {
             ptr_ = ptr;
-            counter++;
 //            cout << "constructor : counter is: " << counter << endl;
         }
     }
 
     ~ScopedPtr() {
-        counter--;
 //        cout << "destructor : counter is: " << counter << endl;
-        if (counter <= 0) {
+        if (ptr_ != nullptr) {
             delete ptr_; // memory leak emerges if this deletion is absent
             ptr_ = nullptr;
 //            cout << "destructor : nullified ptr_" << endl;
@@ -55,17 +51,12 @@ struct ScopedPtr {
         return n.evaluate() == *d; // comparing real double values got from inside Number class
     }
 
-    int getCounter() const { return counter; }
-
-    int &setCounter() { return counter; }
-
 private:
     ScopedPtr(const ScopedPtr &);
 
     ScopedPtr &operator=(const ScopedPtr &);
 
     Expression *ptr_;
-    int counter = 0;
 };
 
 #endif //_LEARNING_C_CPP_SCOPEDPTR_HPP
