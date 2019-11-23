@@ -4,19 +4,15 @@
 #include <iostream>
 #include "Expression.hpp"
 
-
 using namespace std;
 
 struct SharedPtr {
     explicit SharedPtr(Expression *ptr = nullptr) { // creates different objects
-//    explicit SharedPtr(Expression *ptr) {
 //        cout << "constructor : counter was: " << counter << endl;
         if (ptr != nullptr) {
             *refCounter = 1;
-            if (ptr != ptr_) { // this is questionable
+            if (ptr != ptr_) // this is questionable
                 ptr_ = ptr;
-                ptrCounter++; // only counting different objects in memory
-            }
 //            cout << "constructor : counter is: " << counter << endl;
         }
     }
@@ -25,7 +21,6 @@ struct SharedPtr {
         if (other.ptr_ != nullptr) {
             *refCounter = *refCounter + 1; // later change to more compact form
             // this has to be the only place of this counter incrementation
-            ptrCounter = other.ptrCounter; // we have to just pass the inner pointer
             ptr_ = other.ptr_;
         }
     }
@@ -36,7 +31,6 @@ struct SharedPtr {
         if (refCounter != nullptr && *refCounter <= 0) {
             delete ptr_; // memory leak emerges if this deletion is absent
             ptr_ = nullptr;
-            ptrCounter = 0;
             delete refCounter;
 //            cout << "destructor : nullified ptr_" << endl;
         }
@@ -47,12 +41,12 @@ struct SharedPtr {
             // todo continue here
             cout << "ptr_ == other.ptr_" << endl;
         }
-        if (ptr_ != nullptr && refCounter != nullptr) {
+        if (ptr_ != nullptr && refCounter != nullptr && *refCounter > 0) {
             cout << "before decrement: " << *refCounter << endl;
             (*refCounter)--;
             cout << "after decrement: " << *refCounter << endl;
         }
-        if (other.ptr_ != nullptr && other.refCounter != nullptr) {
+        if (other.ptr_ != nullptr && other.refCounter != nullptr && *(other.refCounter) > 0) {
             cout << "before decrement in other: " << *(other.refCounter) << endl;
             (*(other.refCounter))--;
             cout << "after decrement in other: " << *(other.refCounter) << endl;
@@ -90,7 +84,6 @@ struct SharedPtr {
 
 private:
     Expression *ptr_;
-    int ptrCounter = 0;
     int *refCounter = new int(0);
     /* counts only different pointers - how many separate instances we have */
 };

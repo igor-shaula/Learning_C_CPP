@@ -35,9 +35,7 @@ void runAllTests() {
     SharedPtr p1;
     {
         SharedPtr p2(new Number(1.1));
-        // SharedPtr p2(new Expression("expr1"));
         SharedPtr p3(new Number(1.2));
-        // SharedPtr p3(new Expression("expr2"));
         SharedPtr p4(p2);
 //        const SharedPtr& p4(p2);
         SharedPtr p5;
