@@ -10,6 +10,7 @@ struct SharedPtr {
     explicit SharedPtr(Expression *ptr = nullptr) { // creates different objects
 //        cout << "constructor : counter was: " << counter << endl;
         if (ptr != nullptr) {
+//            delete refCounter;
             *refCounter = 1;
             if (ptr != ptr_) // this is questionable
                 ptr_ = ptr;
@@ -42,14 +43,11 @@ struct SharedPtr {
             cout << "ptr_ == other.ptr_" << endl;
         }
         if (ptr_ != nullptr && refCounter != nullptr && *refCounter > 0) {
-            cout << "before decrement: " << *refCounter << endl;
             (*refCounter)--;
-            cout << "after decrement: " << *refCounter << endl;
         }
-        if (other.ptr_ != nullptr && other.refCounter != nullptr && *(other.refCounter) > 0) {
-            cout << "before decrement in other: " << *(other.refCounter) << endl;
-            (*(other.refCounter))--;
-            cout << "after decrement in other: " << *(other.refCounter) << endl;
+        if (other.ptr_ != nullptr && other.refCounter != nullptr) {
+//        if (other.ptr_ != nullptr && other.refCounter != nullptr && *(other.refCounter) > 0) {
+            (*(other.refCounter))++;
         }
     }
 
@@ -57,17 +55,26 @@ struct SharedPtr {
     Expression *release() {  // as i understand, counter has to remain untouched here
         Expression *tmp = ptr_;
         ptr_ = nullptr;
+        if (refCounter != nullptr)
+            *refCounter = 0;
         return tmp;
     }
 
     void reset(Expression *ptr = nullptr) {
-        delete ptr_; // memory leak emerges if this deletion is absent
-        ptr_ = ptr;
+        if (refCounter != nullptr && *refCounter == 0) {
+            delete ptr_; // memory leak emerges if this deletion is absent
+            ptr_ = ptr;
+            delete refCounter;
+        }
     }
 
     // these methods don't require to be tested as they are simple getters and setters -------------
 
-    Expression *get() const { return ptr_; }
+    Expression *get() const {
+        if (refCounter != nullptr && *refCounter > 1)
+            (*refCounter)--;
+        return ptr_;
+    }
 
     Expression &operator*() const { return *ptr_; }
 
@@ -78,15 +85,10 @@ struct SharedPtr {
         return n.evaluate() == *d; // comparing real double values got from inside Number class
     }
 
-//    int getCounter() const { return counter; }
-//
-//    int &setCounter() { return counter; }
-
 private:
     Expression *ptr_;
     int *refCounter = new int(0);
     /* counts only different pointers - how many separate instances we have */
 };
-
 
 #endif //_LEARNING_C_CPP_SHAREDPTR_HPP
