@@ -10,7 +10,6 @@ struct SharedPtr {
     explicit SharedPtr(Expression *ptr = nullptr) { // creates different objects
 //        cout << "constructor : counter was: " << counter << endl;
         if (ptr != nullptr) {
-//            delete refCounter;
             *refCounter = 1;
             if (ptr != ptr_) // this is questionable
                 ptr_ = ptr;
@@ -30,13 +29,11 @@ struct SharedPtr {
         safeDecRefCounter();
         safeDeleteRefCounterIfNeeded();
 //        cout << "destructor : counter is: " << counter << endl;
-//        if (refCounter != nullptr && *refCounter <= 0) {
-        if (ptr_ != nullptr)
-//            delete ptr_; // memory leak emerges if this deletion is absent
+        if (ptr_ != nullptr) {
+//            delete ptr_; // memory leak emerges if this deletion is PRESENT
             ptr_ = nullptr;
-//            delete refCounter;
 //            cout << "destructor : nullified ptr_" << endl;
-//        }
+        }
     }
 
     void reset(Expression *ptr = nullptr) {
@@ -44,14 +41,8 @@ struct SharedPtr {
             ptr_ = ptr;
             *refCounter = 1;
         } else {
-//            cout << "else" << endl;
             safeDecRefCounter();
-//            cout << "safeDecRefCounter" << endl;
             safeDeleteRefCounterIfNeeded();
-//            cout << "clearAllPointersIfNeeded" << endl;
-//            cout << "refCounter = " << refCounter << endl;
-//            if (refCounter != nullptr)
-//                cout << "refCounter value = " << *refCounter << endl;
         }
     }
 
@@ -62,8 +53,9 @@ struct SharedPtr {
 //        }
         if (this != &other) // to avoid unnecessary operations if we have the same instance
         {
-            if (ptr_ != nullptr && refCounter != nullptr && *refCounter > 0) {
-                (*refCounter)--;
+            if (ptr_ != nullptr) {
+//                (*refCounter)--;
+                safeDecRefCounter();
             }
             if (other.ptr_ != nullptr && other.refCounter != nullptr) {
 //        if (other.ptr_ != nullptr && other.refCounter != nullptr && *(other.refCounter) > 0) {
@@ -85,10 +77,7 @@ struct SharedPtr {
 
     // these methods don't require to be tested as they are simple getters and setters -------------
 
-    Expression *get() const {
-//        safeDecRefCounter();
-        return ptr_;
-    }
+    Expression *get() const { return ptr_; }
 
     Expression &operator*() const { return *ptr_; }
 
@@ -109,25 +98,13 @@ private:
 
     void safeDecRefCounter() {
         if (refCounter != nullptr && *refCounter > 0) {
-//            cout << "refCounter was " << refCounter << endl;
             (*refCounter)--;
         }
     }
 
-//    void safeDeletePtr() {
-//        if (ptr_ != nullptr) delete ptr_;
-//    }
-
     void safeDeleteRefCounterIfNeeded() {
-        if (refCounter != nullptr && *refCounter == 0) {
+        if (refCounter != nullptr && *refCounter == 0)
             delete refCounter;
-//            safeDeletePtr(); // we don't need any data without its refCounter
-
-//            if (ptr_ != nullptr) {
-//                delete ptr_;
-//                cout << "deleted ptr_" << endl;
-//            }
-        }
     }
 };
 

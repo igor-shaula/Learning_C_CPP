@@ -36,7 +36,7 @@ void checkPointersInHeap();
 
 int main() {
     runOtherTests();
-//    checkPointersInHeap();
+    checkPointersInHeap();
     return 0;
 }
 
@@ -113,7 +113,8 @@ void checkPointersInHeap() {
     auto *d1 = new double(1.2);
     Expression *e1 = new Number(1.2);
     SharedPtr sp1(e1);
-    Expression *sp1got = sp1.get();
+    println("CREATED sp1");
+    const Expression *sp1got = sp1.get();
     check(sp1got->evaluate() == *d1, "SP - constructor - value changed");
 
     /* todo: why the next line leads to seg.fault even when proper constructor is present ??? */
