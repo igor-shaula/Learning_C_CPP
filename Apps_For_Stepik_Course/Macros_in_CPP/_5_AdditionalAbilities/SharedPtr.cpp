@@ -35,8 +35,8 @@ void runOtherTests();
 void checkPointersInHeap();
 
 int main() {
-//    runOtherTests();
-    checkPointersInHeap();
+    runOtherTests();
+//    checkPointersInHeap();
     return 0;
 }
 
@@ -52,29 +52,52 @@ void check(bool isOk, const string &what) {
 void runOtherTests() {
 
     SharedPtr p1;
+    println("p1");
+//    SharedPtr p(nullptr);
+//    println("p-null");
+    p1.reset(nullptr);
+    println("p1-reset-null");
     {
         SharedPtr p2(new Number(1.1));
+        println("p2");
         SharedPtr p3(new Number(1.2));
+        println("p3");
         SharedPtr p4(p2);
+        println("p4");
 //        const SharedPtr& p4(p2);
         SharedPtr p5;
+        println("p5");
         p5 = p2;
+        println("p5=p2");
         p5 = p4;
+        println("p5=p4");
         p1 = p5;
+        println("p1=p5");
         p3.reset(nullptr);
+        println("p3.reset");
         p3 = p5;
+        println("p3=p5");
         p5.reset(nullptr);
+        println("p5.reset");
         SharedPtr p6;
+        println("p6");
         SharedPtr p7;
+        println("p7");
         p7 = p7;
+        println("p7=p7");
         p7.reset(nullptr);
+        println("p7.reset-null");
         p7.reset(new Number(1.3));
+        println("p7.reset-new");
         // p7.reset(new Expression("expr3"));
         SharedPtr p8(new Number(1.4));
+        println("p8");
         // SharedPtr p8(new Expression("expr4"));
         p8.reset(nullptr);
+        println("p8.reset-null");
     }
     p1 = p1;
+    println("p1=p1");
 }
 
 void checkPointersInHeap() {
