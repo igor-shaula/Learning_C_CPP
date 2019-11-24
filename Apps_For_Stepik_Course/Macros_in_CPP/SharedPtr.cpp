@@ -30,7 +30,26 @@
 
 #include "SharedPtr.hpp"
 
-void runAllTests() {
+void runOtherTests();
+
+void checkPointersInHeap();
+
+int main() {
+//    runOtherTests();
+    checkPointersInHeap();
+    return 0;
+}
+
+void println(string const &s) {
+    cout << s << endl;
+}
+
+void check(bool isOk, const string &what) {
+    string result = isOk ? "+OK" : "FAILED";
+    println("\t" + result + " : " + what);
+}
+
+void runOtherTests() {
 
     SharedPtr p1;
     {
@@ -58,9 +77,64 @@ void runAllTests() {
     p1 = p1;
 }
 
-int main() {
-    runAllTests();
-    return 0;
+void checkPointersInHeap() {
+    println("STARTING checkPointersInHeap()");
+
+    double value = 1.2;
+    auto *dp1 = new double(value);
+    check(*dp1 == value, "double - assigned address of object in heap");
+
+    double *dp2 = dp1;
+    check(*dp2 == value, "double - assigned copied address of object in heap");
+
+    auto *d1 = new double(1.2);
+    Expression *e1 = new Number(1.2);
+    SharedPtr sp1(e1);
+    Expression *sp1got = sp1.get();
+    check(sp1got->evaluate() == *d1, "SP - constructor - value changed");
+
+    /* todo: why the next line leads to seg.fault even when proper constructor is present ??? */
+//    Expression *sp2got = sp2.get();
+//    check(sp2got->evaluate() == *d1, "SP - constructor for second pointer - value assigned");
+
+    /* leads to interrupted by signal 11: SIGSEGV */
+//    Expression *en2; // explicitly not initialized
+//    SharedPtr sp2(en2);
+//    check(sp2.get() != nullptr, "SP - assigned address of non-defined object in heap");
+//    cout << sp2.get()->evaluate() << endl;
+
+    /* leads to interrupted by signal 11: SIGSEGV */
+//    SharedPtr sp3(nullptr); // should not work because we have special safety check before assignment
+//    check(sp3.get() == nullptr, "SP - assigned nullptr");
+
+    /* impossible to compile - and that's normal for ScopedPtr */
+//    SharedPtr sp4 = sp1; // copying constructor is forbidden for ScopedPtr
+//    check(*sp1 == *sp4, "SP - copying instance of ScopedPtr");
+
+    double newValue = 2.3;
+    Expression *e2 = new Number(newValue);
+    sp1.reset(e2);
+    Expression *e2changed = sp1.get();
+    check(e2changed->evaluate() == newValue, "SP - test of reset()");
+
+    Expression *e2release = sp1.release();
+    check(e2release->evaluate() == newValue, "SP - test of release() - value changed");
+    check(sp1.get() == nullptr, "SP - test of release() - pointer nullified");
+
+    /* todo: find a way to correctly test destructors - single and multiple invocations of them */
+
+    Expression *e3 = new Number(3.4);
+    Expression *e3ptr;
+    {
+        SharedPtr sp3(e3);
+        e3ptr = sp3.get();
+    }
+//    cout << e3->evaluate() << endl; // interrupted by signal 11: SIGSEGV - and that's correct
+//    cout << e3ptr->evaluate() << endl; // interrupted by signal 11: SIGSEGV - and that's correct
+    cout << "e3 == nullptr : " << (e3 == nullptr) << endl; // and this is really strange - WHY ???
+    cout << "e3 == e3ptr : " << (e3 == e3ptr) << endl;
+
+    println("FINISHED checkPointersInHeap()");
 }
 /*
 Катастрофическая невнимательность. Сразу написал все как надо, даже сказал сам себе
