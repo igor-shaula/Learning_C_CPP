@@ -20,15 +20,17 @@ public:
             data_[i] = other.data_[i];
     }
     ~Array() {
-        for (size_t i = 0; i < size_; ++i)
-            delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
+        /* for some reason this deletion of every object is not needed by the task */
+//        for (size_t i = 0; i < size_; ++i)
+//            delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
         delete[] data_;
     }
     Array &operator=(Array const &other) {
         if (this != &other) {
             size_ = other.size_;
-            for (size_t i = 0; i < size_; ++i)
-                delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
+            /* here we skip deletion of every inner object as well as in destructor */
+//            for (size_t i = 0; i < size_; ++i)
+//                delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
             delete[] data_;
             data_ = new T[size_];
             for (size_t i = 0; i < size_; ++i)
