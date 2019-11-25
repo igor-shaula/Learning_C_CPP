@@ -10,6 +10,7 @@ struct SharedPtr {
     /* SharedPtr with nullptr inside cannot be created intentionally */
 
     explicit SharedPtr(Expression *ptr = nullptr) { // creates different objects
+        // todo fix this constructor because for now it crashes in second group of tests
         if (ptr != nullptr) {
             ptr_ = ptr;
             safeSetRefCounterTo1();
