@@ -111,10 +111,13 @@ void checkPointersInHeap() {
     check(*dp2 == value, "double - assigned copied address of object in heap");
 
     auto *d1 = new double(1.2);
-    Expression *e1 = new Number(1.2);
+    auto *e1 = new Number(1.2);
+//    Expression *e1 = new Number(1.2);
     SharedPtr sp1(e1);
     println("CREATED sp1");
+//    const Expression *sp1got(sp1.get());
     const Expression *sp1got = sp1.get();
+    println("CREATED sp1got");
     check(sp1got->evaluate() == *d1, "SP - constructor - value changed");
 
     /* todo: why the next line leads to seg.fault even when proper constructor is present ??? */
@@ -141,9 +144,9 @@ void checkPointersInHeap() {
     Expression *e2changed = sp1.get();
     check(e2changed->evaluate() == newValue, "SP - test of reset()");
 
-    Expression *e2release = sp1.release();
-    check(e2release->evaluate() == newValue, "SP - test of release() - value changed");
-    check(sp1.get() == nullptr, "SP - test of release() - pointer nullified");
+//    Expression *e2release = sp1.release();
+//    check(e2release->evaluate() == newValue, "SP - test of release() - value changed");
+//    check(sp1.get() == nullptr, "SP - test of release() - pointer nullified");
 
     /* todo: find a way to correctly test destructors - single and multiple invocations of them */
 

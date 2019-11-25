@@ -7,58 +7,35 @@
 using namespace std;
 
 struct SharedPtr {
+    /* SharedPtr with nullptr inside cannot be created intentionally */
+
     explicit SharedPtr(Expression *ptr = nullptr) { // creates different objects
-//        cout << "constructor : counter was: " << counter << endl;
         if (ptr != nullptr) {
-            *refCounter = 1;
-            if (ptr != ptr_) // this is questionable
-                ptr_ = ptr;
-//            cout << "constructor : counter is: " << counter << endl;
-        }
+            ptr_ = ptr;
+            safeSetRefCounterTo1();
+        } // else - do nothing - we should not create wrappers around nullptr
     }
 
     SharedPtr(SharedPtr const &other) { // creates COPIES
         if (other.ptr_ != nullptr) {
-            *refCounter = *refCounter + 1; // later change to more compact form
-            // this has to be the only place of this counter incrementation
             ptr_ = other.ptr_;
-        }
+            safeIncreaseRefCounter();
+        } // else - do nothing - we should not create wrappers around nullptr
     }
 
-    ~SharedPtr() {
-        safeDecRefCounter();
-        safeDeleteRefCounterIfNeeded();
-//        cout << "destructor : counter is: " << counter << endl;
-        if (ptr_ != nullptr) {
-//            delete ptr_; // memory leak emerges if this deletion is PRESENT
-            ptr_ = nullptr;
-//            cout << "destructor : nullified ptr_" << endl;
-        }
-    }
-
-    void reset(Expression *ptr = nullptr) {
-        if (ptr != nullptr) {
-            ptr_ = ptr;
-            *refCounter = 1;
-        } else {
-            safeDecRefCounter();
-            safeDeleteRefCounterIfNeeded();
-        }
-    }
-
+/* here we can have several different scenarios:
+ * 1 - other is valid different SharedPtr with different pointer inside
+ * 2 - other is valid different SharedPtr with the same pointer inside
+ * 3 - other is valid the same SharedPtr with consequently the same pointer inside
+ * 4 - other is invalid object - nullptr
+ */
     SharedPtr &operator=(SharedPtr const &other) {
-//        if (ptr_ == other.ptr_) { // is it correct check for assigning to itself ???
-//            // todo continue here
-//            cout << "ptr_ == other.ptr_" << endl;
-//        }
         if (this != &other) // to avoid unnecessary operations if we have the same instance
         {
             if (ptr_ != nullptr) {
-//                (*refCounter)--;
-                safeDecRefCounter();
+                safeDecreaseRefCounter();
             }
             if (other.ptr_ != nullptr && other.refCounter != nullptr) {
-//        if (other.ptr_ != nullptr && other.refCounter != nullptr && *(other.refCounter) > 0) {
                 (*(other.refCounter))++;
             }
             // delete pointers before new assignment !!!
@@ -66,7 +43,25 @@ struct SharedPtr {
         return *this;
     }
 
+    void reset(Expression *ptr = nullptr) {
+        if (ptr != nullptr) {
+            ptr_ = ptr;
+            safeSetRefCounterTo1();
+        } else {
+            safeDecreaseRefCounter();
+            nullifyPtrIfNeeded();
+            safeDeleteRefCounterIfNeeded();
+        }
+    }
+
+    ~SharedPtr() {
+        safeDecreaseRefCounter();
+        nullifyPtrIfNeeded();
+        safeDeleteRefCounterIfNeeded();
+    }
+
     /* method release() is absent in the task */
+/*
     Expression *release() {  // as i understand, counter has to remain untouched here
         Expression *tmp = ptr_;
         ptr_ = nullptr;
@@ -74,6 +69,7 @@ struct SharedPtr {
             *refCounter = 0;
         return tmp;
     }
+*/
 
     // these methods don't require to be tested as they are simple getters and setters -------------
 
@@ -93,18 +89,28 @@ struct SharedPtr {
 private:
     Expression *ptr_;
     int *refCounter = new int(0);
+    // counts only different pointers - how many separate instances we have
 
-    /* counts only different pointers - how many separate instances we have */
+    void safeSetRefCounterTo1() {
+        if (refCounter != nullptr) *refCounter = 1;
+    }
 
-    void safeDecRefCounter() {
-        if (refCounter != nullptr && *refCounter > 0) {
-            (*refCounter)--;
+    void safeIncreaseRefCounter() {
+        if (refCounter != nullptr) (*refCounter)++;
+    }
+
+    void safeDecreaseRefCounter() {
+        if (refCounter != nullptr && *refCounter > 0) (*refCounter)--;
+    }
+
+    void nullifyPtrIfNeeded() {
+        if (refCounter == nullptr || *refCounter == 0) {
+            ptr_ = nullptr; // delete ptr_; - memory leak emerges if this deletion is PRESENT
         }
     }
 
     void safeDeleteRefCounterIfNeeded() {
-        if (refCounter != nullptr && *refCounter == 0)
-            delete refCounter;
+        if (refCounter != nullptr && *refCounter == 0) delete refCounter;
     }
 };
 
