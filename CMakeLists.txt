@@ -8,8 +8,10 @@ include_directories(Apps_For_Stepik_Course)
 include_directories(Apps_For_Stepik_Course/Macros_in_CPP)
 
 add_executable(_Learning_C_CPP
-        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/SimpleSample.hpp
-        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/SimpleSample.cpp)
+        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ComplexTemplates.hpp
+        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ComplexTemplates.cpp)
+#        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/SimpleTemplates.hpp
+#        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/SimpleTemplates.cpp)
 #        Apps_For_Stepik_Course/Macros_in_CPP/StringNested.cpp
 #        Apps_For_Stepik_Course/Macros_in_CPP/Singleton.cpp
 #        Apps_For_Stepik_Course/Macros_in_CPP/Singleton.hpp)

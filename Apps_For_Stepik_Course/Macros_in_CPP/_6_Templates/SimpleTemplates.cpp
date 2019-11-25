@@ -1,4 +1,4 @@
-#include "SimpleSample.hpp"
+#include "SimpleTemplates.hpp"
 
 ARRAY_OVER_MACRO(ArrayInt, int);
 
