@@ -56,5 +56,23 @@ int main() {
     new(b) IntArray(5); // initializing allocated memory by calling constructor
     /* i suppose that for the last sample no deletion is needed as objects on stack are cleaned automatically */
 
+    struct A {
+        A(int x) {} // note that we have no default constructor here
+        ~A() {}
+    };
+
+    const int n = 50;
+    /*! actual allocation goes here */
+    A *placementMemory = static_cast<A *>(operator new[](n * sizeof(A)));
+    //! that's it - now when we have allocated memory - we can write something there
+    for (int i = 0; i < n; i++) {
+        new(placementMemory + i) A(rand()); //здесь память для объекта не выделяется, но инициализируется
+    }
+    //! деинициализация памяти - green text begins after ! in comment
+    for (int i = 0; i < n; i++) {
+        placementMemory[i].~A();
+    }
+    operator delete[](placementMemory);
+
     return 0;
 }
