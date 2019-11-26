@@ -11,11 +11,11 @@ void println(size_t size, string const &comment) {
 int main() {
 
     /* allocation of memory and immediate creation of object in this allocated memory */
-    IntArray *pia = new IntArray(9);
+    auto *pia = new IntArray(9);
     println(pia->size(), "pia");
 
     /* only allocation of memory without any sort of initialization of this found memory */
-    IntArray *pia1 = (IntArray *) (malloc(sizeof(IntArray)));
+    auto *pia1 = (IntArray *) (malloc(sizeof(IntArray)));
     println(pia1->size(), "pia1 via malloc()");
     pia1->~IntArray(); // explicitly calling destructor
     println(pia1->size(), "pia1 after destructor 1");
@@ -23,7 +23,7 @@ int main() {
     println(pia1->size(), "pia1 after destructor 2");
 
 //    IntArray *pia2 = new IntArray(); // a sample for comparison to the next line
-    IntArray *pia2 = new IntArray; // yes, we can invoke method without brackets
+    auto *pia2 = new IntArray; // yes, we can invoke method without brackets
     println(pia2->size(), "pia2");
 
     /* sample of using 'placement new' approach */
@@ -34,9 +34,27 @@ int main() {
         new(ptr + i) int(i);
     delete[] buffer;
 
+    /* allocating memory directly - has to give the same effect as the sample with placement new */
+    int *ptrd = (int *) ::operator new[](count * sizeof(int));
+
     /* checking if it worked: */
-    for (size_t i = 0; i < count; ++i)
-        println(ptr[i], "");
+    for (size_t i = 0; i < count; ++i) {
+        println(ptr[i], "ptr"); // strange that ptr[1] is 0
+        println(ptrd[i], "ptrd"); // strange that ptrd[1] is 0
+    }
+
+    void *p = malloc(sizeof(IntArray));
+    auto *a = new(p) IntArray(10); // 'new' with placement - just invokes constructor for given address
+    println(a->size(), " new(..)");
+    a->~IntArray(); // destructor clears inner state of existed object
+    println(a->size(), " new(..) after destructor");
+    free(a);
+    println(a->size(), " new(..) after free");
+
+    /* if we create an array on stack (not in heap) - it will have problems with alignment */
+    char b[sizeof(IntArray)]; // memory is allocated ON STACK
+    new(b) IntArray(5); // initializing allocated memory by calling constructor
+    /* i suppose that for the last sample no deletion is needed as objects on stack are cleaned automatically */
 
     return 0;
 }
