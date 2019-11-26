@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+/* operator= and T() are not defined - only copying constructor is defined for T
+ */
 template<typename T>
 class Array {
 private:
@@ -11,36 +13,39 @@ private:
 public:
     explicit Array(size_t size, const T &value = T()) {
         size_ = size;
-        data_ = new char[size_ * sizeof(T)];
+        data_ = (T *) operator new[](size_ * sizeof(T));
         for (size_t i = 0; i < size_; ++i)
-            data_[i] = value;
+            new(data_ + i) T(value);
     }
     Array() {
         size_ = 0;
-        data_ = new char[0];
+//        data_ = (T *) operator new[](0);
+//        new(data_) T(nullptr);
     }
-    Array(const Array &other) {
+    Array(Array const &other) {
         size_ = other.size_;
-        data_ = new char[size_ * sizeof(T)];
+
+        data_ = (T *) operator new[](size_ * sizeof(T));
         for (size_t i = 0; i < size_; ++i)
-            data_[i] = other.data_[i];
+            new(data_ + i) T(other.data_[i]);
     }
     ~Array() {
-        /* for some reason this deletion of every object is not needed by the task */
         for (size_t i = 0; i < size_; ++i)
-            delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
+//            data_[i].~T();
+            (data_ + i)->~T(); // the same segmentation fault as with data_[i].~T();
         delete[] data_;
     }
-    Array &operator=(Array const &other) {
-        if (this != &other) {
-            size_ = other.size_;
-            /* here we skip deletion of every inner object as well as in destructor */
+    Array &operator=(Array const &otherE) {
+        if (this != &otherE) {
+            size_ = otherE.size_;
+
             for (size_t i = 0; i < size_; ++i)
-                delete &data_[i]; // & because data_[i] is actually an object - and we need ptr to it
+                data_[i].~T();
             delete[] data_;
-            data_ = new T[size_];
+
+            data_ = (T *) operator new[](size_ * sizeof(T));
             for (size_t i = 0; i < size_; ++i)
-                data_[i] = other.data_[i];
+                new(data_ + i) T(otherE.data_[i]);
         }
         return *this;
     }
