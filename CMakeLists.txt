@@ -9,7 +9,7 @@ include_directories(Apps_For_Stepik_Course/Macros_in_CPP)
 
 add_executable(_Learning_C_CPP
         Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ArrayTemplate2.cpp
-        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ArrayTemplate2.hpp)
+        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ArrayTemplate2.hpp Apps_For_Stepik_Course/Macros_in_CPP/_3_Structs_Classes/ClassesInDynamicMemory.hpp Apps_For_Stepik_Course/Macros_in_CPP/_3_Structs_Classes/ClassesInDynamicMemory.cpp)
 #        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ArrayTemplate1.cpp
 #        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ArrayTemplate1.hpp)
 #        Apps_For_Stepik_Course/Macros_in_CPP/_6_Templates/ComplexTemplates.hpp
