@@ -1,6 +1,8 @@
 #include "ArrayTemplate2.hpp"
-//#include "iostream"
-#include <new>
+#include "iostream"
+//#include <new>
+
+using namespace std;
 
 struct A {
 public:
@@ -15,7 +17,10 @@ private:
 };
 
 int main() {
-    Array<A> array(2, A(5));
+    const size_t count = 10;
+    Array<A> array(count, A(5));
+    for (size_t i = 0; i < count; ++i)
+        cout << "array: " << i << " value is: " << array[i].a << endl;
 /*
     A obj1(5);
     A *ptr1 = new A(3);

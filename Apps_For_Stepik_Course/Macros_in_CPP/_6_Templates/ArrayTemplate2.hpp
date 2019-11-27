@@ -2,7 +2,7 @@
 #define _LEARNING_C_CPP_ARRAY_TEMPLATE_HPP
 
 #include <cstddef>
-#include <new>
+//#include <new>
 
 /* operator= and T() are not defined - only copying constructor is defined for T
  * besides there is no guarantee that we have predefined ~T() also
@@ -13,10 +13,8 @@ class Array {
 private:
     size_t size_;
     T *data_;
-    T *tmp;
     void allocateNewMemoryForDataWithNewChar() {
-        tmp = (T *) new char[size_ * sizeof(T)];
-        data_ = tmp;
+        data_ = (T *) new char[size_ * sizeof(T)];
 //        data_ = (T *) operator new[](size_ * sizeof(T));
     }
     void initializeOneObject(size_t const i, T const &value) {
@@ -44,7 +42,6 @@ public:
         size_ = size;
         allocateNewMemoryForDataWithNewChar();
         initializeMemoryForData(value);
-        delete[] tmp;
     }
     Array() {
         size_ = 0;
@@ -56,7 +53,6 @@ public:
         size_ = other.size_;
         allocateNewMemoryForDataWithNewChar();
         copyMemoryFromOther(other);
-        delete[] tmp;
     }
     Array &operator=(Array const &other) {
         if (this != &other) {
@@ -64,7 +60,6 @@ public:
             deleteAllocatedMemory();
             allocateNewMemoryForDataWithNewChar();
             copyMemoryFromOther(other);
-            delete[] tmp;
         }
         return *this;
     }
