@@ -1,4 +1,6 @@
-/* main task here - review all options of generalizing a function to multiply ints and floats */
+/* TASK 1 / SIMILAR FUNCTIONS - review all options of generalizing a function to multiply ints and floats ------------*/
+
+#include <cstddef>
 
 /* 1 - good old C */
 int squareI(int x) { return x * x; }
@@ -28,6 +30,29 @@ INumber *square(INumber *x) { return x->multiply(x); }
 template<typename Num>
 Num square(Num x) { return x * x; }
 // this will work for any type with defined operator of multiplying
+
+/* TASK 2 / SORTING --------------------------------------------------------------------------------------------------*/
+
+/* 1 - good old C */
+void qsort(void *base, size_t nItems, size_t size /* , pointer to sorting function */);
+// this function is standard & hence not type-safe as anything else in C
+
+/* 2 - plain C++ */
+void sort(int *p, int *q);
+void sort(float *p, float *q);
+// code duplication here
+
+/* 3 - OOP C++ */
+struct IComparable {
+    virtual int compare(IComparable *comparable) const = 0;
+    virtual ~IComparable() = 0;
+};
+void sort(IComparable **p, IComparable **q);
+// this code will work slower as it has to use dynamic memory
+
+/* 4 - C++ templates */
+template<typename Type>
+void sort(Type *p, Type *q);
 
 int main() {
     return 0;
