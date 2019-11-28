@@ -1,4 +1,4 @@
-/* TASK 1 / SIMILAR FUNCTIONS - review all options of generalizing a function to multiply ints and floats ------------*/
+/* LESSON 1 / SIMILAR FUNCTIONS - review all options of generalizing a function to multiply ints and floats ------------*/
 
 #include <cstddef>
 
@@ -31,7 +31,7 @@ template<typename Num>
 Num square(Num x) { return x * x; }
 // this will work for any type with defined operator of multiplying
 
-/* TASK 2 / SORTING --------------------------------------------------------------------------------------------------*/
+/* LESSON 2 / SORTING --------------------------------------------------------------------------------------------------*/
 
 /* 1 - good old C */
 void qsort(void *base, size_t nItems, size_t size /* , pointer to sorting function */);
@@ -53,6 +53,12 @@ void sort(IComparable **p, IComparable **q);
 /* 4 - C++ templates */
 template<typename Type>
 void sort(Type *p, Type *q);
+
+/* LESSON 3 / DEDUCTION OF TEMPLATE TYPE */
+
+// function templates differ from class templates because FTs don't have default parameter values \
+// instead we have to use overloading for function templates \
+// additionally for function templates compiler automatically deducts template type (for example <int>)
 
 int main() {
     return 0;

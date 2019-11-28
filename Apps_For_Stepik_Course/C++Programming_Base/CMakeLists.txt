@@ -4,6 +4,7 @@ project(C++Programming_Base)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(_6_Templates
-        _6_Templates/FunctionTemplates.cpp)
+        _6_Templates/CopyWithTemplates.cpp)
+#        _6_Templates/FunctionTemplates.cpp)
 #        _6_Templates/ArrayTemplate2.cpp
 #        _6_Templates/ArrayTemplate2.hpp)
