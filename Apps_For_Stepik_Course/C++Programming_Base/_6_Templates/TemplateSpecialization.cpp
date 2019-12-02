@@ -32,11 +32,36 @@ template<>
 void foo<int, int>(int a, int b) { cout << "specialized only for ints" << endl; }
 // specialization for our function 'foo' - but note that for first variant as it uses only one type int like T
 
+void testTypesDetection(); // needed for task in the end of the lesson chain
+
 int main() {
     foo(3, 4); // IDE points to specialized function but IN FACT IT WILL NOT BE SELECTED BY COMPILER
     /* OVERLOADING WORKS FIRST in compilation process - that's why selection might not be easily visible */
+    testTypesDetection();
     return 0;
 }
+
+template<typename T1, typename T2>
+struct SameType {
+    static const bool value = false;
+};
+template<typename T>
+struct SameType<T, T> {
+    static const bool value = true;
+};
+// and yes it works! so simple when you understand the language!
+
+struct Dummy {
+};
+typedef int type;
+void testTypesDetection() {
+    cout << SameType<int, int>::value << endl; // выведет 1, т. е. true
+    cout << SameType<int, type>::value << endl; // 1, type == int
+    cout << SameType<int, int &>::value << endl; // 0, int и ссылка на int - различные типы
+    cout << SameType<Dummy, Dummy>::value << endl; // 1
+    cout << SameType<int, const int>::value << endl; // 0, const - часть типа
+}
+
 /*
 Наверное, стоило сначала дать общие понятия о том, как происходит выбор функции на этапе компиляции:
 - приоритет всегда отдается нешаблонным функциям.
