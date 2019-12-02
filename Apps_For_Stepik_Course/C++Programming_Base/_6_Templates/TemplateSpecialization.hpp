@@ -36,7 +36,7 @@ void swap(T &a, T &b) { // this is default approach - but there are some exclusi
 }
 // let we have class Database which is big and heavy - so it has no copying constructor and operator =
 struct Database {
-    void swap(Database &other); // we have to have this method defined in this class
+    void swap(Database &other) {} // we have to have this method defined in this class
 };
 template<>
 void swap<Database>(Database &a, Database &b) { a.swap(b); } // so we're not using 'tmp' for Database objects
