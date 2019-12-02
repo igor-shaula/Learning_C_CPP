@@ -3,6 +3,7 @@
 
 #include <cstddef>
 
+/* FULL SPECIALIZATION FOR CLASS */
 template<class T>
 struct Array {
     // ...
@@ -25,5 +26,19 @@ public:
     }
     /* here we have only getter, similarly we can write a setter - i'll do it but some later */
 };
+
+/* FULL SPECIALIZATION FOR FUNCTION */
+template<class T>
+void swap(T &a, T &b) { // this is default approach - but there are some exclusions like shown underneath
+    T tmp(a);
+    a = b;
+    b = tmp;
+}
+// let we have class Database which is big and heavy - so it has no copying constructor and operator =
+struct Database {
+    void swap(Database &other); // we have to have this method defined in this class
+};
+template<>
+void swap<Database>(Database &a, Database &b) { a.swap(b); } // so we're not using 'tmp' for Database objects
 
 #endif //C_PROGRAMMING_BASE_TEMPLATE_SPECIALIZATION_HPP
