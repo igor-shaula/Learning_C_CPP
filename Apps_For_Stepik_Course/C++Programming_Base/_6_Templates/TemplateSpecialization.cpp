@@ -3,6 +3,21 @@
 
 using namespace std;
 
+/* sample of using template specialization for classes
+ * let's think about copying of types - for most of custom types we'll have to use copying in loops,
+ * but for many primitive types we can use per-byte copying 'memcpy' which is much faster ..
+ * the question is how to differentiate these types - and here specialization becomes very handy
+ */
+template<typename T>
+struct PerByteCopyable { // this is default template for all types
+    static const bool value = false; // 'memcpy' is prohibited - we have to use loop-based custom copying
+};
+template<>
+struct PerByteCopyable<char> { // we can write similar specializations for other needed primitive types
+    static const bool value = true; // now 'memcpy' will be used during copying operations
+};
+// the benefit here is that all functions using these templates will always react on specialization
+
 /* DIFFERENCE BETWEEN OVERLOADING AND SPECIALIZATION */
 
 template<class T>

@@ -2,6 +2,7 @@
   <dictionary name="bakas">
     <words>
       <w>gitignore</w>
+      <w>memcpy</w>
     </words>
   </dictionary>
 </component>
