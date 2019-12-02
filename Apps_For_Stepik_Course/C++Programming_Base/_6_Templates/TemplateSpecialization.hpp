@@ -41,4 +41,9 @@ struct Database {
 template<>
 void swap<Database>(Database &a, Database &b) { a.swap(b); } // so we're not using 'tmp' for Database objects
 
+/* OVERLOADING INSTEAD OF TEMPLATE SPECIALIZATION */
+template<class T>
+// we see that there is no specialization here because template type is defined
+void swap(Array<T> &a, Array<T> &b) { a.swap(b); } // method 'swap' has to be defined in class Array
+
 #endif //C_PROGRAMMING_BASE_TEMPLATE_SPECIALIZATION_HPP
