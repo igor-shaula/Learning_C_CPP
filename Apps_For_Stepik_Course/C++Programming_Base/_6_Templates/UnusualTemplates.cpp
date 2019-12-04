@@ -30,6 +30,35 @@ struct FileLogger {
     ~FileLogger() { log << "Logging finished.\n"; }
 };
 
+// using templates as parameters
+string toString(int i);
+
+// SAMPLE 1 - we have an existing class Array: and we must define template type every time:
+template<typename T>
+struct Array {
+    explicit Array(size_t size) : size_(size), data_(new T[size_]) {}
+    size_t size() const { return size_; }
+    T get(size_t i) const { return *(data_ + i); }
+private:
+    size_t size_;
+    T *data_;
+};
+// this function works only with Array<> - not with lists, vectors, maps and other containers
+Array<string> toStrings(Array<int> const &intArray) { // we must specify <type> every time here
+    Array<string> stringArray(intArray.size());
+    for (size_t i = 0; i != intArray.size(); ++i)
+        stringArray.get(i) = toString(intArray.get(i));
+    return stringArray;
+}
+// SAMPLE 2 - specifying complex template for processing all suitable types:
+template<template<class> class Container>
+Container<string> toStrings(Container<int> const &cInt) {
+    Container<string> cString(cInt.size()); // this function works with ALL TYPES OF CONTAINERS
+    for (size_t i = 0; i != cInt.size(); ++i)
+        cString.get(i) = toString(cInt.get(i));
+    return cString;
+}
+
 int main() {
     FileLogger<cout> fl1;
     FileLogger<cout> fl2;
