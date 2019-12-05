@@ -20,5 +20,16 @@ void testSample1() {
     // that's because compiler at first has to determine shift of base type pointer
 }
 void testSample2() {
-
+    struct Unit {
+        Unit(int id, int hp);
+    };
+    struct Elf : virtual Unit {
+        explicit Elf(int id) : Unit(id, 100) {}
+    };
+    struct Archer : virtual Unit {
+        explicit Archer(int id) : Unit(id, 120) {}
+    };
+    struct ElfArcher : Elf, Archer {
+        explicit ElfArcher(int id) : Unit(id, 150), Elf(id), Archer(id) {}
+    };
 }
