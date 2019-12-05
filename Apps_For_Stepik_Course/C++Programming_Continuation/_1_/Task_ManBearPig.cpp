@@ -33,3 +33,7 @@ struct Pig : Animal {
 struct ManBearPig : Bear, Pig, Man {
     ManBearPig(size_t id) : Bear(id), Pig(id), Man(id), Unit(id) {}
 };
+
+int main() {
+    return 0;
+}
