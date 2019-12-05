@@ -1,46 +1,42 @@
 #include <iostream>
 
-/* SAMPLE 1 */
-
-struct A {
-    virtual ~A() = default;
-};
-
-struct C {
-    virtual ~C() = default;
-    static void foo() {
-        std::cout << "C: " << __func__ << std::endl;
-    }
-};
-struct D : A, C {
-    virtual ~D() = default;
-
-    static void bar() {
-        std::cout << "D: " << __func__ << std::endl;
-    }
-};
-struct B : A {
-    virtual ~B() = default;
-
-    static void baz() {
-        std::cout << "B: " << __func__ << std::endl;
-    }
-};
-struct E : B, C, D {
-    virtual ~E() = default;
-};
-
 void test1sample();
+
+void test2sample();
+
 int main() {
     test1sample();
-    E e;
-    std::cout << sizeof e << std::endl;
-    e.baz();
-    D &d = e;
-    d.foo();
-
+    test2sample();
     return 0;
 }
 void test1sample() {
+    struct A {};
+    struct C {
+        static void fC() { std::cout << "C: " << __func__ << std::endl; }
+    };
+    struct D : A, C {
+        static void fD() { std::cout << "D: " << __func__ << std::endl; }
+    };
+    struct B : A {
+        static void fB() { std::cout << "B: " << __func__ << std::endl; }
+    };
+    struct E : B, C, D {};
 
+    E e;
+    std::cout << sizeof e << std::endl;
+    e.fB();
+    D &d = e;
+    d.fC();
+}
+void test2sample() {
+    struct A {};
+    struct B : A {};
+    struct C {
+        static void foo() {}
+    };
+    struct D : A, C {};
+    struct E : B, C, D {};
+
+    E e;
+//    e.C::foo(); // <----- ‘C’ is an ambiguous base of ‘E‘
 }
