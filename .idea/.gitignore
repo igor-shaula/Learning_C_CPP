@@ -1,8 +1,7 @@
-
 # Default ignored files
 /workspace.xml
-/_Learning_C_CPP.iml
+/*.iml
 /misc.xml
 /modules.xml
 /vcs.xml
-/Learning_C_CPP.iml
+/deployment.xml
