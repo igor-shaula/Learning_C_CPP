@@ -3,8 +3,11 @@ using namespace std;
 
 void checkOldWaysOfTypeCasting();
 
+void detectWhereCStyleCastingFails();
+
 int main() {
     checkOldWaysOfTypeCasting();
+    detectWhereCStyleCastingFails();
     return 0;
 }
 
@@ -44,4 +47,34 @@ void checkOldWaysOfTypeCasting() {
     println(*arrayInt);
     char *bytes = (char *) data; // for some reason constantly gives letter 'p'
     println(*bytes);
+}
+
+// if structures are declared and DEFINED - everything is OK:
+struct A { int a; };
+struct B { int b; };
+struct C : A, B {};
+
+C *f(A *a) {
+    return (C *) a; // in fact static_cast is used here and pointer shifts correctly
+}
+
+// now if DEFINITION is absent - compiler has no information about types - and does wrong casting:
+struct AR {};
+struct BR;
+struct CR;
+
+CR *fr(AR *a) {
+    return (CR *) a; // reinterpret_cast will be used here and pointer value will stay the same
+}
+
+void detectWhereCStyleCastingFails() {
+
+    // in memory object C is organized like |A|B|C| where B* and C* definitely shift from A*
+    A *a = new A();
+    cout << f(a) << " must NOT be equal to " << a << endl; // in fact they are equal - WHY ???
+
+    AR ar{};
+//    AR *ar = new AR();
+    cout << fr(&ar) << " must NOT be equal to " << &ar << endl;
+//    cout << fr(ar) << " must NOT be equal to " << ar << endl;
 }
