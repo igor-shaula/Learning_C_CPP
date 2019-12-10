@@ -40,3 +40,11 @@ int main() {
 
     return 0;
 }
+
+// this declaration serves only for ability to compile
+struct Expression {};
+
+//another solution for special task from base course for checking if child classes are the same:
+bool check_equals(Expression const *left, Expression const *right) {
+    return typeid(*left) == typeid(*right);
+}
