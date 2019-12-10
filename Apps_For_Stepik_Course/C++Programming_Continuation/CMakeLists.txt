@@ -4,4 +4,4 @@ project(C++Programming_Continuation)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(_1_
-        _1_/RTTI.cpp)
+        _1_/DynamicCast.cpp)
