@@ -32,6 +32,6 @@ int main() {
 
 // what is inside pointer to field of a class - shift from the very beginning of the object
 
-// what is inside pointer to method - address of the method in segment of code,
+// what is inside pointer to method - address of the method in segment of code (for non-virtual),
 // also as there are common and virtual methods - instead of method's address we need its number in
 // virtual method table, also we need shift from base class pointer to derived/this class pointer \\
