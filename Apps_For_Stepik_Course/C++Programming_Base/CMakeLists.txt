@@ -4,7 +4,7 @@ project(C++Programming_Base)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(_6_Templates
-        _6_Templates/TaskFlattenArray.cpp _6_Templates/TaskFlattenArray.hpp)
+        _6_Templates/Task_ValueHolder.cpp _6_Templates/Task_ValueHolder.hpp)
 #        _6_Templates/TemplateSpecialization.cpp
 #        _6_Templates/TemplateSpecialization.hpp)
 #        _6_Templates/LessFromLecture.cpp)
