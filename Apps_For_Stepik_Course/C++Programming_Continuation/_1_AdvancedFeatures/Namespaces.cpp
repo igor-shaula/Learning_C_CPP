@@ -41,4 +41,22 @@ namespace items {
 }
 namespace weapons { struct Sword {}; } // adding to existing namespace 'weapons'
 
+// Насчет разделения пространств имён:
+// такое можно использовать при активном использовании умных указаелей (о них в третьем модуле).
+// Вот пример подобного заголовочного файла:
+#pragma once
+#include <memory>
+namespace MyLib {
+    class MyClass;
+    typedef std::shared_ptr<MyClass> MyClassPtr;
+}
+// тут можно включить все заголовочные файлы ДАННОЙ библиотеки, от которых класс ниже зависит.
+// Даже при циклическом включении файлов указатель на класс успеет определиться,
+// и в результате к нему можно будет обращаться как в заголовочных файлах, так и в файлах с кодом.
+namespace MyLib {
+    class MyClass {
+        // определение класса
+    };
+}
+
 // all classes & structures implicitly define their own namespace of the same name
