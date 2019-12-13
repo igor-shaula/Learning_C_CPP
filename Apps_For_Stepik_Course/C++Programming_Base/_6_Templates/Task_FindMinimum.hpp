@@ -2,7 +2,6 @@
 #define C_PROGRAMMING_BASE_TASK_TEMPLATE_MINIMUM_HPP
 
 #include <cstddef>
-#include <array>
 
 template<typename T>
 class Array {
@@ -26,7 +25,7 @@ struct Greater {
 };
 
 template<typename T, typename C>
-T minimum(Array<T> &array, C comparator) {
+T minimum(const Array<T> &array, C comparator) {
     T min = array[0];
     for (size_t i = 1; i != array.size(); ++i)
         if (comparator(array[i], min))
