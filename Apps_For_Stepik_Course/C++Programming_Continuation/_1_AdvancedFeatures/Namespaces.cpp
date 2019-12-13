@@ -20,3 +20,25 @@ namespace XML {
 // full names of this struct & function will be:
 // XML::Parser;
 // int XML::GetCurrentLineNumber(XML::Parser *parser);
+
+// namespaces can be nested:
+namespace items {
+    namespace food {
+        struct Fruit {};
+    }
+}
+// items::food::Fruit;
+// со стандарта С++17 упростили синтаксис вложенных пространств имен, т.е. можно будет так:
+namespace items::foodNew {
+    struct Fruit { /*...*/ };
+}
+
+// namespaces can be separated by other block of code - they're not continuous like struct & functions:
+namespace weapons { struct Bow {}; }
+namespace items {
+    struct Scroll {};
+    struct Artifact {};
+}
+namespace weapons { struct Sword {}; } // adding to existing namespace 'weapons'
+
+// all classes & structures implicitly define their own namespace of the same name
