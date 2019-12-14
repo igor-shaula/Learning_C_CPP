@@ -97,3 +97,15 @@ namespace ru {
         // this time all 3 variants of 'f' are available and compiler chooses the most suitable of them
     }
 }
+
+// Koenig lookup(search) = argument-dependent lookup or ADL:
+namespace cg {
+    struct Vector { Vector(int p1, int p2) {}};
+    Vector operator+(Vector a, Vector const &b);
+}
+cg::Vector a(1, 2);
+cg::Vector b(3, 4);
+cg::Vector c = a + b; // the same as c = operator+(a,b);
+cg::Vector d = cg::operator+(a, b); // gives the same result as previous line
+// during search of function name at first names from current namespace are viewed \
+// but then search goes in namespaces to which function arguments belong
