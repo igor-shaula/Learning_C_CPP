@@ -80,3 +80,20 @@ namespace inner {
         // this function selection is not the best but compiler will select first and stop searching
     }
 }
+
+// there are 2 different senses in using keyword 'using':
+namespace ru {
+    namespace spb {
+        int f(int i) { return 1; }
+        int g(int i) { return -1; }
+    }
+    using namespace spb; // from now on all stuff from this namespace will be available for use
+    using spb::f; // only 'f' will be added to code during compilation - this way is much more clean
+    // adding more variants (but less suitable) of function 'f' in current namespace:
+    int f(float f) { return 2; }
+    int f(int a, int b) { return 3; }
+    namespace msk {
+        int global = f(5); // function from other namespace 'spb' is invoked here - because of 'using'
+        // this time all 3 variants of 'f' are available and compiler chooses the most suitable of them
+    }
+}
