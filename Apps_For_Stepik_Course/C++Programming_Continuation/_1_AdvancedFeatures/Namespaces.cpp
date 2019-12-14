@@ -60,3 +60,23 @@ namespace MyLib {
 }
 
 // all classes & structures implicitly define their own namespace of the same name
+
+// operator :: allows to get access to global namespace (top-level namespace):
+struct Dictionary {};
+namespace items {
+    struct Dictionary {}; // local one
+    ::Dictionary globalDictionary; // using top-level class - outside of this namespace
+}
+// searching in any namespace works until any first (not the best) coincidence is found \
+// if nothing suitable found - compiler goes to upper level step by step and searches there \
+// if nothing is found at the top level / global namespace - compilation error is fired
+int f(int i) { return 1; }
+namespace inner {
+    int f(float f) { return 2; }
+    int f(double a, double b) { return 3; }
+    namespace innerInner {
+        int a = 9;
+        int global = f(a); // function f(float) will be invoked - as it's first suitable found
+        // this function selection is not the best but compiler will select first and stop searching
+    }
+}
