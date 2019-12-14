@@ -109,3 +109,20 @@ cg::Vector c = a + b; // the same as c = operator+(a,b);
 cg::Vector d = cg::operator+(a, b); // gives the same result as previous line
 // during search of function name at first names from current namespace are viewed \
 // but then search goes in namespaces to which function arguments belong
+
+// nameless namespace - in fact name is given during compilation - but only compiler knows it:
+namespace { // generated name will be unique
+    struct Test { std::string name; };
+}
+// given above is equivalent to:
+namespace $GeneratedName$ {
+    struct Test { std::string name; };
+}
+using namespace $GeneratedName$;
+// nameless namespaces can be used instead of 'static' - their effects are the same
+
+/* В языках программирования C и C++ единица трансляции (англ. translation unit)
+ * — подаваемый на вход компилятора исходный текст (файл с расширением .c или .cpp)
+ * со всеми включёнными в него файлами
+ */
+// nameless namespace need describing in more details - especially about static and classes
