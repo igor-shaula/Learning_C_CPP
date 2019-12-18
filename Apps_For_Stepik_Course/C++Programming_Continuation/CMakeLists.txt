@@ -3,4 +3,4 @@ project(C++Programming_Continuation)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(_2_NewFeaturesOf11And14 _2_NewFeaturesOf11And14/Task_Constexpr.cpp _2_NewFeaturesOf11And14/RangeBasedForLoop.cpp _2_NewFeaturesOf11And14/InitializationLists.cpp)
+add_executable(_2_NewFeaturesOf11And14 _2_NewFeaturesOf11And14/Task_Constexpr.cpp _2_NewFeaturesOf11And14/RangeBasedForLoop.cpp _2_NewFeaturesOf11And14/InitializationLists.cpp _2_NewFeaturesOf11And14/UniversalInitialization.cpp)
