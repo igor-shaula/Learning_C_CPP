@@ -20,16 +20,23 @@ to_pair(std::tuple<T1, T2, T3> t) -> decltype(std::pair<R, Q>(std::get<1>(t), st
 */
 
 //template<int i1, int i2>
-template<int i1, int i2, typename Tuple, typename T1, typename T2>
-auto to_pair(Tuple t) -> decltype(std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t))) {
-    return std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t)); // make_pair() OR pair() ???
+//template<int i1, int i2, typename Tuple, typename T1, typename T2>
+//std::pair<T1, T2>
+//to_pair(Tuple t)/* -> decltype(std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t))) */{
+////auto to_pair(Tuple t) -> decltype(std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t))) {
+//    return std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t)); // make_pair() OR pair() ???
+//}
+
+template<size_t i1, size_t i2>
+auto to_pair(std::tuple<> t) -> decltype(std::make_pair(std::get<i1>(t), std::get<i2>(t))) {
+//auto to_pair(std::tuple<> t) -> decltype(std::make_pair(std::get<size_t>(t), std::get<size_t>(t))) {
+    return std::make_pair(std::get<i1>(t), std::get<i2>(t));
 }
 
 //template<int i1, int i2, typename Tuple>
 //auto to_pair(Tuple t) -> decltype(std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t))) {
 //    return std::make_pair<T1, T2>(std::get<i1>(t), std::get<i2>(t)); // OR pair() ?
 //}
-
 
 //template<typename Tuple>
 //struct Helper {
@@ -42,7 +49,6 @@ auto to_pair(Tuple t) -> decltype(std::make_pair<T1, T2>(std::get<i1>(t), std::g
 //};
 
 //Helper operator<(Helper a, int b) {}
-
 
 void testNeededFunction() {
     auto t = std::make_tuple(0, 3.5, "Hello");
