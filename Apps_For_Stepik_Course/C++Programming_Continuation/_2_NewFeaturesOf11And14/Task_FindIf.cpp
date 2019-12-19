@@ -19,13 +19,12 @@ int *find_if(int *p, int *q, F gen_finder) {
  */
 
 auto gen_finder = [](int *inner, int *innerBorder) {
-    return [=](int outerValue) -> bool {
-//        cout << "outerValue from gen_finder = " << outerValue << endl;
-        return outerValue == *find_if(inner, innerBorder, [=](int innerValue) -> bool {
-//            cout << "\tinnerValue from gen_finder = " << innerValue << endl;
-            return outerValue == innerValue;
+    return [inner, innerBorder](int innerValue) -> bool {
+        cout << "innerValue from gen_finder = " << innerValue << endl;
+        return innerValue == *find_if(inner, innerBorder, [innerValue](int value) -> bool {
+            cout << "value from inner lambda = " << value << endl;
+            return value == innerValue;
         });
-        // in fact we need two for-loops to find cross value
     };
 };
 
@@ -36,6 +35,9 @@ void runGivenTest() {
     int *first_prime = find_if(m, m + 10, gen_finder(primes, primes + 5));
     // first_prime будет указывать на число 7
     cout << *first_prime << endl;
+    cout << first_prime << endl;
+    cout << &m[6] << endl;
+    cout << &primes[3] << endl;
 }
 
 int main() {
