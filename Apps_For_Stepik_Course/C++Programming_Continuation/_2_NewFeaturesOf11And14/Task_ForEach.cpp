@@ -9,7 +9,7 @@ void for_each_int(int *p, int *q, F f) {
 }
 // Определите переменную square_fun, хранящую безымянную функцию, которая возводит переданное число в квадрат.
 
-std::function<int(int &)> square_fun = [](int &x) -> int { x *= x; };
+std::function<int(int &)> square_fun = [](int &x) -> int { return x *= x; };
 auto square_fun_auto = [](int &x) -> int { x *= x; }; // the same effect as lambda above
 
 void print(int const array[]) {
