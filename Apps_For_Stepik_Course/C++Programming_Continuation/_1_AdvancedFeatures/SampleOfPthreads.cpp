@@ -97,3 +97,43 @@ int main() {
 
 // Если захотите сравнить время различных модификаций, то самый простой способ это сделать в Linux — команда time:
 // time ./integrate
+
+/*
+Стандартный вывод time дает процессорное время выполнения всех потоков, поэтому оно не меняется.
+Чтобы получить время "часов" (elapsed time) можно либо смотреть полный вывод утилиты time
+\time -v ./integrate
+ либо задать формат вывода только этого времени
+\time -f "%E" ./integrate
+П.С. интересно было узнать, что в линуксе есть два способа получения времен:
+ bash скрипт time, и утилита /usr/bin/time (которую я использую выше)
+ */
+
+/* for compilation & work on Windows:
+ Заменил:
+
+    // создаём дескрипторы потоков
+    pthread_t threads[THREAD_COUNT];
+
+    // создаём и запускаем потоки
+    for (size_t i = 0; i != THREAD_COUNT; ++i)
+        pthread_create(&threads[i], 0, &thread_fun, &tasks[i]);
+
+    // дожидаемся завершения потоков
+    for (size_t i = 0; i != THREAD_COUNT; ++i)
+        pthread_join(threads[i], 0);
+на:
+
+#include <thread>
+
+    std::vector<std::thread> threads;
+
+    for (size_t i = 0; i != THREAD_COUNT; ++i)
+    {
+        std::thread temp(&thread_fun, &tasks[i]);
+        threads.push_back(std::move(temp));
+    }
+
+    for (size_t i = 0; i != THREAD_COUNT; ++i)
+        threads[i].join();
+Все остальное – без изменений.
+ */
