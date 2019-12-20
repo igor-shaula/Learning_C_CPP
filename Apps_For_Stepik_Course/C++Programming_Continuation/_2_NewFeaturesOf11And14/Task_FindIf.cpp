@@ -18,10 +18,10 @@ int *find_if(int *p, int *q, F gen_finder) {
  * и проверяет, есть ли это значение в переданном массиве.
  */
 
-auto gen_finder = [](int *inner, int *innerBorder) {
-    return [inner, innerBorder](int innerValue) -> bool {
+auto gen_finder = [](int *inner, int *innerBorder) { // `-> bool` before `{` is optional here
+    return [inner, innerBorder](int const &innerValue) { // `-> bool` before `{` is optional
         cout << "innerValue from gen_finder = " << innerValue << endl;
-        return innerValue == *find_if(inner, innerBorder, [innerValue](int value) -> bool {
+        return innerValue == *find_if(inner, innerBorder, [&innerValue](int const &value) {
             cout << "value from inner lambda = " << value << endl;
             return value == innerValue;
         });
