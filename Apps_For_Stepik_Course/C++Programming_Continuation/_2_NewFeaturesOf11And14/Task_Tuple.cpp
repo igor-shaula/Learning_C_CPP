@@ -25,12 +25,19 @@ std::pair<T1, T2> to_pair(Tuple t)*/
 // based on two arguments passed from to_pair<1, 2>(t); --------------------------------------------
 
 // this variant is the best - it compiles and works at least
-template<size_t i1, size_t i2>
-auto to_pair(std::tuple<int, double, const char *> t) -> decltype(
+//template<size_t i1, size_t i2, typename ...T>
 //auto to_pair(std::tuple<decltype(std::make_tuple(0, 3.5, "Hello"))> t) -> decltype(
+//std::make_pair(std::get<i1>(t), std::get<i2>(t))) {
+//    cout << "i1 = " << i1 << endl;
+//    cout << "i2 = " << i2 << endl;
+//    cout << sizeof(decltype(1.2)) << endl;
+//    return std::make_pair(std::get<i1>(t), std::get<i2>(t));
+//}
+
+// this is the final variant - accepted by Stepik
+template<size_t i1, size_t i2, typename ...T>
+auto to_pair(std::tuple<T...> t) -> decltype(
 std::make_pair(std::get<i1>(t), std::get<i2>(t))) {
-    cout << "i1 = " << i1 << endl;
-    cout << "i2 = " << i2 << endl;
     return std::make_pair(std::get<i1>(t), std::get<i2>(t));
 }
 
