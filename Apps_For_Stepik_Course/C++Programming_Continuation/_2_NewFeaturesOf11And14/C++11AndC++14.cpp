@@ -1,3 +1,5 @@
+#include <cstddef>
+#include <type_traits>
 int main() {
     return 0;
 }
@@ -21,3 +23,40 @@ int main() {
  * typedef void(*OtherType)(double);
  * using OtherType = void (*)(double);
  */
+struct Class {};
+typedef int *(Class::*Foo)(int, double) const; // old style
+using Foo = int *(Class::*)(int, double) const; // new style
+
+/* what else new:
+ *
+ * added type 'long long int'
+ *
+ * added type traits - via #include <type_traits>
+ *
+ * added operators: alignof & alignas:
+ * alignas(float) unsigned char c[sizeof(float)];
+ *
+ * added static assert:
+ */
+template<class T>
+// now we'll check if this type is signed or unsigned or non-numerical at all
+void run(T *data, size_t n) {
+    static_assert(std::is_signed<T>::value, "T is not signed"); // works during compile time
+}
+
+// checking how 'explicit/ for casting operator works in new standard:
+#include <iostream>
+using std::string;
+struct String {
+    String(const string &) {}
+    explicit operator char const *() const {}
+};
+void checkAllVariants() {
+    String s("Hello");
+//    delete s;
+//    if (s) {}
+//    char const *p1 = s;
+    char const *p2 = (char const *) s;
+    char const *p3 = static_cast<char const *>(s);
+//    char const *s2 = s + 4;
+}
