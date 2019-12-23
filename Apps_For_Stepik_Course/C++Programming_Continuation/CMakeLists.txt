@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(_1_AdvancedFeatures
         _1_AdvancedFeatures/Namespaces.cpp)
 add_executable(_2_NewFeaturesOf11And14
-        _2_NewFeaturesOf11And14/C++11AndC++14.cpp)
+        _2_NewFeaturesOf11And14/C++11AndC++14.cpp _2_NewFeaturesOf11And14/Decltype.cpp)
