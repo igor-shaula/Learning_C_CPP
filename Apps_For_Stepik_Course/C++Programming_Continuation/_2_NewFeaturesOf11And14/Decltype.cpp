@@ -69,3 +69,26 @@ int main() {
     test();
     return 0;
 }
+
+// in C++11 there is a way of deducing function type via 'auto' and 'decltype':
+template<class A, class B>
+auto plus(A a, B b) -> decltype(a + b) { return a + b; }
+// in C++14 we can write the same in even shorter manner:
+template<class A, class B>
+auto plus(A a, B b) { return a + b; } // here 'decltype' is not needed
+// another variant with more precise deduction - decltype deduction instead of auto deduction:
+template<class A, class B>
+decltype(auto) plus(A a, B b) { return a + b; } // here if '+' returns a reference - it will be in type
+
+// one moment - during deduction types are casted to nearest - for example char -> int (in decltype)
+
+template<class A, class B>
+decltype(A{} + B{}) sum(A a, B b) {
+    return a + b;
+} // А вот в таком виде и без auto сработало для вашего примера.
+// - не сработает, если у A или B нет конструктора по умолчанию.
+// в заголовочном файле <utility>﻿ есть чудная ﻿std::declval﻿﻿, с ней сработает
+template<class A, class B>
+decltype(std::declval<A>() + std::declval<B>()) Plus(A &&a, B &&b) noexcept {
+    return a + b;
+}
