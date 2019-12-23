@@ -51,7 +51,7 @@ struct String {
     String(const string &) {}
     explicit operator char const *() const {}
 };
-void checkAllVariants() {
+void checkAllVariants() { // if we remove upper 'explicit' - all commented code here begin to compile
     String s("Hello");
 //    delete s;
 //    if (s) {}
@@ -60,3 +60,15 @@ void checkAllVariants() {
     char const *p3 = static_cast<char const *>(s);
 //    char const *s2 = s + 4;
 }
+
+// a new type std::nullptr_t was added - it contains only one literal 'nullptr' \
+// it was done to eliminate inconsistency of using 0 value for pointers - because it's int anyway:
+int f(int a) { return 1; }
+int f(int *p) { return 2; } // think that we'd like to call this particular function
+void use() {
+    f(0); // explicit call of f(int a);
+    // but what if we passed a pointer value there - not int - then we have to cast it to pointer:
+    f((int *) 0); // now correct function is called - this syntax is used in C++98/03
+    f(nullptr); // the same as before but looks better and much more predictable
+}
+// note that 'nullptr' can be implicitly casted to pointer of any type
