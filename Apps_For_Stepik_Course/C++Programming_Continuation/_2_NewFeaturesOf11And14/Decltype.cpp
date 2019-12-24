@@ -87,7 +87,7 @@ decltype(A{} + B{}) sum(A a, B b) {
     return a + b;
 } // А вот в таком виде и без auto сработало для вашего примера.
 // - не сработает, если у A или B нет конструктора по умолчанию.
-// в заголовочном файле <utility>﻿ есть чудная ﻿std::declval﻿﻿, с ней сработает
+// в заголовочном файле <utility> есть чудная std::declval - с ней сработает
 template<class A, class B>
 decltype(std::declval<A>() + std::declval<B>()) Plus(A &&a, B &&b) noexcept {
     return a + b;
