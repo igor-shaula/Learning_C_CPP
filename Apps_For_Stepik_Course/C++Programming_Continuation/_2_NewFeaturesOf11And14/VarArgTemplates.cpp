@@ -8,7 +8,7 @@ using std::cout;
 using std::endl;
 
 // base of recursion:
-void myPrintf(char const *s) {
+void myPrintf(char const *s) { // like the next function but without any template arguments
     while (*s) { // till the end of the string
         if (*s == '%' && *(++s) != '%') // we need only one '%' and check for the next symbol
             cout << "error - found one %" << endl;
@@ -20,7 +20,7 @@ void myPrintf(char const *s, T const &value, Args... args) {
     while (*s) {
         if (*s == '%' && *(++s) != '%') {
             cout << value;
-            printf(++s, args...);
+            myPrintf(++s, args...);
             return;
         }
         cout << *s++;
@@ -68,6 +68,8 @@ int runRead() {
 
 int main() {
     myPrintf("asdf%d", 5); // compilation fails if this is uncommented
+    cout << endl;
+    myPrintf("asdf%d", 5, 3); // compilation fails if this is uncommented
 //    runRead();
     return 0;
 }
