@@ -4,6 +4,6 @@ project(C++Programming_Continuation)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(_1_AdvancedFeatures
-        _1_AdvancedFeatures/Namespaces.cpp)
+        _1_AdvancedFeatures/Task_Header.hpp _1_AdvancedFeatures/Task_Header1.cpp _1_AdvancedFeatures/Task_Header2.cpp)
 add_executable(_2_NewFeaturesOf11And14
-        _2_NewFeaturesOf11And14/Task_PrintValues.cpp _2_NewFeaturesOf11And14/DefaultAndDelete.cpp _2_NewFeaturesOf11And14/ConstructorDelegation.cpp _2_NewFeaturesOf11And14/OverrideAndFinal.cpp)
+        _2_NewFeaturesOf11And14/OverrideAndFinal.cpp)
