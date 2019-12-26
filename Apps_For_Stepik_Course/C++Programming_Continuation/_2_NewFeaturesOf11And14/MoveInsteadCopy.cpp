@@ -1,4 +1,6 @@
 #include <cstddef>
+
+// using older copying constructor and copying assignment operator
 struct OldString {
     OldString() = default;
     OldString(OldString const &s);
@@ -32,3 +34,28 @@ OldString getDateString() { // returning by value from function
 void showCopying() {
     OldString dateCopied = getDateString(); // here we copy the string for the second time
 }
+
+// using new standard's moving constructor and moving assignment operator
+struct NewString {
+    NewString() = default;
+    NewString(NewString &&s) // instead of OldString(OldString const &s); also && - rvalue reference
+            : data_(s.data_), size_(s.size_) {
+        s.data_ = nullptr;
+        s.size_ = 0;
+    }
+    NewString &operator=(NewString &&s) {
+        if (this != &s) { // otherwise we'll clear 'this' object's data
+            delete[] data_;
+            data_ = s.data_;
+            size_ = s.size_;
+            s.data_ = nullptr; // destructor anyway will be called for 's' object
+            s.size_ = 0; // we have to leave 's' object in proper/'agreed' state
+        }
+        return *this;
+    }
+//    char *data() const { return data_; }
+//    size_t size() const { return size_; }
+private:
+    char *data_;
+    size_t size_;
+};
