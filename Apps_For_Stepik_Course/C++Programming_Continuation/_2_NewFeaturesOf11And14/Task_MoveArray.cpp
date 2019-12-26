@@ -22,6 +22,7 @@ struct Array {
 
     // реализуйте перемещающий конструктор
     Array(Array &&other) {
+        // as we lack default values for this class'es field - we have to prepare the now:
         size_ = 0;
         data_ = nullptr;
         swap(other);
@@ -30,9 +31,13 @@ struct Array {
     // реализуйте перемещающий оператор присваивания
     Array &operator=(Array &&other) {
         if (this != &other) {
-            size_ = 0;
-            delete data_;
+//            size_ = 0;
+//            delete data_;
+//            data_ = nullptr;
+            // it's very strange that it's not needed to somehow clear 'this' instance before swapping
             swap(other);
+//            Array temp(std::move(other));
+//            swap(temp);
         }
         return *this;
     }
