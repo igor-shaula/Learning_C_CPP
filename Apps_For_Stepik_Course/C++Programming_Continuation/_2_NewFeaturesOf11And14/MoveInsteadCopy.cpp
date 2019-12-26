@@ -17,7 +17,7 @@ private:
     size_t size_ = 0;
 };
 
-OldString getDateString() { // returning by value from function
+OldString getDateStringOld() { // returning by value from function
     OldString date("21.10.2015"); // string is created in dynamic memory
     return date; // here the string is copied for the first time - to the place of invocation
 }
@@ -32,18 +32,26 @@ OldString getDateString() { // returning by value from function
  */
 
 void showCopying() {
-    OldString dateCopied = getDateString(); // here we copy the string for the second time
+    OldString dateCopied = getDateStringOld(); // here we copy the string for the second time
 }
 
 // using new standard's moving constructor and moving assignment operator
 struct NewString {
     NewString() = default;
-    NewString(NewString &&s) // instead of OldString(OldString const &s); also && - rvalue reference
+    NewString(char const *s) {
+        size_ = 10;
+        data_ = new char(size_);
+        for (size_t i = 0; i < size_; ++i)
+            *(data_ + i) = *(s + i);
+    }
+    NewString(NewString const &s); // lvalue-reference - copying will be used here
+    NewString(NewString &&s) // rvalue reference - moving is used here
             : data_(s.data_), size_(s.size_) {
         s.data_ = nullptr;
         s.size_ = 0;
     }
-    NewString &operator=(NewString &&s) {
+    NewString &operator=(NewString const &s); // lvalue-reference - copying will be used here
+    NewString &operator=(NewString &&s) { // rvalue-reference - moving is used here
         if (this != &s) { // otherwise we'll clear 'this' object's data
             delete[] data_;
             data_ = s.data_;
@@ -53,15 +61,40 @@ struct NewString {
         }
         return *this;
     }
+    // so we have overloaded versions of constructors - and compiler will choose needed one \
+    // rvalue-refs and lvalue-refs are different arguments for compiler
 //    char *data() const { return data_; }
 //    size_t size() const { return size_; }
 private:
-    char *data_;
-    size_t size_;
+    char *data_ = nullptr;
+    size_t size_ = 0;
 };
 
-// this sample is equal to previous NewString but with using 'swap':
 #include <utility>
+
+NewString getDateStringNew() {
+    NewString date("21.10.2015");
+    return std::move(date); // instruction to compiler to use moving instead of copying
+    /* при возвращении локального объекта функции (каким и является date) по значению
+     * будет вызываться перемещающий конструктор. Т.е. код функции можно было оставить без изменения:
+     * // без std::move
+            return date; // date будет перемещена
+    Более того, такой код потенциально работает более эффективно:
+    так как в данном случае компилятору позволяется сделать оптимизацию возвращаемого значения (RVO).
+Вот неполный список случаев, когда будут вызываться перемещающие методы:
+
+- если передавать в них объект при помощи std::move();
+- если передавать в них временный объект;
+- если из функции по значению возвращается локальный объект функции.
+     */
+}
+
+void showMoving() {
+    NewString dateMoved = getDateStringNew();
+    // on this invocation compiler chooses moving constructor as it knows about rvalue-ref type
+}
+
+// this sample is equal to previous NewString but with using 'swap':
 struct String {
     void swap(String &s) { // remember that implicitly a method has access to 'this' object
         std::swap(data_, s.data_);
