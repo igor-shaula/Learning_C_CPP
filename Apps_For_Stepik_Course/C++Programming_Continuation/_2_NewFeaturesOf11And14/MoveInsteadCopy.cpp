@@ -63,7 +63,7 @@ private:
 // this sample is equal to previous NewString but with using 'swap':
 #include <utility>
 struct String {
-    void swap(String &s) {
+    void swap(String &s) { // remember that implicitly a method has access to 'this' object
         std::swap(data_, s.data_);
         std::swap(size_, s.size_);
     }
