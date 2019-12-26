@@ -104,10 +104,18 @@ struct String {
         data_ = nullptr;
         size_ = 0;
     }
+    String(char const *s) {
+        size_ = 10;
+        data_ = new char(size_);
+        for (size_t i = 0; i < size_; ++i)
+            *(data_ + i) = *(s + i);
+    }
+    String(String const &s);
     String(String &&s) {
         // before invoking 'swap' this object is defined as we have default values
         swap(s);
     }
+    String &operator=(String const &s);
     String &operator=(String &&s) {
         clear(); // taking care of 'this' object's state - it'll be sent to 's' via 'swap'
         swap(s);
@@ -124,6 +132,16 @@ private:
     char *data_ = nullptr;
     size_t size_ = 0;
 };
+
+int main() {
+    String("aga");
+    String a(String("hello")); // moving - inner object is temporary - rvalue
+    String b(std::move(a)); // moving - because std::move is used
+    String c(a); // copying - because inner object is a lvalue
+    a = b; // copying - because right value is a reference
+    b = std::move(c); // moving - because std::move is used
+    c = String("world"); // moving - because inner value is temporary - rvalue
+}
 
 /* конструктор и оператор перемещения используются повсеместно.
  * Может быть вы даже сами его неявно использовали, но не осознавали этого. Пример:
