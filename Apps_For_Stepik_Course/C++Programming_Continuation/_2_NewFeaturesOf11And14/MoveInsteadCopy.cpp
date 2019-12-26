@@ -59,3 +59,35 @@ private:
     char *data_;
     size_t size_;
 };
+
+// this sample is equal to previous NewString but with using 'swap':
+#include <utility>
+struct String {
+    void swap(String &s) {
+        std::swap(data_, s.data_);
+        std::swap(size_, s.size_);
+    }
+    void clear() {
+        data_ = nullptr;
+        size_ = 0;
+    }
+    String(String &&s) {
+        // before invoking 'swap' this object is defined as we have default values
+        swap(s);
+    }
+    String &operator=(String &&s) {
+        clear(); // taking care of 'this' object's state - it'll be sent to 's' via 'swap'
+        swap(s);
+        return *this;
+    }
+/* Очистку объекта лучше всего поручить деструктуру:
+    String& operator=(String && s) {
+        String temp(std::move(s));
+        this->swap(temp);
+        return *this;
+    }
+*/
+private:
+    char *data_ = nullptr;
+    size_t size_ = 0;
+};
