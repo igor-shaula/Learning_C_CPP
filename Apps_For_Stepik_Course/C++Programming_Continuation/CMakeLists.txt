@@ -7,3 +7,5 @@ add_executable(_1_AdvancedFeatures
         _1_AdvancedFeatures/Task_Header2.cpp)
 add_executable(_2_NewFeaturesOf11And14
         _2_NewFeaturesOf11And14/MoveInsteadCopy.cpp)
+add_executable(_3_StandardTemplateLibrary
+        _3_StandardTemplateLibrary/SequentialContainers.cpp)
