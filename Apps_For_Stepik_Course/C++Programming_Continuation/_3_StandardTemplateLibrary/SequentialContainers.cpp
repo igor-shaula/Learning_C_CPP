@@ -104,9 +104,27 @@ void showDeque() {
      */
 }
 
+#include <list>
+void showList() {
+    // std::list<T> in fact is double-linked list \ all insertions & deletions take O(1) time
+    list<string> l = {"one", "two"};
+    println(l.front());
+    l.emplace_front("zero");
+    println(l.front());
+    println(l.back());
+    l.emplace_back("three");
+    println(l.back());
+    /* http://en.cppreference.com/w/cpp/container/list/splice -
+     * Почему в случае (3)﻿будет линейная сложность?
+     * - потому что нужно обновить size.
+     */
+    // question for now - how to get [i] element from a 'list' ??? because it has no specific API
+}
+
 int main() {
     showArray();
     showVector();
     showDeque();
+    showList();
     return 0;
 }
