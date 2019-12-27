@@ -107,18 +107,34 @@ void showDeque() {
 #include <list>
 void showList() {
     // std::list<T> in fact is double-linked list \ all insertions & deletions take O(1) time
-    list<string> l = {"one", "two"};
+    list<string> l = {"Lone", "Ltwo"};
     println(l.front());
-    l.emplace_front("zero");
+    l.emplace_front("Lzero");
     println(l.front());
     println(l.back());
-    l.emplace_back("three");
+    l.emplace_back("Lthree");
     println(l.back());
     /* http://en.cppreference.com/w/cpp/container/list/splice -
      * Почему в случае (3)﻿будет линейная сложность?
      * - потому что нужно обновить size.
      */
-    // question for now - how to get [i] element from a 'list' ??? because it has no specific API
+    // question for now - how to get [i] element from a 'list' ??? iterators or range-based for:
+    // 'list' does not have any API to get i-element because it would require linear time O(N)
+    // for 'vector' searching is done for constant time - but for list - not
+
+    // range-based for: works with all containers, non-STL arrays & also std::initializer_list
+    for (string &s:l) // re-pointing this reference on each iteration
+        println(s);
+    println(l.size());
+    // iterators are present in all STL containers - and their API is generic for all of them:
+    list<string>::iterator i = l.begin(); // this type can be replaced with 'auto'
+    for (; i != l.end(); ++i) // like with pointers - l.end() points just outside container's scope
+        if (*i == "Ltwo") // finding position of certain element - it's like shifting data's pointer
+            break;
+    l.erase(i); // here we delete one of the element which has just been found
+    println("size after deletion: " + l.size());
+    auto last = l.end(); // points to memory right next after the end of our container
+    println(*(--last)); // now pointing to the last element of our sequence container
 }
 
 int main() {
