@@ -1,5 +1,7 @@
-#include <array>
 #include <iostream>
+
+#include <array>
+#include <vector>
 
 using namespace std;
 
@@ -32,7 +34,24 @@ void showArray() {
     println(a.at(0));
 }
 
+void showVector() {
+    // std::vector<T> is a dynamic array with auto-resize during addition of new elements
+    vector<string> v = {"one", "two"};
+    println(v.size());
+    println(v.capacity());
+    println("at 1: " + v.at(1));
+    v.resize(4);
+    println(v.size());
+    println(v.capacity());
+    println("at 3: " + v.at(2));
+    v.reserve(9);
+    println(v.size());
+    println(v.capacity());
+    println(v.data());
+}
+
 int main() {
     showArray();
+    showVector();
     return 0;
 }
