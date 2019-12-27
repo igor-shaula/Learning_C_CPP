@@ -137,10 +137,28 @@ void showList() {
     println(*(--last)); // now pointing to the last element of our sequence container
 }
 
+#include <forward_list>
+void showForwardList() {
+    // std:forward_list<T> looks like restricted variant of 'list' where pointers move only forwards
+    forward_list<string> fl = {"one", "two"};
+    fl.emplace_front("zero"); // places to the very first position
+    println(fl.front());
+    fl.push_front("minus one"); // ALSO places to the very first position
+    println(fl.front());
+    /* some useful methods:
+     * insert_after() & emplace_after() instead of insert() & emplace()
+     * before_begin() & cbefore_begin() - for getting iterators (normal and constant)
+     * push_front(), emplace_front(), pop_front()
+     * splice_after()
+     * merge(), remove(), remove_if(), reverse(), sort(), unique() - will see those some later
+     */
+}
+
 int main() {
     showArray();
     showVector();
     showDeque();
     showList();
+    showForwardList();
     return 0;
 }
