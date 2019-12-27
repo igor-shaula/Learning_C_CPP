@@ -1,10 +1,5 @@
 #include <iostream>
-
-#include <array>
-#include <vector>
-
 using namespace std;
-
 template<class T>
 void println(T const &value) {
     cout << value << endl;
@@ -22,6 +17,7 @@ void println(T const &value) {
  * erase() from 1 or 2 iterators
  */
 
+#include <array>
 void showArray() {
     // std::array<T> is a wrapper over standard array with addition of STL container's API
     array<string, 2> a = {"one", "two"};
@@ -34,6 +30,7 @@ void showArray() {
     println(a.at(0));
 }
 
+#include <vector>
 void showVector() {
     // std::vector<T> is a dynamic array with auto-resize during addition of new elements
     vector<string> v = {"one", "two"};
@@ -48,6 +45,9 @@ void showVector() {
     println(v.size());
     println(v.capacity());
     println(v.data());
+    v.shrink_to_fit();
+    println(v.size());
+    println(v.capacity());
     /* стоит предпочитать emplace_back методу push_back хотя бы потому что вызывается не два последовательных конструктора, а один ?
      * - да, emplace_back эффективней.
      * - Впрочем компилятор может такое оптимизировать :) Так что часто без разницы.
@@ -80,8 +80,33 @@ void showVector() {
      */
 }
 
+#include <deque>
+void showDeque() {
+    // 'deque' = double ended queue - allows to add new elements to either side for O(1) time \
+    // finding an element by [i] operator works much slower than in array or vector \
+    // there are different implementations or STL containers - only headers are standard
+    deque<string> d = {"one", "two"};
+    d.emplace_back("three");
+    d.emplace_front("zero");
+    println(d[0]);
+    println(d[2]);
+    /* вопрос: можно ли считать ошибкой спецификации то, что у метода std::deque::push_back()
+     * указана константная сложность (именно константная, а не амортизированная константа)?
+     * При том, что константа указана также и для случайного доступа.
+     * - push_back действительно за константу работает.
+     * Добавление элемента может потребовать выделение нового блока, но блок тоже константного размера.
+     * - зато добавление указателя на новый блок в "список" этих блоков
+     * (который вовсе не список, а нечто, обладающее константным временем доступа по индексу)
+     * оно явно должно быть аммортизированной константой. Либо я чего-то не понимаю.
+     * - Т.е. учитываются только операции с объектами в контейнере.
+     * В этом смысле получается O(1)O(1) в худшем.
+     * Если считать всё остальное, то да, тут получится только амортизированная сложность.
+     */
+}
+
 int main() {
     showArray();
     showVector();
+    showDeque();
     return 0;
 }
