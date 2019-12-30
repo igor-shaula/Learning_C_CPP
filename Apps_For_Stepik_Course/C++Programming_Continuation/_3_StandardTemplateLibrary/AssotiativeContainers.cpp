@@ -13,9 +13,10 @@ void println(T const &value) {
 
 #include <set>
 void showSet() {
-    /* std::set<T> stores ordered multitude as binary search tree
-     * operations of addition, deletion and search work for O(log(n)) time
-     * values in set cannot be changed - because otherwise we'd have to re-balance binary tree
+    /* std::set<T> stores ordered multitude as balanced binary search tree \
+     * operations of addition, deletion and search work for O(log(n)) time \
+     * values in set cannot be changed - because otherwise we'd have to re-balance binary tree \
+     * in other words values here are keys so changing values leads to changing keys \
      * common methods for a set: lower_bound(), upper_bound(), equal_range()
      */
     set<int> primes = {1, 2, 3, 5, 7, 11}; // each value is UNIQUE here
@@ -27,11 +28,32 @@ void showSet() {
     const pair<set<int>::iterator, bool> &pair = primes.insert(3); // we could use 'auto' here
     if (pair.second) println("3 is inserted");
     else println("3 is not inserted");
-    // iterator from insertion points to found/inserted value:
-    println(pair.first._M_node);
+    // iterator from insertion points to found (if not inserted) or inserted (if new) value:
+//    println(pair.first._M_node);
+}
+
+void showMultiset() {
+    // std::multiset<T> always inserts any quantity of any values - so here duplicates are allowed
+    multiset<int> fib = {0, 1, 1, 2, 3, 5, 8};
+    // count()
+    unsigned long count = fib.count(1);
+    println(count);
+    fib.insert(1); // iterator is returned - not a 'pair' like in 'set' - just 'iterator'
+    println(fib.count(1));
+    const multiset<int>::iterator &lowerBound = fib.lower_bound(1);
+//    println(lowerBound);
+    cout << *lowerBound << endl;
+    const multiset<int>::iterator &upperBound = fib.upper_bound(1);
+//    println(upperBound);
+    cout << *upperBound << endl;
+    const pair<multiset<int>::iterator, multiset<int>::iterator> &equalRange = fib.equal_range(1);
+//    println(equalRange);
+    cout << *equalRange.first << ' ' << *equalRange.second << endl;
+    // it's possible to get range of different values - but how to do it ???
 }
 
 int main() {
     showSet();
+    showMultiset();
     return 0;
 }
