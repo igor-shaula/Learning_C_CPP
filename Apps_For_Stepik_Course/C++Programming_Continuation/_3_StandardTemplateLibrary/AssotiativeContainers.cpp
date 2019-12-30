@@ -72,6 +72,31 @@ void showMap() {
     auto iterator = phonebook.find("Margo");
     if (iterator != phonebook.end())
         cout << "Margo found: " << iterator->second << endl;
+    /* оператор [], или тот же emplace внутри него создаёт пару, в которой первый элемент это ключ,
+     * а второй создаётся пустым, уже после чего в него присваивается значение.
+     * Почему бы вместо конструктора по умолчанию оператору [] не вызвать конструктор от переданного в него значения?
+     * Насколько мне известно, метод emplace у других контейнеров передаёт значение в конструктор класса элемента.
+     * Почему у map значение ключа создаётся каким-то хитрым образом,
+     * а "значение значения" создаётся обязательно конструктором по умолчанию, а потом присваиванием?
+     * - потому что в оператор [] на момент вызова не передаётся больше никакого значения кроме значения ключа.
+     * Присваивание происходит уже после возвращения оператором [] ссылки на созданное им значение,
+     * после чего к этой ссылке применяется оператор присваивания = с передаваемым уже в нём "значением значения"
+     */
+    // special methods for map: operator[] and at() - in detail:
+    auto it = phonebook.find("Margo");
+    if (it != phonebook.end()) it->second = 22334455; // writing new value to existing element
+    else phonebook.emplace("Margo", 22334455); // creating new object invoking its default constructor
+    // lines above could be minimized to:
+    phonebook["Margo"] = 22334455; // but here operations are the same - finding and assigning or insertion
+    /* some notes about operator[] in map:
+     * - works only with non-const map
+     * - requires presence of default constructor for type T
+     * - works for O(log(n)) time - longer then linear time as for arrays
+     * notes about method at() in map:
+     * - generates runtime error if given key is absent - so it cannot create new element
+     * - can work with const map and does not require presence of default constructor for type T
+     * - works for O(log(n)) time - longer then linear time as for arrays
+     */
 }
 
 void showMultimap() {
@@ -83,6 +108,9 @@ void showMultimap() {
     unsigned long count = phonebook.count("Homer");
     println(count);
     // in all other meanings and usage multimap is like multiset
+//    phonebook["Homer"] = 123;
+//    phonebook.at("Homer") = 123;
+    // we see that there is NO operator[] and method at() for multimap
 }
 
 int main() {
