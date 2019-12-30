@@ -55,14 +55,18 @@ void showMultiset() {
 #include <map>
 void showMap() {
     /* std::map stores ordered variety of key-value pairs which are ordered by key \
+     * in other words map stores reflection from multitude of keys to multitude of values \
+     * balanced binary search tree is used as realization of map - the same as for set \
      * as with std::set - map cannot keep duplicates - because they would have equal keys \
      * operations of addition, deletion and search work for O(log(n)) time - the same as in set \
      * typedef std::pair<const Key, T> value_type;
-     * also has methods: lower_bound(), upper_bound() and equal_range()
-     * unlike std::set, std::map has accessors: operator[] & at()
+     * also has methods: lower_bound(), upper_bound() and equal_range() \
+     * unlike std::set, std::map has accessors: operator[] & at() with access by value for both \
+     * there is no possibility to change the key af any value - like in std::set
      */
     map<string, int> phonebook;
     phonebook.emplace("Margo", 2123456);
+    phonebook.emplace("NotMargo", 2123456); // different key but equal value - it's OK for map
     phonebook.emplace("Lisa", 2123455);
     phonebook.emplace("Bart", 2123454);
     auto iterator = phonebook.find("Margo");
@@ -70,9 +74,21 @@ void showMap() {
         cout << "Margo found: " << iterator->second << endl;
 }
 
+void showMultimap() {
+    // std::multimap<T> is like map but allows duplicates:
+    multimap<string, int> phonebook;
+    phonebook.emplace("Homer", 123456);
+    phonebook.emplace("Homer", 123456); // duplicate value added intentionally
+    phonebook.emplace("Homer", 1234567);
+    unsigned long count = phonebook.count("Homer");
+    println(count);
+    // in all other meanings and usage multimap is like multiset
+}
+
 int main() {
     showSet();
     showMultiset();
     showMap();
+    showMultimap();
     return 0;
 }
