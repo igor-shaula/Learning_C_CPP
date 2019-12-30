@@ -52,8 +52,27 @@ void showMultiset() {
     // it's possible to get range of different values - but how to do it ???
 }
 
+#include <map>
+void showMap() {
+    /* std::map stores ordered variety of key-value pairs which are ordered by key \
+     * as with std::set - map cannot keep duplicates - because they would have equal keys \
+     * operations of addition, deletion and search work for O(log(n)) time - the same as in set \
+     * typedef std::pair<const Key, T> value_type;
+     * also has methods: lower_bound(), upper_bound() and equal_range()
+     * unlike std::set, std::map has accessors: operator[] & at()
+     */
+    map<string, int> phonebook;
+    phonebook.emplace("Margo", 2123456);
+    phonebook.emplace("Lisa", 2123455);
+    phonebook.emplace("Bart", 2123454);
+    auto iterator = phonebook.find("Margo");
+    if (iterator != phonebook.end())
+        cout << "Margo found: " << iterator->second << endl;
+}
+
 int main() {
     showSet();
     showMultiset();
+    showMap();
     return 0;
 }
