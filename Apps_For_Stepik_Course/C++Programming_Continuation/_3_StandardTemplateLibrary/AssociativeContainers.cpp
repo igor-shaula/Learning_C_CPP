@@ -53,6 +53,7 @@ void showMultiset() {
 }
 
 #include <map>
+#include <functional>
 void showMap() {
     /* std::map stores ordered variety of key-value pairs which are ordered by key \
      * in other words map stores reflection from multitude of keys to multitude of values \
@@ -141,10 +142,36 @@ void showComparators() {
     set<Person, PersonComparator> persons2; // our custom comparator will be used here
 }
 
+void showLambdaAsComparator() {
+    // Я тут поэкспериментировал в сторону того, чтобы разместить определение функции сравнения прям в конструкторе объекта.
+    // Попробовал скомпилировать следующий код:
+    struct Person { string name, surname; };
+
+//    std::set<
+//            Person, [](Person const &lhs, Person const &rhs) { return lhs.surname < rhs.surname; }
+//    > s3;
+    // Он не скомпилировался. Ожидаемо, т. к. лямбда-функция -- это всё-таки не тип.
+    // Поискал по инету, пока что обнаружил единственный способ это сделать:
+    std::set<
+            Person, std::function<bool(const Person &, const Person &)>
+    > s4([](Person const &lhs, Person const &rhs) {
+        return lhs.surname < rhs.surname;
+    });
+
+    // Ну или так:
+    auto PersonCompLambda = [](Person const &lhs, Person const &rhs) { return lhs.surname < rhs.surname; };
+    std::set<Person, decltype(PersonCompLambda)> s5(PersonCompLambda);
+
+    // Какой из этих способов предпочтительнее ?
+    // - я бы выбрал второй, т.к. function в данном случае излишен.
+}
+
 int main() {
     showSet();
     showMultiset();
     showMap();
     showMultimap();
+    showComparators();
+    showLambdaAsComparator();
     return 0;
 }
