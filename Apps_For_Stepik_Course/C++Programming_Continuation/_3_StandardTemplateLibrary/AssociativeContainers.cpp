@@ -6,8 +6,8 @@ void println(T const &value) {
     cout << value << endl;
 }
 
-/* assotiative containers can be ORDERED (><) & UNORDERED (require hash-function)
- * common methods for assotiative containers:
+/* associative containers can be ORDERED (><) & UNORDERED (require hash-function)
+ * common methods for associative containers:
  * find by key , count by key , erase by key
  */
 
@@ -87,7 +87,8 @@ void showMap() {
     if (it != phonebook.end()) it->second = 22334455; // writing new value to existing element
     else phonebook.emplace("Margo", 22334455); // creating new object invoking its default constructor
     // lines above could be minimized to:
-    phonebook["Margo"] = 22334455; // but here operations are the same - finding and assigning or insertion
+    phonebook["Margo"] = 11223344; // but here operations are the same - finding and assigning or insertion
+    println(phonebook["Margo"]);
     /* some notes about operator[] in map:
      * - works only with non-const map
      * - requires presence of default constructor for type T
@@ -111,6 +112,33 @@ void showMultimap() {
 //    phonebook["Homer"] = 123;
 //    phonebook.at("Homer") = 123;
     // we see that there is NO operator[] and method at() for multimap
+}
+
+void showComparators() {
+    // by default 'set' and 'map' have built-in default comparator 'less' that just invokes 'operator<'
+    // but we can define our own comparator - for that we can reload operator<
+    struct Person {
+        Person(const char *name, const char *surname) : name(name), surname(surname) {}
+        string name, surname;
+        // we can define operator< here (with 1 argument of course)
+        bool operator<(Person const &other) {
+            return name < other.name || (name == other.name && surname < other.surname);
+        }
+    };
+//    bool operator<(Person const &p1, Person const &p2) {
+//        return p1.name < p2.name || (p1.name == p2.name && p1.surname < p2.surname);
+//    }
+    set<Person> persons1; // default comparator will be used here
+//    persons1.emplace("a", "b");
+//    persons1.emplace(Person("a", "b")); // insert also doesn't work
+
+    // if we need another comparator - we can use a boolean method from another structure:
+    struct PersonComparator {
+        bool operator()(Person const &p1, Person const &p2) const {
+            return p1.surname < p2.surname; // here we do not need comparison by names
+        }
+    };
+    set<Person, PersonComparator> persons2; // our custom comparator will be used here
 }
 
 int main() {
