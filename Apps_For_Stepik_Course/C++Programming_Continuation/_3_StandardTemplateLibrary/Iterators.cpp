@@ -57,8 +57,55 @@ void showDecreasingIterator() {
     std::cout << /*ptrdiff_t в MSVC2015, не size_t*/ std::distance(v.end(), v.begin()) << std::endl; // -3
 }
 
+/* every iterator has the following categories - inside iterator.h there are following structures:
+ * template<class Iterator>
+ * struct iterator_traits {
+ *      typedef difference_type     Iterator::difference_type; // for all non-RAI this is void
+ *      typedef value_type          Iterator::value_type;
+ *      typedef pointer             Iterator::pointer;
+ *      typedef reference           Iterator::reference;
+ *      typedef iterator_category   Iterator::iterator_category; // RAI, BDI, FI, II, OI
+ * };
+ *
+ * specialization for upper template - used for pointers only
+ * this specialization is the only reason for upper structure's very existence
+ *
+ * template<class T>
+ * struct iterator_traits<T *> {
+ *      typedef difference_type     ptrdiff_t; // what is it ???
+ *      typedef value_type          T;
+ *      typedef pointer             T*;
+ *      typedef reference           T&;
+ *      typedef iterator_category   random_access_iterator_tag;
+ * };
+ */
+
+#include <iterator>
+using namespace std;
+void showIteratorsCategory() { // iterator_traits
+    vector<int> vector = {1, 2, 3, 4, 5};
+    // the question is how to use these iterator traits - with specified types (not 'auto')
+    auto iBegin = vector.begin();
+    auto iEnd = vector.end();
+    auto iDistance = distance(iBegin, iEnd);
+    cout << iDistance << endl; // 5 in result for given vector
+}
+
+/* ? Что значит разность двух итераторов, если шаблон определен для одного итератора. Откуда там второй появился?
+ * - Мы с использованием шаблона определяем класс итератора для нашего контейнера.
+ * Дальше мы можем использовать несколько объектов данного класса.
+ * ? Мы определили класс итератора. Он один там. А разность между между ним и чем имеется ввиду?
+ * - У нас есть класс итератора. Может быть много итераторов - объектов данного класса.
+ * Например, у нас есть список, есть класс итератора этого списка.
+ * Есть итераторы этого класса: на начало списка, на конец списка, на середину списка...
+ * Вот для этих итераторов (которые все одного класса) можно считать разность. Это похоже на арифметику указателей.
+ * = теперь понятно. В нем можно хранить разницу:
+ * typename std::iterator_traits<U>::difference_type n = std::distance(first_iterator, last_iterator);
+ * */
+
 int main() {
     showIterators();
     showDecreasingIterator();
+    showIteratorsCategory();
     return 0;
 }
