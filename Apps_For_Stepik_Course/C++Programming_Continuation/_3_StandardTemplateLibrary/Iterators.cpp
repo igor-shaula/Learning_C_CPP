@@ -132,9 +132,46 @@ void advance(I &i, size_t n) {
  * Оператор typename говорит, что это имя типа (a не переменная).
  */
 
+#include <list>
+// idea is very simple, also common and reverse iterators can be converted into each other
+void showReverseIterators() {
+    // reverse iterators are possible only for containers with RAI & BDI
+    list<int> l = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    // using objects of type list<int>::reverse_iterator
+    for (auto i = l.rbegin(); i != l.rend(); ++i)
+        cout << *i << endl;
+    // conversion from normal to reverse iterators:
+    list<int>::iterator i = l.begin(); // could use 'auto' here for type
+    advance(i, 5); // now 'i' points to 5
+    list<int>::reverse_iterator ri(i); // implicitly creating object via constructor - but it points to 4
+    // in fact iterator is meant to point between elements - like between 4 and 5 in our sample
+    // that's why normal and reverse show different results - they take element to the right ot them
+    // back conversion from reverse to normal iterator require using method base():
+    i = ri.base();
+    // this is needed because backward conversion is dangerous - possible conversion iterator -> pointer
+    // in some cases normal iterator can be a simple pointer - and we may not have its constructor,
+    // and we better avoid casting from iterator to pointer - it can be difficult to implement
+
+    /* Уточнение: под gcc строчка
+     std::list<int>::reverse_iterator ri = i;
+     не компилиться, нужно явно указывать преобразование
+     std::list<int>::reverse_iterator ri = (std::list<int>::reverse_iterator)(i);
+     - спасибо, поправим на
+     std::list<int>::reverse_iterator ri(i);
+
+     ABOUT ITERATORS AND POINTERS:
+     - в чем опасность преобразования итератора к указателю?
+     если бы такое преобразование было, то итератор можно было бы проинициализировать от любого указателя на этот тип.
+     - Если правильно понял, можно было бы проинициализировать итератор указателем, который еще никуда не ссылается
+     и получить инвалидный итератор?
+     или, который ссылается элемент такого же типа, но не лежащий в контейнере.
+     */
+}
+
 int main() {
     showIterators();
     showDecreasingIterator();
     showIteratorTraits();
+    showReverseIterators();
     return 0;
 }
