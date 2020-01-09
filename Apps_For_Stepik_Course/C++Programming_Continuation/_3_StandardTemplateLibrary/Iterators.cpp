@@ -125,6 +125,13 @@ void advance(I &i, size_t n) {
     // object is created - with type dependent from type I - it will be RAI if possible
 }
 
+/* Как я понял, iterator_traits<I>::iterator_category -- тип (typedef),
+ * добавив справа () -- получаем переменную/объект этого типа. Тогда зачем перед этим стоит typename?
+ * - Если кратко, то компилятор не знает, что означает const_iterator.
+ * Синтаксис схож как для переменной, так и для объявления типов (typedef).
+ * Оператор typename говорит, что это имя типа (a не переменная).
+ */
+
 int main() {
     showIterators();
     showDecreasingIterator();
