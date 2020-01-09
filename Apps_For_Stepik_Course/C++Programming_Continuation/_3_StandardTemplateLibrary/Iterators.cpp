@@ -80,9 +80,8 @@ void showDecreasingIterator() {
  * };
  */
 
-#include <iterator>
 using namespace std;
-void showIteratorsCategory() { // iterator_traits
+void showIteratorTraits() {
     vector<int> vector = {1, 2, 3, 4, 5};
     // the question is how to use these iterator traits - with specified types (not 'auto')
     auto iBegin = vector.begin();
@@ -103,9 +102,32 @@ void showIteratorsCategory() { // iterator_traits
  * typename std::iterator_traits<U>::difference_type n = std::distance(first_iterator, last_iterator);
  * */
 
+#include <iterator>
+/* there are 5 well known iterator categories (as types):
+    struct random_access_iterator_tag {};
+    struct bidirectional_iterator_tag {};
+    struct forward_iterator_tag {};
+    struct input_iterator_tag {};
+    struct output_iterator_tag {};
+ */
+// now how can we use these iterator categories - via most suitable overloaded function selection:
+template<class I>
+void advanceImpl(I &i, size_t n, random_access_iterator_tag) { // setting specialization in overloading
+    i += n; // doing wanted shift in only one operation - in constant time
+}
+template<class I>
+void advanceImpl(I &i, size_t n, ...) { // this overloaded form will have the lowest priority among all
+    for (size_t k = 0; k != n; ++k, ++i); // traversing container in linear time
+}
+template<class I>
+void advance(I &i, size_t n) {
+    advanceImpl(i, n, iterator_traits<I>::iterator_category()); // some magic happens here:
+    // object is created - with type dependent from type I - it will be RAI if possible
+}
+
 int main() {
     showIterators();
     showDecreasingIterator();
-    showIteratorsCategory();
+    showIteratorTraits();
     return 0;
 }
