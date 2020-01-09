@@ -133,6 +133,7 @@ void advance(I &i, size_t n) {
  */
 
 #include <list>
+#include <fstream>
 // idea is very simple, also common and reverse iterators can be converted into each other
 void showReverseIterators() {
     // reverse iterators are possible only for containers with RAI & BDI
@@ -168,10 +169,37 @@ void showReverseIterators() {
      */
 }
 
+// lets's say that we have a database and we need to make a query and get certain values from it:
+template<class OutIterator>
+struct Database {
+    void findByName(string name, OutIterator oi) {} // result of search will be stored in 'oi' object
+};
+struct Person {};
+void showAdvancedIterators() {
+    /* advanced iterators can be used for:
+     * filling containers - back_inserter , front_inserter , inserter
+     * or for work with streams - istream_iterator , ostream_iterator
+     */
+    // 1. inserters - they invoke push_back() for back_inserter and push_front() for front_inserter
+    vector<Person> result; // we don't know its size - it can be anything
+    Database<decltype(back_inserter(result))> database; // typing is added to compile
+    database.findByName("Rick", back_inserter(result));
+//    Database::findByName("Rick", back_inserter(result)); // this does not compile
+    // 2. streaming:
+    ifstream file("input.txt");
+    vector<double> vd( // using existing constructor from two iterators
+            (istream_iterator<double>(file)), // these extra brackets are really needed to compile
+            istream_iterator<double>());
+    // now all doubles from this file are added to 'vd' object
+    copy(vd.begin(), vd.end(), ostream_iterator<double>(cout, "\n"));
+    // here algorithm 'copy' is used - it will be reviewed some later
+}
+
 int main() {
     showIterators();
     showDecreasingIterator();
     showIteratorTraits();
     showReverseIterators();
+    showAdvancedIterators();
     return 0;
 }
