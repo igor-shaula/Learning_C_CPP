@@ -48,8 +48,33 @@
  - search - finds place of inclusion of second sequence in first and returns this place
  - search_n - search for n substrings in a row inside greater given sequence
  - find_end (search_last) - returns last place of substring's inclusion in given string
+ */
 
- * algorithms for sorted sequences:
+#include<vector>
+#include <iostream>
+using namespace std;
+void showNonModifyingAlgorithms() {
+    // 1
+    vector<int> vi = {2, 3, 5, 7, 13, 17, 19}; // 11 is absent in this row of simple numbers
+    size_t evenCount = count_if(vi.begin(), vi.end(), [](int x) { return x % 2 == 0; }); // lambda as predicate
+    cout << evenCount << endl; // 1 - because the only even number here is 2
+    // now we want to insert a new element with value 11 into the right place of our existing vector
+    auto it11 = lower_bound(vi.begin(), vi.end(), 11); // now we have this iterator ready for use
+    vi.insert(it11, 11);
+    size_t count11 = count(vi.begin(), vi.end(), 11);
+    cout << count11 << endl;
+    // 2
+    vector<string> vs = {"name1", "name2", "name3"};
+    for_each(vs.begin(), vs.end(), [](string &s) { cout << s << endl; });
+//    auto it1 = find(vs, "name1");
+    auto it1 = find(vs.begin(), vs.end(), "name1");
+    cout << "found: " << it1.operator*() << endl;
+    string names[] = {"name4", "name5", "name1"};
+    auto it = find_first_of(vs.begin(), vs.end(), names, names + 3);
+    cout << "first of names: " << *it << endl;
+}
+
+/* continuation of non-modifying algorithms - now for sorted sequences:
  - lower_bound , upper_bound , equal_range - they search for boundaries and take logarithmic time
  * these algorithms work with multitudes as with sorted sequences:
  - set_intersection , set_difference , set_union , set_symmetric_difference
@@ -57,3 +82,8 @@
  - binary_search - checks if element is inside given sequence and returns bool
  - includes - checks if one sequence is a subsequence of another given sequence
  */
+
+int main() {
+    showNonModifyingAlgorithms();
+    return 0;
+}
