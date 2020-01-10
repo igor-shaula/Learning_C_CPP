@@ -187,6 +187,7 @@ void showAdvancedIterators() {
 //    Database::findByName("Rick", back_inserter(result)); // this does not compile
     // 2. streaming:
     ifstream file("input.txt");
+    cout << "input is read" << file.get() << endl;
     vector<double> vd( // using existing constructor from two iterators
             (istream_iterator<double>(file)), // these extra brackets are really needed to compile
             istream_iterator<double>());
