@@ -23,9 +23,47 @@ using namespace std;
  - iota - lets generate sequences of numbers for example
  */
 
+#include <vector>
 #include <algorithm>
+#include <numeric>
 void showModifyingAlgorithms() {
+    size_t size = 10;
 
+    vector<int> a(size);
+    // filling first vector with random values:
+    generate(a.begin(), a.end(), []() { return rand() % 10; }); // cannot use 'size' in lambda
+    cout << "random with generate:\t\t";
+    for (size_t i = 0; i != size; ++i)
+        cout << a[i] << ' ';
+    cout << endl;
+
+    vector<int> b(size);
+    // filling second vector with sequential values:
+    iota(b.begin(), b.end(), 0); // starting from 0
+    cout << "sequence with iota:\t\t";
+    for (size_t i = 0; i != size; ++i)
+        cout << b[i] << ' ';
+    cout << endl;
+
+    vector<int> c(size);
+    // c[i] = a[i] * b[i];
+    transform(a.begin(), a.end(), b.begin(), c.begin(), multiplies<>());
+    cout << "multiplication with transform:\t";
+    for (size_t i = 0; i != size; ++i)
+        cout << c[i] << ' ';
+    cout << endl;
+
+    // c[i] *= 2;
+    transform(c.begin(), c.end(), c.begin(), [](int x) { return x * 2; });
+    cout << "second transformation:\t\t";
+    for (size_t i = 0; i != size; ++i)
+        cout << c[i] << ' ';
+    cout << endl;
+
+    // sum of c[i];
+    int sum = accumulate(c.begin(), c.end(), 0);
+    cout << "sum is: " << sum << endl;
+    // every launch gives result 454 for unknown reason ...
 }
 
 int main() {

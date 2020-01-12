@@ -8,4 +8,4 @@ add_executable(_1_AdvancedFeatures
 add_executable(_2_NewFeaturesOf11And14
         _2_NewFeaturesOf11And14/MoveInsteadCopy.cpp)
 add_executable(_3_StandardTemplateLibrary
-        _3_StandardTemplateLibrary/NonModifyingAlgorithms.cpp _3_StandardTemplateLibrary/ModifyingAlgorithms.cpp)
+        _3_StandardTemplateLibrary/ModifyingAlgorithms.cpp)
