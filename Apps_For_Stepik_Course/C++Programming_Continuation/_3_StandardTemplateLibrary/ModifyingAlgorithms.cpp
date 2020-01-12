@@ -24,41 +24,37 @@ using namespace std;
  */
 
 #include <vector>
+size_t size = 10;
+
+void printVector(const string &s, vector<int> const &vi) {
+    cout << s;
+    for (size_t i = 0; i != size; ++i)
+        cout << vi[i] << ' ';
+    cout << endl;
+}
+
 #include <algorithm>
 #include <numeric>
 void showModifyingAlgorithms() {
-    size_t size = 10;
 
     vector<int> a(size);
     // filling first vector with random values:
-    generate(a.begin(), a.end(), []() { return rand() % 10; }); // cannot use 'size' in lambda
-    cout << "random with generate:\t\t";
-    for (size_t i = 0; i != size; ++i)
-        cout << a[i] << ' ';
-    cout << endl;
+    generate(a.begin(), a.end(), []() { return rand() % size; });
+    printVector("random with generate:\t\t", a);
 
     vector<int> b(size);
     // filling second vector with sequential values:
     iota(b.begin(), b.end(), 0); // starting from 0
-    cout << "sequence with iota:\t\t";
-    for (size_t i = 0; i != size; ++i)
-        cout << b[i] << ' ';
-    cout << endl;
+    printVector("sequence with iota:\t\t", b);
 
     vector<int> c(size);
     // c[i] = a[i] * b[i];
     transform(a.begin(), a.end(), b.begin(), c.begin(), multiplies<>());
-    cout << "multiplication with transform:\t";
-    for (size_t i = 0; i != size; ++i)
-        cout << c[i] << ' ';
-    cout << endl;
+    printVector("multiplication with transform:\t", c);
 
     // c[i] *= 2;
     transform(c.begin(), c.end(), c.begin(), [](int x) { return x * 2; });
-    cout << "second transformation:\t\t";
-    for (size_t i = 0; i != size; ++i)
-        cout << c[i] << ' ';
-    cout << endl;
+    printVector("second transformation:\t\t", c);
 
     // sum of c[i];
     int sum = accumulate(c.begin(), c.end(), 0);
