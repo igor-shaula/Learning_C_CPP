@@ -62,7 +62,43 @@ void showModifyingAlgorithms() {
     // every launch gives result 454 for unknown reason ...
 }
 
+#include <list>
+void showRemovingElements() {
+    vector<int> v = {2, 5, 1, 5, 8, 5, 2, 5, 8};
+    cout << "initial size: " << v.size() << endl;
+    remove(v.begin(), v.end(), 5); // it returns iterator to the end of modified sequence
+    // in fact work here is done not with container but with its iterators viewed as a sequence
+    cout << "size after remove: " << v.size() << endl; // 9
+    printVector("after removing all 5: ", v);
+    // for all containers except 'list' erase-remove idiom should be used for deletion of elements:
+    v.erase(remove(v.begin(), v.end(), 5), v.end());
+    // here result of inner 'remove' acts like begin iterator for a sequence of elements to delete
+    cout << "size after erase-remove: " << v.size() << endl; // 7 - and one '5' is present there
+    printVector("after erase-remove: ", v);
+
+    // only for std::list<> remove() works as intended - for list erase-remove idiom is not needed
+    list<int> l = {2, 5, 1, 5, 8, 5, 2, 5, 8};
+    l.remove(5);
+    cout << "size after removing from list: " << l.size() << endl;
+
+    // removing of duplicates:
+    vector<int> vd = {1, 22, 333, 4444, 55555};
+    size = 5;
+    vd.erase(unique(vd.begin(), vd.end()), vd.end());
+    printVector("has to be unique: ", vd); // not unique in fact
+
+    // removing from list:
+    list<int> ld = {1, 22, 333, 4444, 55555};
+    ld.unique();
+    cout << ld.end().operator*() << endl; // checking last element
+    list<int>::iterator it;
+    // this fails on runtime fact...
+//    auto sum = partial_sum(ld.begin(), ld.end(), it);
+//    cout << *sum << endl;
+}
+
 int main() {
     showModifyingAlgorithms();
+    showRemovingElements();
     return 0;
 }
