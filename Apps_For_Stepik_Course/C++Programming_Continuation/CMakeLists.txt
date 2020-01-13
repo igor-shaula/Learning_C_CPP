@@ -9,3 +9,5 @@ add_executable(_2_NewFeaturesOf11And14
         _2_NewFeaturesOf11And14/MoveInsteadCopy.cpp)
 add_executable(_3_StandardTemplateLibrary
         _3_StandardTemplateLibrary/ModifyingAlgorithms.cpp)
+add_executable(_4_ErrorProcessing
+        _4_ErrorProcessing/Test_StaticAssert.cpp)
