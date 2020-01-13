@@ -97,8 +97,32 @@ void showRemovingElements() {
 //    cout << *sum << endl;
 }
 
+#include <map>
+void showRemovingFromAssotiativeContainers() {
+    /* possible: erasing by iterator and erasing by key
+     * if we want to 'remove_if' - it will fail because this algorithm changes order of elements
+     * - but in assotiative containers there is no order - so we have a problem here
+     */
+    map<string, int> m; // here we'll try to remove element with value 0
+    // wrong variant:
+    for (auto it = m.begin(); it != m.end(); ++it) // problem will be here after erasing 'it'
+        if (it->second == 0)
+            m.erase(it); // after erasing this iterator it will be impossible to increment it
+    // correct variant:
+    for (auto it = m.begin(); it != m.end();) // no incrementing here
+        if (it->second == 0)
+            it = m.erase(it);
+        else ++it; // safely erasing
+    // alternative variant for old standard:
+    for (map<string, int>::iterator it = m.begin(); it != m.end();) // no increment here
+        if (it->second == 0)
+            m.erase(it++); // postfix form of incrementing is crucial here - because old value is needed
+        else ++it;
+}
+
 int main() {
     showModifyingAlgorithms();
     showRemovingElements();
+    showRemovingFromAssotiativeContainers();
     return 0;
 }
