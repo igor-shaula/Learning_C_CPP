@@ -10,4 +10,4 @@ add_executable(_2_NewFeaturesOf11And14
 add_executable(_3_StandardTemplateLibrary
         _3_StandardTemplateLibrary/ModifyingAlgorithms.cpp)
 add_executable(_4_ErrorProcessing
-        _4_ErrorProcessing/Task_WhichError.cpp)
+        _4_ErrorProcessing/Task_StringNoexcept.cpp)
