@@ -1,27 +1,21 @@
 #include <stdio.h>
 
-main()
-{
+int main() {
     int spaces = 0;
     int tabs = 0;
     int eols = 0;
 
     int c;
-    while ((c = getchar()) != EOF)
-    {
+    while ((c = getchar()) != EOF) {
         // printf("\n");
-        if (c == ' ')
-        {
+        if (c == ' ') {
             spaces++;
-        }
-        else if (c == '\t')
-        {
+        } else if (c == '\t') {
             tabs++;
-        }
-        else if (c == '\n')
-        {
+        } else if (c == '\n') {
             eols++;
             printf("TOTAL spaces: %d, tabs: %d, lines: %d\n", spaces, tabs, eols);
         }
     }
+    return 0;
 }

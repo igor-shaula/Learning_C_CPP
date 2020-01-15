@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int main()
-{
+int main() {
     // printf(".\q.\n");
     // printf(".\w.\n");
     printf("e\e.\n");
@@ -49,4 +48,5 @@ int main()
     printf("0\0.\n");
     // printf(".\-.\n");
     // printf(".\=.\n");
+    return 0;
 }

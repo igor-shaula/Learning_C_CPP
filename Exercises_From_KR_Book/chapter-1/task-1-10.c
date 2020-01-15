@@ -1,23 +1,19 @@
 #include <stdio.h>
-main()
-{
+
+int main() {
     int c;
-    while ((c = getchar()) != EOF)
-    {
-        if (c == '\t')
-        {
+    while ((c = getchar()) != EOF) {
+        if (c == '\t') {
             putchar('\\');
             putchar('t');
-        }
-        else if (c == '\b') // how to detect this symbol ???
+        } else if (c == '\b') // how to detect this symbol ???
         {
             putchar('\\');
             putchar('b');
-        }
-        else if (c == '\\')
-        {
+        } else if (c == '\\') {
             putchar('\\');
         }
         putchar(c);
     }
+    return 0;
 }

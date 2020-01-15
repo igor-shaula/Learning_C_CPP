@@ -3,29 +3,24 @@
 #define IN 1
 #define OUT 0
 
-main()
-{
+int main() {
     int c, nl, nw, ns, state;
 
     state = OUT;
     nl = nw = ns = 0;
 
-    while ((c = getchar() != EOF))
-    {
+    while ((c = getchar() != EOF)) {
         ++ns;
-        if (c == '\n' || c == ' ' || c == '\t')
-        {
+        if (c == '\n' || c == ' ' || c == '\t') {
             state = OUT;
-            if (c == '\n')
-            {
+            if (c == '\n') {
                 ++nl;
             }
-        }
-        else if (state == OUT)
-        {
+        } else if (state == OUT) {
             ++nw;
             state = IN;
         }
     }
     printf("lines:%d ,words%d ,symbols%d\n", nl, nw, ns);
+    return 0;
 }

@@ -1,19 +1,14 @@
 #include <stdio.h>
 
-main()
-
-{
+int main() {
     int c = 0;
 
-    while ((c = getchar()) != '\n')
-    {
-        if (c == ' ' || c == '\t')
-        {
+    while ((c = getchar()) != '\n') {
+        if (c == ' ' || c == '\t') {
             putchar('\n');
-        }
-        else
-        {
+        } else {
             putchar(c);
         }
     }
+    return 0;
 }

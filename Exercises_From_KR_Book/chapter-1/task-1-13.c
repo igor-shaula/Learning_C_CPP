@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-main() {
+int main() {
 
     int c;
     // int word_lengths[];
@@ -8,18 +8,14 @@ main() {
     int letter_counter = 0;
     int word_counter = 0;
 
-    while ((c = getchar()) != '\n')
-    {
-        if (c == ' ' || c == '\t')
-        {
+    while ((c = getchar()) != '\n') {
+        if (c == ' ' || c == '\t') {
             inside_word = 0;
-        }
-        else
-        {
+        } else {
             inside_word = 1;
         }
-        
-        if(inside_word == 1) {
+
+        if (inside_word == 1) {
             letter_counter++;
         } else {
             word_counter++;
@@ -28,4 +24,5 @@ main() {
         // word_lengths = new array ...
     }
     printf("words totally: %d", word_counter);
+    return 0;
 }
