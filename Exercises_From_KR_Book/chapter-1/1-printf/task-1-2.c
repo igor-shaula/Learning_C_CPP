@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+int main() {
+    // 1-printf(".\q.\n");
+    // 1-printf(".\w.\n");
+    printf("e\e.\n");
+    printf("r\r.\n");
+    printf("t\t.\n");
+    // 1-printf(".\y.\n");
+    // 1-printf(".\u.\n");
+    // 1-printf(".\i.\n");
+    // 1-printf(".\o.\n");
+    // 1-printf(".\p.\n");
+    // 1-printf(".\[.\n");
+    // 1-printf(".\].\n");
+    printf("backslash\\.\n");
+    printf("a\a.\n");
+    // 1-printf(".\s.\n");
+    // 1-printf(".\d.\n");
+    printf("f\f.\n");
+    // 1-printf(".\g.\n");
+    // 1-printf(".\h.\n");
+    // 1-printf(".\j.\n");
+    // 1-printf(".\k.\n");
+    // 1-printf(".\l.\n");
+    // 1-printf(".\;.\n");
+    printf("'\'.\n");
+    // 1-printf(".\z.\n");
+    // 1-printf(".\x.\n");
+    // 1-printf(".\c.\n");
+    printf("v\v.\n");
+    printf("b\b.\n");
+    printf("n\n.\n");
+    // 1-printf(".\m.\n");
+    // 1-printf(".\,.\n");
+    // 1-printf(".\..\n");
+    // 1-printf(".\/.\n");
+    // 1-printf(".\`.\n");
+    printf("1\1.\n");
+    printf("2\2.\n");
+    printf("3\3.\n");
+    printf("4\4.\n");
+    printf("5\5.\n");
+    printf("6\6.\n");
+    printf("7\7.\n");
+    // 1-printf(".\8.\n");
+    // 1-printf(".\9.\n");
+    printf("0\0.\n");
+    // 1-printf(".\-.\n");
+    // 1-printf(".\=.\n");
+    return 0;
+}

@@ -7,7 +7,7 @@ int main() {
 
     int c;
     while ((c = getchar()) != EOF) {
-        // printf("\n");
+        // 1-printf("\n");
         if (c == ' ') {
             spaces++;
         } else if (c == '\t') {
