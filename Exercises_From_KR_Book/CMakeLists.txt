@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-1/1-printf/task-1-2.c)
+        chapter-1/3-getchar-putchar/sample-1-5-1-file-copying.c)
