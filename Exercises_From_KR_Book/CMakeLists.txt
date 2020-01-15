@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-1/3-getchar-putchar/sample-1-5-2-character-count-1.c)
+        chapter-1/3-getchar-putchar/sample-1-5-2-character-count-2.c)
