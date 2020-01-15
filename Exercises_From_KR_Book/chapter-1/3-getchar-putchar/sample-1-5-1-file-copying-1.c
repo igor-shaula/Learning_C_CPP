@@ -3,6 +3,7 @@
 #include <stdio.h>
 int main() {
     int c;
+    // type `int` is chosen instead of `char` for having ability to use EOF which is greater than `char`
     c = getchar();
     while (c != EOF) {
         putchar(c);
