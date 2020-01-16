@@ -1,3 +1,5 @@
+// alternative copying from input stream to output while replacing tabs, backspaces and backslashes with '\'
+
 #include <stdio.h>
 
 int main() {
@@ -9,16 +11,13 @@ int main() {
             putchar('\\');
             putchar('t');
             needToDeleteSpace++;
-        } else if (c == '\b') // how to detect this symbol ???
-        {
+        } else if (c == '\b') { // how to detect this symbol ???
             putchar('\\');
             putchar('b');
-        } else if (c == '\\') {
+        } else if (c == '\\')
             putchar('\\');
-        }
-        if (needToDeleteSpace == 0) {
+        if (needToDeleteSpace == 0)
             putchar(c);
-        }
     }
     return 0;
 }

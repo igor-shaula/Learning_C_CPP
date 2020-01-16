@@ -1,3 +1,5 @@
+// just output of EOF value
+
 #include <stdio.h>
 
 int main() {
