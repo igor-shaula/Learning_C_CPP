@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <float.h>
 
 void printUnsignedRange(int bytes) {
     int bits = 8 * bytes;
@@ -14,6 +15,36 @@ void printSignedRange(int bytes) {
     long long from = -(1LL << (bits - 1));
     long long to = (1LL << (bits - 1)) - 1;
     printf("from %lld to %lld\n", from, to);
+}
+
+void printUpperFloatLimit() {
+    float f = 1.0f;
+    unsigned long long counter = 0;
+    while (f >= 0.0f) {
+        printf("%.40f %llu\n", f, counter); // `inf`
+        if ((f * 10.0f) == f) {
+            printf("last growing value: %f %llu\n", f, counter); // `inf`
+            break;
+        } else {
+            f *= 10.0f;
+            ++counter;
+        }
+    }
+}
+
+void printLowerFloatLimit() {
+    float f = 1.0f;
+    unsigned long long counter = 0;
+    while (f >= 0.0f) {
+        printf("%.80f %llu\n", f, counter);
+        if ((f * 0.1f) == f) {
+            printf("last falling value: %.80f %llu\n", f, counter);
+            break;
+        } else {
+            f *= 0.1f;
+            ++counter;
+        }
+    }
 }
 
 int main() {
@@ -59,5 +90,10 @@ int main() {
     printf("Range of unsigned long long: ");
     printUnsignedRange(sizeof(unsigned long long));
     printf("unsigned range for int from limits.h: %llu\n", ULLONG_MAX);
+    // all for float:
+    printUpperFloatLimit();
+    printLowerFloatLimit();
+    printf("%d\n", 1000000000000.0f == 10.0f * 100000000000.0f);
+    printf("%d\n", 0.01f == 1.0f * 0.01f);
     return 0;
 }
