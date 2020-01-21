@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-2/sample-2-7-string-to-int-conversion.c)
+        chapter-2/sample-2-7-2-to-lower-case-conversion.c)
