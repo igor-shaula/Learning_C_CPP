@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-1/4-arrays/sample-1-10-find-longest-line.c)
+        chapter-2/task-2-1-type-limits.c)
