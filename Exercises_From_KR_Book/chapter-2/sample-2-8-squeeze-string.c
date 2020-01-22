@@ -2,39 +2,47 @@
 
 #include <stdio.h>
 
-char *squeezeFromBook(char s[], char c) { // it's `void` in the book
-    // realisation the same as in the book - but for some reason it does not work
+#define MAX_LENGTH 100
+
+char t[MAX_LENGTH];
+
+int getLength(const char a[]) {
+    int length = 0;
+    while (a[length++] != '\0');
+    printf("length is: %d\n", length);
+    return length;
+}
+
+void squeezeFromBook(char s[], char c) { // it's `void` in the book
     int i, j;
     for (i = j = 0; s[i] != '\0'; i++)
         if (s[i] != c)
-            s[j++] = s[i]; // segmentation fault here
-    s[j] = '\0';
-    return s;
+            t[j++] = s[i]; // segmentation fault here
+    t[j] = '\0';
 }
 
-char *squeeze(char s[], char c) { // it's `void` in the book
-    // realisation the same as in the book - but for some reason it does not work
-    int i, shift;
+void squeeze(char s[], char c) { // it's `void` in the book
+    // realisation differs from given by book in using second/global array for result
+    int i, shift = 0;
     char tmpChar;
-    int length = 0;
-    while (s[length++] != '\0');
-    printf("length is: %d\n", length);
-    char t[length];
     for (i = 0; (tmpChar = s[i]) != '\0'; i++) {
-        putchar(tmpChar);
-        if (s[i] == c) // need to skip this character and write later in place of it
+        if (tmpChar == c) // need to skip this character and write later in place of it
             ++shift;
         else
-//            s[i - shift] = tmpChar;
-            t[i - shift] = tmpChar; // interrupted by signal 11: SIGSEGV
-        // it seems that there is no difference between concrete array that we're using
+            t[i - shift] = tmpChar; // if using initial array - interrupted by signal 11: SIGSEGV
     }
     t[i - shift] = '\0';
-    return t;
+}
+
+void fillArray(char a[]) {
+    if (a == 0) return;
+    while (*a != '0') *a = '0';
 }
 
 int main() {
-    char *p = squeeze("asdf", 's');
-    printf("%s\n", p);
+    fillArray(t);
+//    squeezeFromBook("asdf", 's');
+    squeeze("asdf", 's');
+    printf("%s\n", t);
     return 0;
 }
