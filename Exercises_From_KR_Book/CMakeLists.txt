@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-2/sample-2-7-3-random.c)
+        chapter-2/task-2-3-from-HEX-to-INT.c)

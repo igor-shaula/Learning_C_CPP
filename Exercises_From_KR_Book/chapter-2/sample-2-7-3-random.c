@@ -16,4 +16,5 @@ int random() {
 int main() {
     initializeRandom(5);
     printf("%d", random());
+    return 0;
 }
