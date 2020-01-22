@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        chapter-2/sample-2-8-squeeze-string.c)
+        chapter-2/task-2-4-filter-string-by-string.c)
