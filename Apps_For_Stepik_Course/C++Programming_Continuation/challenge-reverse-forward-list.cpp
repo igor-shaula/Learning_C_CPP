@@ -60,8 +60,8 @@ void prepareForwardList(forward_list<Node> &list) {
         currentNode->setValue(c);
         currentNode->addNewNode(new Node());
         putchar(currentNode->getValue());
-        list.emplace_front(*currentNode);
-//        list.push_front(*currentNode);
+//        list.emplace_front(*currentNode);
+        list.push_front(*currentNode);
         ++size;
     }
     putchar('\n');
@@ -69,32 +69,28 @@ void prepareForwardList(forward_list<Node> &list) {
     cout << "list size in the end of preparation: " << getSize(list) << endl;
 }
 
-void checkInitialList(Node *const startingNode) {
-
-    if (startingNode != nullptr) {
-        cout << startingNode->getValue() << endl;
-    } else {
-        cerr << "trying to print empty node" << endl;
-        return;
-    }
-    Node *tmp = startingNode;
-    while (tmp->hasNext()) {
-        tmp = tmp->getNext();
-        cout << tmp << endl;
-    }
-}
-
-void reverseForwardList() {
-
+void reverseForwardList(forward_list<Node> &initialList) {
+//    initialList.reverse();
+    int length = getSize(initialList);
+    // we need temporary array for reordering:
+    // array of nodes is meant for use in reverse
+    struct Node *ptrArray[length + 1];
+    for (int i = 0; i < length - 2; ++i)
+        ptrArray[i]->addNewNode(ptrArray[i + 1]);
+    ptrArray[length - 1]->addNewNode(ptrArray[0]);
+    // reversing itself:
+    for (int i = 0; i < length; ++i)
+        initialList.push_front(*ptrArray[i]);
+//    for (int i = length - 1; i > 0; --i) {
+//        ptrArray[i]->nextNodePtr = ptrArray[i - 1];
+//    }
 }
 
 int main() {
-//    cout << "size of our forward list is: " << size << endl;
     forward_list<Node> list;
     prepareForwardList(list);
     print(list);
-    cout << "getSize of our forward list is: " << getSize(list) << endl;
-//    checkInitialList(startingNode);
-    reverseForwardList();
+    reverseForwardList(list);
+    print(list);
     return 0;
 }
