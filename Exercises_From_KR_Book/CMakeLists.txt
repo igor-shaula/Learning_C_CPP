@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(Exercises_From_KR_Book
-        challenge-reverse-forward-list.c)
+        chapter-2/sample-2-8-strcat.c)
